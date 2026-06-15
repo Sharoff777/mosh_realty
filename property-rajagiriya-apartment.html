@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pgTitle">Property — Mosh Realty</title>
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    .breadcrumb{padding:1rem clamp(1.2rem,4vw,3rem);font-size:0.78rem;color:var(--text-light);display:flex;align-items:center;gap:0.4rem;max-width:1280px;margin:0 auto;flex-wrap:wrap;}
+    .breadcrumb a{color:var(--text-light);transition:color var(--transition);}
+    .breadcrumb a:hover{color:var(--gold);}
+    .breadcrumb svg{color:var(--text-xlight);}
+
+    /* Gallery */
+    .gallery-wrap{max-width:1280px;margin:0 auto;padding:0 clamp(1.2rem,4vw,3rem);}
+    .gallery-main{position:relative;border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:16/8;background:var(--ivory-dark);cursor:pointer;}
+    .gallery-main img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;}
+    .gallery-main:hover img{transform:scale(1.02);}
+    .gallery-badge{position:absolute;top:1rem;left:1rem;}
+    .gallery-view-btn{position:absolute;bottom:1rem;right:1rem;background:rgba(26,26,26,0.75);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);border-radius:var(--radius-md);padding:0.5rem 1.1rem;font-size:0.75rem;font-weight:600;color:var(--white);cursor:pointer;display:flex;align-items:center;gap:0.4rem;transition:background var(--transition);}
+    .gallery-view-btn:hover{background:rgba(184,148,58,0.85);}
+    .gallery-thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-top:0.5rem;}
+    .g-thumb{border-radius:var(--radius-md);overflow:hidden;cursor:pointer;opacity:0.65;transition:opacity var(--transition);aspect-ratio:4/3;}
+    .g-thumb:hover,.g-thumb.act{opacity:1;}
+    .g-thumb img{width:100%;height:100%;object-fit:cover;}
+
+    /* Lightbox */
+    .lb{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:3000;display:none;flex-direction:column;align-items:center;justify-content:center;}
+    .lb.open{display:flex;}
+    .lb-img{max-width:88vw;max-height:78vh;object-fit:contain;border-radius:var(--radius-md);}
+    .lb-close{position:absolute;top:1.2rem;right:1.2rem;width:40px;height:40px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--white);cursor:pointer;font-size:1.2rem;transition:background var(--transition);}
+    .lb-close:hover{background:rgba(184,148,58,0.5);}
+    .lb-nav{display:flex;gap:0.7rem;margin-top:1.2rem;}
+    .lb-nav button{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:var(--radius-md);padding:0.55rem 1.4rem;color:var(--white);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all var(--transition);}
+    .lb-nav button:hover{background:var(--gold);border-color:var(--gold);}
+    .lb-counter{position:absolute;bottom:1.2rem;font-size:0.75rem;color:rgba(255,255,255,0.4);}
+
+    /* Detail layout */
+    .detail-wrap{max-width:1280px;margin:0 auto;padding:2.5rem clamp(1.2rem,4vw,3rem);display:grid;grid-template-columns:1fr 340px;gap:3rem;align-items:start;}
+    .detail-price{font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--charcoal);letter-spacing:-0.02em;margin-bottom:0.2rem;}
+    .detail-name{font-family:var(--font-display);font-size:1.5rem;font-weight:500;color:var(--charcoal);margin-bottom:0.3rem;}
+    .detail-loc{font-size:0.85rem;color:var(--text-light);display:flex;align-items:center;gap:0.3rem;margin-bottom:1.5rem;}
+    .specs-bar{display:flex;gap:1.5rem;flex-wrap:wrap;padding:1.2rem 0;border-top:1px solid var(--ivory-dark);border-bottom:1px solid var(--ivory-dark);margin-bottom:1.8rem;}
+    .spec-i{display:flex;align-items:center;gap:0.4rem;font-size:0.85rem;color:var(--text-mid);}
+    .spec-i svg{color:var(--gold);}
+    .spec-i strong{color:var(--charcoal);}
+    .detail-section-title{font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--charcoal);margin-bottom:0.7rem;}
+    .detail-desc{font-size:0.9rem;color:var(--text-light);line-height:1.85;margin-bottom:2rem;}
+    .feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;}
+    .feat-item{display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;color:var(--text-mid);}
+    .feat-check{width:18px;height:18px;background:rgba(184,148,58,0.12);border:1px solid rgba(184,148,58,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);flex-shrink:0;}
+
+    /* Sidebar */
+    .prop-sidebar{position:sticky;top:90px;display:flex;flex-direction:column;gap:1.2rem;}
+    .enq-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md);}
+    .enq-head{background:var(--charcoal);padding:1.3rem 1.6rem;}
+    .enq-head h4{font-family:var(--font-display);font-size:1.1rem;color:var(--white);margin-bottom:0.15rem;}
+    .enq-head p{font-size:0.75rem;color:rgba(255,255,255,0.45);}
+    .enq-body{padding:1.4rem 1.6rem;}
+    .btn-wa{display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.85rem;background:#25D366;color:var(--white);border:none;border-radius:var(--radius-md);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all var(--transition);text-decoration:none;margin-bottom:0.6rem;}
+    .btn-wa:hover{background:#1da851;transform:translateY(-1px);}
+    .btn-call{display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.85rem;background:var(--ivory);color:var(--charcoal);border:1.5px solid var(--ivory-mid);border-radius:var(--radius-md);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all var(--transition);text-decoration:none;margin-bottom:1rem;}
+    .btn-call:hover{border-color:var(--charcoal);}
+    .enq-form-mini .form-group{margin-bottom:0.7rem;}
+    .enq-form-mini input,.enq-form-mini textarea{background:var(--ivory);border:1.5px solid var(--ivory-mid);border-radius:var(--radius-md);padding:0.65rem 0.85rem;color:var(--text-dark);font-size:0.85rem;outline:none;width:100%;transition:border-color var(--transition);}
+    .enq-form-mini input:focus,.enq-form-mini textarea:focus{border-color:var(--gold);}
+    .enq-form-mini textarea{min-height:70px;resize:vertical;}
+    .enq-form-mini label{font-size:0.7rem;font-weight:600;color:var(--text-light);display:block;margin-bottom:0.3rem;}
+    .sell-nudge{background:var(--ivory);border-radius:var(--radius-lg);padding:1.3rem 1.5rem;}
+    .sell-nudge p{font-size:0.82rem;color:var(--text-light);line-height:1.7;margin-bottom:0.9rem;}
+
+    /* Similar */
+    .similar-wrap{max-width:1280px;margin:0 auto;padding:0 clamp(1.2rem,4vw,3rem) 5rem;}
+    .similar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:1.5rem;}
+
+    @media(max-width:1100px){.detail-wrap{grid-template-columns:1fr;}.prop-sidebar{position:static;}}
+    @media(max-width:768px){.gallery-thumbs{grid-template-columns:repeat(4,1fr);}.similar-grid{grid-template-columns:1fr 1fr;}.feat-grid{grid-template-columns:1fr;}}
+    @media(max-width:500px){.similar-grid{grid-template-columns:1fr;}.gallery-main{aspect-ratio:4/3;}}
+  </style>
+</head>
+<body>
+<nav class="nav scrolled" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div><div class="nav-logo-text">Mosh <span>Realty</span></div><div class="nav-logo-sub">Luxury Real Estate</div></div></a>
+    <div class="nav-links"><a href="index.html">Home</a><a href="properties.html" class="active">Properties</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+    <div class="nav-right"><a href="tel:+94771234567" class="nav-contact-link">+94 77 123 4567</a><a href="sell-with-us.html" class="btn-nav-cta">Sell With Us <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><button class="nav-toggle"><span></span><span></span><span></span></button></div>
+  </div>
+</nav>
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a><a href="properties.html">Properties</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+  <a href="sell-with-us.html" class="cta-mobile">Sell With Us →</a>
+</div>
+
+<div style="margin-top:72px;">
+  <nav class="breadcrumb">
+    <a href="index.html">Home</a>
+    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    <a href="properties.html">Properties</a>
+    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    <span id="bcName" style="color:var(--charcoal);"></span>
+  </nav>
+</div>
+
+<!-- Gallery -->
+<div class="gallery-wrap">
+  <div class="gallery-main" onclick="openLB(0)">
+    <img id="mainImg" src="" alt="">
+    <div class="gallery-badge"><span class="prop-badge" id="pgBadge"></span></div>
+    <button class="gallery-view-btn" onclick="event.stopPropagation();openLB(0)">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      View All Photos
+    </button>
+  </div>
+  <div class="gallery-thumbs" id="thumbsWrap"></div>
+</div>
+
+<!-- Detail -->
+<div class="detail-wrap">
+  <div>
+    <div class="detail-price" id="dPrice"></div>
+    <h1 class="detail-name" id="dName"></h1>
+    <div class="detail-loc"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span id="dLoc"></span></div>
+    <div class="specs-bar" id="dSpecs"></div>
+    <div class="detail-section-title">About This Property</div>
+    <p class="detail-desc" id="dDesc"></p>
+    <div class="detail-section-title">Features & Amenities</div>
+    <div class="feat-grid" id="dFeats"></div>
+  </div>
+
+  <aside class="prop-sidebar">
+    <div class="enq-card">
+      <div class="enq-head"><h4>Enquire About This Property</h4><p>Advisor responds within 2 hours</p></div>
+      <div class="enq-body">
+        <a id="waEnqBtn" href="#" class="btn-wa" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp Enquiry
+        </a>
+        <a href="tel:+94771234567" class="btn-call">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12 19.79 19.79 0 011.65 3.38 2 2 0 013.62 1.22h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          +94 77 123 4567
+        </a>
+        <div class="enq-form-mini">
+          <p style="font-size:0.72rem;color:var(--text-light);margin-bottom:0.7rem;font-weight:500;">Or send a quick message</p>
+          <div class="form-group"><label>Your Name</label><input type="text" id="eqName" placeholder="Name"></div>
+          <div class="form-group"><label>Phone / WhatsApp</label><input type="tel" id="eqPhone" placeholder="+94 77 …"></div>
+          <div class="form-group"><label>Message</label><textarea id="eqMsg" placeholder="I'm interested in this property…"></textarea></div>
+          <button class="btn-primary" style="width:100%;padding:0.75rem;" onclick="sendEnquiry()">Send Enquiry</button>
+        </div>
+      </div>
+    </div>
+    <div class="sell-nudge">
+      <div class="section-tag" style="margin-bottom:0.5rem;">Own a Property?</div>
+      <p>List with Mosh Realty. Commission only — 2.5–3% on deal closure. Free photography included.</p>
+      <a href="sell-with-us.html" class="btn-outline" style="width:100%;justify-content:center;display:flex;padding:0.75rem;">Sell With Us</a>
+    </div>
+  </aside>
+</div>
+
+<!-- Similar -->
+<div class="similar-wrap">
+  <div class="section-tag">You May Also Like</div>
+  <h3 style="font-family:var(--font-display);font-size:1.6rem;font-weight:600;color:var(--charcoal);letter-spacing:-0.01em;">Similar <em style="font-style:italic;font-weight:400;color:var(--gold);">Properties</em></h3>
+  <div class="similar-grid" id="simGrid"></div>
+</div>
+
+<!-- Lightbox -->
+<div class="lb" id="lb">
+  <button class="lb-close" onclick="closeLB()">✕</button>
+  <img class="lb-img" id="lbImg" src="" alt="">
+  <div class="lb-nav">
+    <button onclick="lbPrev()">← Prev</button>
+    <button onclick="lbNext()">Next →</button>
+  </div>
+  <div class="lb-counter" id="lbCount"></div>
+</div>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2025 Mosh Realty (Pvt) Ltd.</p><a href="properties.html" style="color:rgba(255,255,255,0.35);font-size:0.78rem;">← All Properties</a></div></div></footer>
+<a href="https://wa.me/94771234567" class="wa-float" target="_blank"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+
+<script src="js/properties.js"></script>
+<script src="js/main.js"></script>
+<script>
+// Get property ID from filename
+const fn = location.pathname.split('/').pop();
+const pid = fn.replace('property-','').replace('.html','');
+const prop = PROPERTIES.find(p=>p.id===pid);
+let lbIdx = 0;
+
+if (!prop) {
+  document.body.innerHTML = '<div style="padding:8rem 2rem;text-align:center;margin-top:72px;"><h2 style="font-family:serif;color:#B8943A;margin-bottom:1rem;">Property not found</h2><a href="properties.html" style="color:#7A7A7A;">← Back to listings</a></div>';
+} else {
+  document.getElementById('pgTitle').textContent = prop.name + ' — Mosh Realty';
+  document.getElementById('bcName').textContent = prop.name;
+
+  // Main image
+  const mi = document.getElementById('mainImg');
+  mi.src = prop.gallery[0]; mi.alt = prop.name;
+  document.getElementById('pgBadge').textContent = prop.status;
+  document.getElementById('pgBadge').className = 'prop-badge ' + prop.badgeClass;
+
+  // Thumbs
+  const tw = document.getElementById('thumbsWrap');
+  prop.gallery.forEach((img,i)=>{
+    const d = document.createElement('div');
+    d.className='g-thumb'+(i===0?' act':'');
+    d.innerHTML=`<img src="${img}" alt="Photo ${i+1}" loading="lazy">`;
+    d.onclick=()=>{
+      mi.src=img; lbIdx=i;
+      document.querySelectorAll('.g-thumb').forEach(t=>t.classList.remove('act'));
+      d.classList.add('act');
+    };
+    tw.appendChild(d);
+  });
+
+  // WA
+  const wam = `Hi, I'm interested in: *${prop.name}* (${prop.price}) at ${prop.location}. Please share more details.`;
+  document.getElementById('waEnqBtn').href=`https://wa.me/${prop.whatsapp}?text=${encodeURIComponent(wam)}`;
+
+  // Details
+  document.getElementById('dPrice').textContent=prop.price;
+  document.getElementById('dName').textContent=prop.name;
+  document.getElementById('dLoc').textContent=prop.location;
+  document.getElementById('dDesc').textContent=prop.description;
+
+  // Specs
+  const sp=document.getElementById('dSpecs');
+  if(prop.beds){
+    sp.innerHTML=`
+      <div class="spec-i"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><strong>${prop.beds}</strong> Bedrooms</div>
+      <div class="spec-i"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 12V4a1 1 0 011-1h5a1 1 0 011 1v3M2 20h20M20 20v-8a2 2 0 00-2-2h-6"/></svg><strong>${prop.baths}</strong> Bathrooms</div>
+      <div class="spec-i"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/></svg><strong>${prop.sqft}</strong> sq ft</div>
+      <div class="spec-i"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><strong>${prop.type}</strong></div>`;
+  } else {
+    sp.innerHTML=`<div class="spec-i"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/></svg><strong>${prop.sqft}</strong></div><div class="spec-i"><strong>${prop.type}</strong></div>`;
+  }
+
+  // Features
+  const ff=document.getElementById('dFeats');
+  prop.features.forEach(f=>{
+    ff.innerHTML+=`<div class="feat-item"><div class="feat-check"><svg width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>${f}</div>`;
+  });
+
+  // Similar
+  const sim=PROPERTIES.filter(p=>p.id!==prop.id&&(p.type===prop.type||p.status===prop.status)).slice(0,3);
+  document.getElementById('simGrid').innerHTML=sim.map(p=>renderPropCard(p)).join('');
+}
+
+// Lightbox
+function openLB(i){ lbIdx=i; updLB(); document.getElementById('lb').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeLB(){ document.getElementById('lb').classList.remove('open'); document.body.style.overflow=''; }
+function updLB(){ document.getElementById('lbImg').src=prop.gallery[lbIdx]; document.getElementById('lbCount').textContent=`${lbIdx+1} / ${prop.gallery.length}`; }
+function lbNext(){ lbIdx=(lbIdx+1)%prop.gallery.length; updLB(); }
+function lbPrev(){ lbIdx=(lbIdx-1+prop.gallery.length)%prop.gallery.length; updLB(); }
+document.getElementById('lb').addEventListener('click',e=>{ if(e.target===document.getElementById('lb')) closeLB(); });
+document.addEventListener('keydown',e=>{ if(!document.getElementById('lb').classList.contains('open')) return; if(e.key==='ArrowRight') lbNext(); if(e.key==='ArrowLeft') lbPrev(); if(e.key==='Escape') closeLB(); });
+
+function sendEnquiry(){
+  const n=document.getElementById('eqName').value.trim()||'Website visitor';
+  const ph=document.getElementById('eqPhone').value.trim()||'Not provided';
+  const msg=document.getElementById('eqMsg').value.trim()||'Interested in this property';
+  const pn=prop?prop.name:'this property';
+  const wam=`*Enquiry — Mosh Realty*\n\n*From:* ${n}\n*Phone:* ${ph}\n*Property:* ${pn}\n*Message:* ${msg}`;
+  window.open(`https://wa.me/94771234567?text=${encodeURIComponent(wam)}`,'_blank');
+}
+</script>
+</body>
+</html>

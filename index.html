@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mosh Realty — Luxury Real Estate Sri Lanka</title>
+  <meta name="description" content="Sri Lanka's premier luxury real estate agency. Buy, sell, and rent exceptional properties across Colombo and beyond.">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 72px;
+    }
+    .hero-left {
+      background: var(--charcoal);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(3rem,6vw,5rem) clamp(2rem,5vw,4rem) clamp(3rem,6vw,5rem) clamp(1.5rem,5vw,4rem);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: -80px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(184,148,58,0.1) 0%, transparent 70%);
+    }
+    .hero-left-content { position: relative; z-index: 1; max-width: 560px; }
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .hero-eyebrow::before { content: ''; width: 24px; height: 1.5px; background: var(--gold-light); }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem,4.5vw,4.4rem);
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.4rem;
+    }
+    .hero-title em { font-style: italic; font-weight: 400; color: var(--gold-pale); display: block; }
+    .hero-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+      max-width: 420px;
+    }
+    .hero-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 3rem; }
+    .hero-search-bar {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-md);
+      padding: 0.7rem 0.8rem;
+      gap: 0.7rem;
+      max-width: 440px;
+    }
+    .hero-search-bar svg { color: rgba(255,255,255,0.4); flex-shrink: 0; }
+    .hero-search-bar input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--white);
+      font-size: 0.9rem;
+      font-family: var(--font-body);
+    }
+    .hero-search-bar input::placeholder { color: rgba(255,255,255,0.35); }
+    .hero-search-btn {
+      background: var(--gold);
+      color: var(--white);
+      border: none;
+      padding: 0.55rem 1.2rem;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition);
+      white-space: nowrap;
+    }
+    .hero-search-btn:hover { background: var(--gold-light); }
+    .hero-quick-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .hero-tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      padding: 0.3rem 0.85rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .hero-tag:hover { border-color: var(--gold); color: var(--gold-light); }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-right img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .hero-right-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(26,26,26,0.75) 0%, transparent 60%);
+      padding: 2rem;
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .hero-stat-pill {
+      background: rgba(247,243,238,0.12);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(247,243,238,0.2);
+      border-radius: var(--radius-md);
+      padding: 0.7rem 1.2rem;
+      color: var(--white);
+      text-align: center;
+    }
+    .hero-stat-pill .n {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--gold-pale);
+    }
+    .hero-stat-pill .l {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.6);
+      font-weight: 500;
+      margin-top: 0.15rem;
+    }
+
+    /* ── Stat bar ── */
+    .stat-bar-wrap {
+      padding: 0 clamp(1.2rem,4vw,3rem);
+      transform: translateY(-1.5rem);
+    }
+
+    /* ── Properties section ── */
+    .props-section { padding-top: 1rem; }
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .filter-tabs {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .ftab {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 0.45rem 1rem;
+      border-radius: 100px;
+      border: 1.5px solid var(--ivory-mid);
+      color: var(--text-light);
+      background: transparent;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .ftab:hover { border-color: var(--charcoal); color: var(--charcoal); }
+    .ftab.active { background: var(--charcoal); color: var(--white); border-color: var(--charcoal); }
+
+    .props-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    /* ── Sell CTA band ── */
+    .sell-band {
+      background: var(--charcoal);
+      padding: clamp(3.5rem,7vw,5.5rem) 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .sell-band::before {
+      content: '';
+      position: absolute;
+      right: -100px; top: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(184,148,58,0.08) 0%, transparent 70%);
+    }
+    .sell-band-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .sell-band h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem,3vw,2.6rem);
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.6rem;
+    }
+    .sell-band h2 em { font-style: italic; font-weight: 400; color: var(--gold-pale); }
+    .sell-band p { font-size: 0.95rem; color: rgba(255,255,255,0.5); }
+    .sell-band-actions { display: flex; gap: 0.7rem; flex-shrink: 0; flex-wrap: wrap; }
+
+    /* ── Why section ── */
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .why-img {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 4/5;
+    }
+    .why-img img { width: 100%; height: 100%; object-fit: cover; }
+    .why-img-badge {
+      position: absolute;
+      bottom: 1.5rem; right: 1.5rem;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.4rem;
+      box-shadow: var(--shadow-md);
+      text-align: center;
+    }
+    .why-img-badge .n { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--gold); line-height: 1; }
+    .why-img-badge .l { font-size: 0.7rem; color: var(--text-light); font-weight: 500; margin-top: 0.2rem; }
+    .why-features { margin-top: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .why-feat {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .why-feat-icon {
+      width: 42px; height: 42px;
+      background: var(--ivory-dark);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .why-feat h4 { font-size: 0.95rem; font-weight: 600; color: var(--charcoal); margin-bottom: 0.25rem; }
+    .why-feat p { font-size: 0.83rem; color: var(--text-light); line-height: 1.7; }
+
+    /* ── Testimonials ── */
+    .testi-section { background: var(--charcoal); }
+    .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+    .testi-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      padding: 1.8rem;
+    }
+    .testi-stars { color: var(--gold-light); font-size: 0.85rem; margin-bottom: 1rem; letter-spacing: 0.05em; }
+    .testi-text {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-style: italic;
+      font-weight: 400;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.75;
+      margin-bottom: 1.4rem;
+    }
+    .testi-author { display: flex; align-items: center; gap: 0.8rem; }
+    .testi-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: rgba(184,148,58,0.2);
+      border: 1px solid rgba(184,148,58,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      color: var(--gold-light);
+      flex-shrink: 0;
+    }
+    .testi-name { font-size: 0.87rem; font-weight: 600; color: var(--white); }
+    .testi-role { font-size: 0.72rem; color: rgba(255,255,255,0.4); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-right { height: 50vw; min-height: 300px; }
+      .props-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .why-img { display: none; }
+      .sell-band-inner { grid-template-columns: 1fr; }
+      .testi-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .hero-left { padding: 3rem 1.2rem; }
+      .props-grid { grid-template-columns: 1fr; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .filter-tabs { display: grid; grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div>
+        <div class="nav-logo-text">Mosh <span>Realty</span></div>
+        <div class="nav-logo-sub">Luxury Real Estate</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="properties.html">Properties</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-right">
+      <a href="tel:+94771234567" class="nav-contact-link">+94 77 123 4567</a>
+      <a href="sell-with-us.html" class="btn-nav-cta">
+        Sell With Us
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <button class="nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="properties.html">Properties</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="sell-with-us.html" class="cta-mobile">Sell With Us →</a>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-left-content">
+      <div class="hero-eyebrow">Sri Lanka's Premier Agency</div>
+      <h1 class="hero-title">
+        Find Your Perfect
+        <em>Property</em>
+      </h1>
+      <p class="hero-sub">Exceptional homes, investment properties and land across Colombo's most prestigious addresses.</p>
+      <div class="hero-actions">
+        <a href="properties.html" class="btn-gold">Browse Properties</a>
+        <a href="sell-with-us.html" class="btn-outline-ivory">Sell With Us</a>
+      </div>
+      <div class="hero-search-bar">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="heroSearchInput" placeholder="Search by location or type…">
+        <button class="hero-search-btn" onclick="doHeroSearch()">Search</button>
+      </div>
+      <div class="hero-quick-tags">
+        <span class="hero-tag" onclick="filterGo('Colombo 7')">Colombo 7</span>
+        <span class="hero-tag" onclick="filterGo('Mount Lavinia')">Mount Lavinia</span>
+        <span class="hero-tag" onclick="filterGo('Battaramulla')">Battaramulla</span>
+        <span class="hero-tag" onclick="filterGo('For Rent')">For Rent</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1400&q=85" alt="Luxury property" loading="eager">
+    <div class="hero-right-overlay">
+      <div class="hero-stat-pill"><div class="n">350+</div><div class="l">Properties Sold</div></div>
+      <div class="hero-stat-pill"><div class="n">12</div><div class="l">Years Experience</div></div>
+      <div class="hero-stat-pill"><div class="n">98%</div><div class="l">Client Satisfaction</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<div class="stat-bar-wrap container">
+  <div class="stat-bar">
+    <div class="stat-item"><div class="stat-num">350<span>+</span></div><div class="stat-label">Properties Sold</div></div>
+    <div class="stat-item"><div class="stat-num">12<span> Yrs</span></div><div class="stat-label">Market Experience</div></div>
+    <div class="stat-item"><div class="stat-num">98<span>%</span></div><div class="stat-label">Client Satisfaction</div></div>
+    <div class="stat-item"><div class="stat-num">2.5<span>Bn+</span></div><div class="stat-label">LKR Transacted</div></div>
+  </div>
+</div>
+
+<!-- ── FEATURED PROPERTIES ── -->
+<section class="section props-section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">Featured Listings</div>
+        <h2 class="section-title">Exceptional <em>Properties</em></h2>
+      </div>
+      <div class="filter-tabs">
+        <button class="ftab active" data-f="all">All</button>
+        <button class="ftab" data-f="For Sale">For Sale</button>
+        <button class="ftab" data-f="For Rent">For Rent</button>
+        <button class="ftab" data-f="Land">Land</button>
+      </div>
+    </div>
+    <div class="props-grid" id="propsGrid"></div>
+    <div style="text-align:center; margin-top:2.5rem;">
+      <a href="properties.html" class="btn-outline">View All Properties</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── SELL BAND ── -->
+<div class="sell-band">
+  <div class="container">
+    <div class="sell-band-inner">
+      <div>
+        <h2>Ready to Sell? List With <em>Mosh Realty</em></h2>
+        <p>Commission-only. Professional photography. Qualified buyers. Zero upfront cost.</p>
+      </div>
+      <div class="sell-band-actions">
+        <a href="sell-with-us.html" class="btn-gold">Sell With Us</a>
+        <a href="contact.html" class="btn-outline-ivory">Talk to Us</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── WHY MOSH ── -->
+<section class="section" style="background: var(--ivory);">
+  <div class="container">
+    <div class="why-grid">
+      <div class="why-img fade-in">
+        <img src="https://images.unsplash.com/photo-1560520031-3a4dc4e9de0c?w=900&q=80" alt="Interior">
+        <div class="why-img-badge"><div class="n">12</div><div class="l">Years of Trust</div></div>
+      </div>
+      <div>
+        <div class="section-tag">Why Choose Us</div>
+        <h2 class="section-title">The Mosh Realty <em>Difference</em></h2>
+        <p class="section-sub">We go beyond transactions — delivering a bespoke experience that matches exceptional clients with exceptional properties.</p>
+        <div class="why-features">
+          <div class="why-feat fade-up">
+            <div class="why-feat-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div><h4>Verified Listings Only</h4><p>Every property is personally verified — clear title, accurate measurements, no hidden surprises.</p></div>
+          </div>
+          <div class="why-feat fade-up stagger-1">
+            <div class="why-feat-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M3 21v-2a7 7 0 0114 0v2"/></svg></div>
+            <div><h4>Dedicated Property Advisor</h4><p>One expert contact from first viewing to final handover — responsive and entirely on your side.</p></div>
+          </div>
+          <div class="why-feat fade-up stagger-2">
+            <div class="why-feat-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <div><h4>Deep Market Intelligence</h4><p>Precise knowledge of Colombo's micro-markets ensures you buy at the right price — and sell at the best.</p></div>
+          </div>
+        </div>
+        <div style="margin-top:2rem;"><a href="about.html" class="btn-primary">Learn More About Us</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section class="section testi-section">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="section-tag" style="justify-content:center;">Client Stories</div>
+      <h2 class="section-title" style="color:var(--white);">Real Results, <em style="color:var(--gold-pale);">Real People</em></h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card fade-up">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Mosh Realty found us our dream home in Colombo 7 within three weeks. Their network of off-market listings is unmatched."</p>
+        <div class="testi-author"><div class="testi-avatar">RS</div><div><div class="testi-name">Rajan S.</div><div class="testi-role">Purchased — Colombo 7</div></div></div>
+      </div>
+      <div class="testi-card fade-up stagger-1">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Sold our property at 12% above asking price in under 30 days. The photography and listing strategy was exceptional."</p>
+        <div class="testi-author"><div class="testi-avatar">DP</div><div><div class="testi-name">Dilanka P.</div><div class="testi-role">Sold — Battaramulla</div></div></div>
+      </div>
+      <div class="testi-card fade-up stagger-2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"As an overseas Sri Lankan, I needed complete trust. Mosh handled everything professionally and transparently."</p>
+        <div class="testi-author"><div class="testi-avatar">NA</div><div><div class="testi-name">Nirosha A.</div><div class="testi-role">Investment — Rajagiriya</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-text">Mosh <span>Realty</span></div>
+        <p>Sri Lanka's most trusted luxury real estate agency. We match exceptional properties with exceptional people.</p>
+        <div class="footer-social">
+          <a href="https://wa.me/94771234567" target="_blank">WA</a>
+          <a href="#" target="_blank">IG</a>
+          <a href="#" target="_blank">FB</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Properties</div>
+        <ul class="footer-links">
+          <li><a href="properties.html">All Listings</a></li>
+          <li><a href="properties.html?f=For+Sale">For Sale</a></li>
+          <li><a href="properties.html?f=For+Rent">For Rent</a></li>
+          <li><a href="properties.html?f=Land">Land</a></li>
+          <li><a href="properties.html?f=Commercial">Commercial</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Company</div>
+        <ul class="footer-links">
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="sell-with-us.html">Sell With Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contact</div>
+        <div class="footer-contact-item"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>42 Galle Road, Colombo 3</div>
+        <div class="footer-contact-item"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12 19.79 19.79 0 011.65 3.38 2 2 0 013.62 1.22h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>+94 77 123 4567</div>
+        <div class="footer-contact-item"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>hello@moshrealty.lk</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Mosh Realty (Pvt) Ltd. All rights reserved.</p>
+      <p>Luxury · Integrity · Results</p>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/94771234567" class="wa-float" target="_blank" aria-label="WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script src="js/properties.js"></script>
+<script src="js/main.js"></script>
+<script>
+// Properties grid
+let activeFilter = 'all';
+const grid = document.getElementById('propsGrid');
+
+function renderGrid() {
+  const list = activeFilter === 'all'
+    ? PROPERTIES.slice(0, 6)
+    : PROPERTIES.filter(p => p.status === activeFilter).slice(0, 6);
+  grid.innerHTML = list.length
+    ? list.map(p => renderPropCard(p)).join('')
+    : '<p style="color:var(--text-light);padding:2rem 0;">No properties match this filter.</p>';
+  // Re-trigger animations
+  grid.querySelectorAll('.prop-card').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    setTimeout(() => {
+      el.style.transition = 'opacity 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease, transform 0.3s ease';
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    }, i * 80);
+  });
+}
+
+document.querySelectorAll('.ftab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.f;
+    renderGrid();
+  });
+});
+
+renderGrid();
+
+function doHeroSearch() {
+  const q = document.getElementById('heroSearchInput').value.trim();
+  location.href = q ? `properties.html?q=${encodeURIComponent(q)}` : 'properties.html';
+}
+document.getElementById('heroSearchInput').addEventListener('keydown', e => { if(e.key === 'Enter') doHeroSearch(); });
+
+function filterGo(q) {
+  location.href = `properties.html?q=${encodeURIComponent(q)}`;
+}
+</script>
+</body>
+</html>
