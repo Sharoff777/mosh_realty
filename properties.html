@@ -43,13 +43,11 @@
 <body>
 <nav class="nav" id="mainNav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo"><div><div class="nav-logo-text">Mosh <span>Realty</span></div><div class="nav-logo-sub">Luxury Real Estate</div></div></a>
+    <a href="index.html" class="nav-logo"><img src="./689525326_1252441576876300_6291122596398590486_n-removebg.png" alt="Mosh Realty" class="nav-logo-img"></a>
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="properties.html" class="active">Properties</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </div>
+      </div>
     <div class="nav-right">
       <a href="tel:+94771234567" class="nav-contact-link">+94 77 123 4567</a>
       <a href="sell-with-us.html" class="btn-nav-cta">Sell With Us <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
@@ -58,8 +56,7 @@
   </div>
 </nav>
 <div class="nav-mobile-menu" id="mobileMenu">
-  <a href="index.html">Home</a><a href="properties.html">Properties</a><a href="about.html">About</a><a href="contact.html">Contact</a>
-  <a href="sell-with-us.html" class="cta-mobile">Sell With Us →</a>
+  <a href="index.html">Home</a><a href="properties.html">Properties</a><a href="sell-with-us.html" class="cta-mobile">Sell With Us →</a>
 </div>
 
 <div class="page-hero">
@@ -145,12 +142,23 @@ function applyFilters() {
   const bedVals = [...document.querySelectorAll('input[data-group="beds"]')].filter(c=>c.checked).map(c=>parseInt(c.value, 10));
   const minBed = bedVals.length ? Math.min(...bedVals) : null;
   const q = document.getElementById('searchInput').value.toLowerCase();
+  // Budget from URL param (passed from homepage budget tool)
+  const maxBudgetMn = window._urlBudget || null;
+  const minBedsUrl = window._urlBeds || null;
   current = PROPERTIES.filter(p => {
     const ms = !statuses.length || statuses.includes(p.status);
     const mt = !types.length || types.includes(p.type);
     const mb = !minBed || p.beds == null || p.beds >= minBed;
     const mq = !q || p.name.toLowerCase().includes(q) || p.location.toLowerCase().includes(q) || p.type.toLowerCase().includes(q) || p.status.toLowerCase().includes(q);
-    return ms && mt && mb && mq;
+    // Budget filter: parse numeric Mn from price string
+    let budgetOk = true;
+    if (maxBudgetMn) {
+      const priceNum = parseFloat((p.price || '').replace(/[^\d.]/g, ''));
+      budgetOk = isNaN(priceNum) || priceNum <= maxBudgetMn;
+    }
+    // Beds from URL
+    const bedsOk = !minBedsUrl || p.beds == null || p.beds >= minBedsUrl;
+    return ms && mt && mb && mq && budgetOk && bedsOk;
   });
   if (document.getElementById('sortSel').value === 'az') current.sort((a,b)=>a.name.localeCompare(b.name));
   render();
@@ -168,13 +176,16 @@ function render() {
 }
 // Handle URL params
 const p = new URLSearchParams(location.search);
-const urlQ = p.get('q'), urlF = p.get('f');
+const urlQ = p.get('q'), urlF = p.get('f'), urlBeds = p.get('beds'), urlBudget = p.get('budget');
 if (urlQ) document.getElementById('searchInput').value = urlQ;
 if (urlF) {
   const statusVals = ['For Sale','For Rent','Land','Commercial'];
   const group = statusVals.includes(urlF) ? 'status' : 'type';
   document.querySelectorAll(`input[data-group="${group}"]`).forEach(c=>{ c.checked = c.value === urlF; });
 }
+// Store budget/beds for filter use
+window._urlBeds = urlBeds ? parseInt(urlBeds) : null;
+window._urlBudget = urlBudget ? parseInt(urlBudget) : null;
 applyFilters();
 </script>
 </body>
