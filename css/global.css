@@ -355,7 +355,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .prop-card-img {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 4/3;
+  aspect-ratio: 1/1;
   background: var(--ivory-dark);
 }
 .prop-card-img img {
@@ -375,6 +375,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   padding: 0.32rem 0.8rem;
   border-radius: 100px;
   backdrop-filter: blur(8px);
+  white-space: nowrap;
 }
 .badge-sale { background: rgba(26,26,26,0.85); color: var(--white); }
 .badge-rent { background: rgba(184,148,58,0.9); color: var(--white); }

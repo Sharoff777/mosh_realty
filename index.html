@@ -5,325 +5,717 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mosh Realty — Luxury Real Estate Sri Lanka</title>
   <meta name="description" content="Sri Lanka's premier luxury real estate agency. Buy, sell, and rent exceptional properties across Colombo and beyond.">
-  <link rel="stylesheet" href="css/global.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    /* ── Hero ── */
+    /* ─── TOKENS ─────────────────────────────── */
+    :root {
+      --navy-deepest: #040d1a;
+      --navy-deep:    #071526;
+      --navy:         #0b1f38;
+      --navy-mid:     #112848;
+      --navy-light:   #1a3a5c;
+      --navy-glass:   rgba(7,21,38,0.75);
+
+      --gold:         #c9a84c;
+      --gold-bright:  #e8c35a;
+      --gold-pale:    #f5dfa0;
+      --gold-dim:     #8a6d2f;
+      --gold-glow:    rgba(201,168,76,0.18);
+      --gold-border:  rgba(201,168,76,0.3);
+
+      --white:        #ffffff;
+      --off-white:    #f7f2e8;
+      --text-muted:   rgba(255,255,255,0.45);
+      --text-mid:     rgba(255,255,255,0.65);
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+
+      --radius:       8px;
+      --radius-md:    12px;
+      --radius-lg:    18px;
+      --radius-xl:    24px;
+
+      --transition:   0.25s ease;
+      --shadow-card:  0 8px 40px rgba(0,0,0,0.45);
+      --shadow-glow:  0 0 40px rgba(201,168,76,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--navy-deepest);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── UTILITY ─────────────────────────────── */
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 clamp(1rem,3vw,2.5rem); }
+    .section { padding: clamp(4rem,8vw,7rem) 0; }
+
+    .btn-gold {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+      color: var(--navy-deepest);
+      font-family: var(--font-body);
+      font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 0.8rem 1.8rem; border-radius: var(--radius);
+      border: none; cursor: pointer;
+      transition: filter var(--transition), transform var(--transition), box-shadow var(--transition);
+      box-shadow: 0 4px 24px rgba(201,168,76,0.3);
+    }
+    .btn-gold:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.45); }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent;
+      color: var(--gold-pale);
+      font-family: var(--font-body);
+      font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 0.8rem 1.8rem; border-radius: var(--radius);
+      border: 1.5px solid var(--gold-border);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .btn-outline:hover { background: var(--gold-glow); border-color: var(--gold); color: var(--gold-pale); transform: translateY(-2px); }
+
+    /* gold line tag */
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-tag::before { content: ''; width: 28px; height: 1.5px; background: var(--gold); }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem,3.5vw,3rem);
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+    .section-title em { font-style: italic; font-weight: 400; color: var(--gold-pale); }
+
+    /* ─── GOLD DIVIDER ────────────────────────── */
+    .gold-divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-border), transparent);
+    }
+
+    /* ─── NAV ────────────────────────────────── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      background: rgba(4,13,26,0.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+      transition: background var(--transition);
+    }
+    .nav-inner {
+      max-width: 1240px; margin: 0 auto;
+      padding: 0 clamp(1rem,3vw,2.5rem);
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px; gap: 1.5rem;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.7rem; }
+    .nav-logo-text {
+      font-family: var(--font-display);
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--white); letter-spacing: 0.02em;
+      line-height: 1;
+    }
+    .nav-logo-text span { color: var(--gold); }
+    .nav-logo-sub { font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); margin-top: 2px; }
+    .nav-links { display: flex; gap: 2.2rem; }
+    .nav-links a {
+      font-size: 0.82rem; font-weight: 500;
+      color: var(--text-mid); letter-spacing: 0.04em;
+      transition: color var(--transition); position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1.5px; background: var(--gold);
+      transform: scaleX(0); transition: transform var(--transition);
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-links a.active { color: var(--white); }
+    .nav-links a.active::after { transform: scaleX(1); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-contact-link { font-size: 0.8rem; color: var(--text-muted); transition: color var(--transition); }
+    .nav-contact-link:hover { color: var(--gold); }
+    .btn-nav-cta {
+      display: flex; align-items: center; gap: 0.4rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+      color: var(--navy-deepest);
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 0.55rem 1.2rem; border-radius: var(--radius);
+      transition: filter var(--transition), transform var(--transition);
+    }
+    .btn-nav-cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .nav-toggle {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .nav-toggle span { display: block; width: 22px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.25s; }
+
+    /* ─── HERO ───────────────────────────────── */
     .hero {
       min-height: 100vh;
       display: grid;
       grid-template-columns: 1fr 1fr;
       margin-top: 72px;
+      position: relative;
     }
     .hero-left {
-      background: var(--charcoal);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: clamp(3rem,6vw,5rem) clamp(2rem,5vw,4rem) clamp(3rem,6vw,5rem) clamp(1.5rem,5vw,4rem);
-      position: relative;
-      overflow: hidden;
+      background: var(--navy-deep);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: clamp(3rem,6vw,5rem) clamp(2rem,5vw,4.5rem);
+      position: relative; overflow: hidden;
     }
+    /* Animated radial glow */
     .hero-left::before {
       content: '';
-      position: absolute;
-      top: -80px; left: -80px;
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(184,148,58,0.1) 0%, transparent 70%);
+      position: absolute; top: -120px; left: -120px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 65%);
+      animation: pulseGlow 6s ease-in-out infinite alternate;
     }
-    .hero-left-content { position: relative; z-index: 1; max-width: 560px; }
+    .hero-left::after {
+      content: '';
+      position: absolute; bottom: -80px; right: -60px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+    }
+    @keyframes pulseGlow {
+      from { transform: scale(1); opacity: 0.8; }
+      to   { transform: scale(1.2); opacity: 1; }
+    }
+
+    .hero-left-content { position: relative; z-index: 1; max-width: 520px; }
     .hero-eyebrow {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold-light);
-      margin-bottom: 1.4rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.4rem;
     }
-    .hero-eyebrow::before { content: ''; width: 24px; height: 1.5px; background: var(--gold-light); }
+    .hero-eyebrow::before { content: ''; width: 28px; height: 1.5px; background: var(--gold); }
     .hero-title {
       font-family: var(--font-display);
-      font-size: clamp(2.6rem,4.5vw,4.4rem);
-      font-weight: 600;
-      color: var(--white);
-      line-height: 1.1;
-      letter-spacing: -0.02em;
+      font-size: clamp(2.8rem,4.5vw,4.6rem);
+      font-weight: 600; color: var(--white);
+      line-height: 1.08; letter-spacing: -0.02em;
       margin-bottom: 1.4rem;
     }
-    .hero-title em { font-style: italic; font-weight: 400; color: var(--gold-pale); display: block; }
+    .hero-title em {
+      font-style: italic; font-weight: 400;
+      color: var(--gold-pale); display: block;
+    }
     .hero-sub {
-      font-size: 1rem;
-      color: rgba(255,255,255,0.55);
-      line-height: 1.8;
-      margin-bottom: 2.5rem;
-      max-width: 420px;
+      font-size: 0.97rem; color: var(--text-muted);
+      line-height: 1.85; margin-bottom: 2.5rem; max-width: 400px;
     }
     .hero-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 3rem; }
-    .hero-search-bar {
-      display: flex;
-      align-items: center;
-      background: rgba(255,255,255,0.07);
-      border: 1.5px solid rgba(255,255,255,0.12);
-      border-radius: var(--radius-md);
-      padding: 0.7rem 0.8rem;
-      gap: 0.7rem;
-      max-width: 440px;
+
+    /* ── Search bar ── */
+    .hero-search-wrap {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.2rem;
+      max-width: 460px;
     }
-    .hero-search-bar svg { color: rgba(255,255,255,0.4); flex-shrink: 0; }
-    .hero-search-bar input {
-      flex: 1;
-      background: none;
-      border: none;
-      outline: none;
-      color: var(--white);
-      font-size: 0.9rem;
-      font-family: var(--font-body);
+    .hero-search-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.7rem; }
+    .hero-search-row {
+      display: flex; align-items: center;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius); padding: 0.55rem 0.8rem; gap: 0.6rem;
+      margin-bottom: 0.9rem;
     }
-    .hero-search-bar input::placeholder { color: rgba(255,255,255,0.35); }
+    .hero-search-row svg { color: rgba(255,255,255,0.35); flex-shrink: 0; }
+    .hero-search-row input {
+      flex: 1; background: none; border: none; outline: none;
+      color: var(--white); font-size: 0.88rem; font-family: var(--font-body);
+    }
+    .hero-search-row input::placeholder { color: rgba(255,255,255,0.3); }
     .hero-search-btn {
-      background: var(--gold);
-      color: var(--white);
-      border: none;
-      padding: 0.55rem 1.2rem;
-      border-radius: var(--radius);
-      font-family: var(--font-body);
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background var(--transition);
-      white-space: nowrap;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+      color: var(--navy-deepest); border: none;
+      padding: 0.5rem 1.1rem; border-radius: 6px;
+      font-family: var(--font-body); font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      cursor: pointer; transition: filter var(--transition); white-space: nowrap;
     }
-    .hero-search-btn:hover { background: var(--gold-light); }
-    .hero-quick-tags {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-top: 1rem;
-    }
+    .hero-search-btn:hover { filter: brightness(1.1); }
+    .hero-quick-tags { display: flex; gap: 0.45rem; flex-wrap: wrap; }
     .hero-tag {
-      font-size: 0.72rem;
-      font-weight: 500;
-      color: rgba(255,255,255,0.5);
-      padding: 0.3rem 0.85rem;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 100px;
-      cursor: pointer;
+      font-size: 0.7rem; font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      padding: 0.28rem 0.8rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px; cursor: pointer;
       transition: all var(--transition);
     }
-    .hero-tag:hover { border-color: var(--gold); color: var(--gold-light); }
+    .hero-tag:hover { border-color: var(--gold); color: var(--gold-pale); }
 
-    .hero-right {
-      position: relative;
-      overflow: hidden;
+    /* ── Hero right – Ken Burns slider ── */
+    .hero-right { position: relative; overflow: hidden; }
+    .hero-slide {
+      position: absolute; inset: 0;
+      opacity: 0; transition: opacity 1s ease;
     }
-    .hero-right img {
-      width: 100%; height: 100%;
-      object-fit: cover;
+    .hero-slide.active { opacity: 1; }
+    .hero-slide img {
+      width: 100%; height: 100%; object-fit: cover;
+      animation: kenBurns 8s ease-in-out infinite alternate;
+    }
+    @keyframes kenBurns {
+      from { transform: scale(1); }
+      to   { transform: scale(1.06); }
     }
     .hero-right-overlay {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      background: linear-gradient(to top, rgba(26,26,26,0.75) 0%, transparent 60%);
-      padding: 2rem;
-      display: flex;
-      align-items: flex-end;
-      gap: 1rem;
-      flex-wrap: wrap;
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(4,13,26,0.55) 0%, transparent 50%);
+    }
+    .hero-stat-pills {
+      position: absolute; bottom: 1.5rem; left: 1.5rem;
+      display: flex; gap: 0.8rem; flex-wrap: wrap;
     }
     .hero-stat-pill {
-      background: rgba(247,243,238,0.12);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(247,243,238,0.2);
-      border-radius: var(--radius-md);
-      padding: 0.7rem 1.2rem;
-      color: var(--white);
-      text-align: center;
+      background: rgba(4,13,26,0.7);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: var(--radius-md); padding: 0.65rem 1.1rem; text-align: center;
     }
     .hero-stat-pill .n {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      font-weight: 700;
-      line-height: 1;
-      color: var(--gold-pale);
+      font-family: var(--font-display); font-size: 1.4rem; font-weight: 700;
+      line-height: 1; color: var(--gold-pale);
     }
-    .hero-stat-pill .l {
-      font-size: 0.65rem;
-      color: rgba(255,255,255,0.6);
-      font-weight: 500;
-      margin-top: 0.15rem;
+    .hero-stat-pill .l { font-size: 0.62rem; color: rgba(255,255,255,0.5); font-weight: 500; margin-top: 0.1rem; }
+    .slide-dots {
+      position: absolute; bottom: 1.5rem; right: 1.5rem;
+      display: flex; gap: 0.4rem; align-items: center;
     }
+    .slide-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.3); cursor: pointer; transition: all var(--transition);
+    }
+    .slide-dot.active { background: var(--gold); width: 20px; border-radius: 3px; }
 
-    /* ── Stat bar ── */
+    /* ─── STAT BAR ───────────────────────────── */
     .stat-bar-wrap {
-      padding: 0 clamp(1.2rem,4vw,3rem);
+      padding: 0 clamp(1rem,3vw,2.5rem);
       transform: translateY(-1.5rem);
+      max-width: 1240px; margin: 0 auto;
     }
-
-    /* ── Properties section ── */
-    .props-section { padding-top: 1rem; }
-    .section-head {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
+    .stat-bar {
+      background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-light) 100%);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius-lg);
+      padding: 1.6rem 2.5rem;
+      display: grid; grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
+      box-shadow: var(--shadow-card);
     }
-    .filter-tabs {
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: var(--font-display); font-size: 2rem; font-weight: 700;
+      color: var(--gold-pale); line-height: 1;
     }
-    .ftab {
-      font-size: 0.78rem;
-      font-weight: 500;
-      padding: 0.45rem 1rem;
-      border-radius: 100px;
-      border: 1.5px solid var(--ivory-mid);
-      color: var(--text-light);
-      background: transparent;
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-    .ftab:hover { border-color: var(--charcoal); color: var(--charcoal); }
-    .ftab.active { background: var(--charcoal); color: var(--white); border-color: var(--charcoal); }
+    .stat-num span { font-size: 1.1rem; color: var(--gold); font-weight: 400; }
+    .stat-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 500; margin-top: 0.3rem; letter-spacing: 0.05em; text-transform: uppercase; }
 
+    /* ─── BUDGET FILTER ──────────────────────── */
+    .budget-section {
+      padding: 3rem 0 4rem;
+    }
+    .budget-wrap {
+      background: var(--navy-mid);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem clamp(1.5rem,4vw,3rem);
+    }
+    .budget-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;
+    }
+    .budget-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: var(--white); }
+    .budget-price-display { font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; color: var(--gold-pale); }
+    .budget-controls {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem 2.5rem;
+      align-items: start;
+    }
+    .filter-group label {
+      display: block; font-size: 0.67rem; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.5rem;
+    }
+    .filter-select {
+      width: 100%; background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius);
+      color: var(--white); font-family: var(--font-body); font-size: 0.88rem;
+      padding: 0.65rem 1rem; appearance: none; cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 0.8rem center;
+      transition: border-color var(--transition);
+    }
+    .filter-select:focus { outline: none; border-color: var(--gold-border); }
+    .filter-select option { background: var(--navy-mid); }
+
+    /* ── Range slider ── */
+    .range-wrap { grid-column: span 3; }
+    .range-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.6rem; }
+    .range-track {
+      position: relative; height: 4px;
+      background: rgba(255,255,255,0.1); border-radius: 2px; margin: 0.5rem 0 0.3rem;
+    }
+    .range-fill { position: absolute; top: 0; height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold-bright)); border-radius: 2px; }
+    input[type=range].budget-slider {
+      width: 100%; margin: 0;
+      -webkit-appearance: none;
+      height: 4px;
+      background: transparent;
+      position: relative; z-index: 2;
+    }
+    input[type=range].budget-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+      border: 2.5px solid var(--navy-deepest);
+      cursor: pointer; box-shadow: 0 0 12px rgba(201,168,76,0.5);
+      transition: transform 0.15s;
+    }
+    input[type=range].budget-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    .budget-footer { display: flex; justify-content: flex-end; margin-top: 1.5rem; }
+
+    /* ─── PROPERTIES SECTION ─────────────────── */
+    .props-section { padding-top: 2rem; }
+    .section-head {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2.5rem;
+    }
+    .filter-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .ftab {
+      font-size: 0.75rem; font-weight: 600; padding: 0.45rem 1.1rem;
+      border-radius: 100px; border: 1.5px solid rgba(255,255,255,0.1);
+      color: var(--text-muted); background: transparent; cursor: pointer;
+      transition: all var(--transition); letter-spacing: 0.04em;
+    }
+    .ftab:hover { border-color: var(--gold-border); color: var(--gold-pale); }
+    .ftab.active { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%); color: var(--navy-deepest); border-color: transparent; }
+
+    /* ── Property grid ── */
     .props-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
+      gap: 1.8rem;
     }
 
-    /* ── Sell CTA band ── */
-    .sell-band {
-      background: var(--charcoal);
-      padding: clamp(3.5rem,7vw,5.5rem) 0;
-      position: relative;
+    /* ── Property card ── */
+    .prop-card {
+      background: linear-gradient(165deg, var(--navy-mid) 0%, var(--navy) 100%);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: var(--radius-lg);
       overflow: hidden;
+      cursor: pointer;
+      display: block;
+      color: inherit;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      transition: transform 0.4s cubic-bezier(.2,.8,.2,1), box-shadow 0.4s ease, border-color 0.4s ease;
+      opacity: 0; transform: translateY(28px);
+    }
+    .prop-card.visible { opacity: 1; transform: translateY(0); }
+    .prop-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 26px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,76,0.35), var(--shadow-glow);
+      border-color: rgba(201,168,76,0.4);
+    }
+
+    .prop-img-wrap { position: relative; overflow: hidden; aspect-ratio: 1/1; display: block; }
+    .prop-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .prop-card:hover .prop-img-wrap img { transform: scale(1.07); }
+    .prop-img-gradient {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(4,13,26,0.92) 0%, rgba(4,13,26,0.15) 45%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .prop-badge {
+      position: absolute; top: 1rem; left: 1rem; z-index: 2;
+      font-size: 0.64rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.32rem 0.8rem; border-radius: 100px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    }
+    .prop-badge.sale { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%); color: var(--navy-deepest); }
+    .prop-badge.rent { background: rgba(255,255,255,0.14); backdrop-filter: blur(8px); color: var(--white); border: 1px solid rgba(255,255,255,0.22); }
+    .prop-badge.land { background: rgba(72,160,80,0.28); backdrop-filter: blur(8px); color: #8df0a4; border: 1px solid rgba(126,232,150,0.25); }
+    .prop-badge.commercial { background: rgba(140,130,255,0.25); backdrop-filter: blur(8px); color: #c2bbff; border: 1px solid rgba(180,172,255,0.3); }
+
+    .prop-fav {
+      position: absolute; top: 1rem; right: 1rem; z-index: 2;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(4,13,26,0.55); backdrop-filter: blur(8px);
+      border: 1px solid rgba(201,168,76,0.25);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all var(--transition);
+    }
+    .prop-fav:hover { background: rgba(201,168,76,0.25); border-color: var(--gold); transform: scale(1.08); }
+    .prop-fav svg { transition: fill var(--transition); pointer-events: none; }
+    .prop-fav.liked svg { fill: var(--gold); stroke: var(--gold); }
+
+    .prop-featured-tag {
+      position: absolute; bottom: 0.9rem; left: 1.05rem; z-index: 2;
+      display: flex; align-items: center; gap: 0.35rem;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.04em;
+      color: var(--gold-pale);
+    }
+    .prop-featured-tag svg { fill: var(--gold); stroke: none; }
+
+    .prop-type-pill {
+      position: absolute; bottom: 0.9rem; right: 1.05rem; z-index: 2;
+      font-size: 0.66rem; font-weight: 600; letter-spacing: 0.03em;
+      color: rgba(255,255,255,0.75);
+    }
+
+    .prop-body { padding: 1.35rem 1.4rem 1.5rem; position: relative; }
+    .prop-location {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.05em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem;
+    }
+    .prop-location svg { opacity: 0.7; flex-shrink: 0; }
+    .prop-name {
+      font-family: var(--font-display); font-size: 1.25rem; font-weight: 600;
+      color: var(--white); line-height: 1.25; margin-bottom: 0.9rem;
+      transition: color var(--transition);
+    }
+    .prop-card:hover .prop-name { color: var(--gold-pale); }
+    .prop-specs {
+      display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem;
+    }
+    .prop-spec {
+      display: flex; align-items: center; gap: 0.45rem;
+      font-size: 0.78rem; color: var(--text-mid); font-weight: 500;
+    }
+    .prop-spec-icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; border-radius: 7px; flex-shrink: 0;
+      background: rgba(201,168,76,0.1); color: var(--gold);
+    }
+    .prop-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 1.1rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .prop-price {
+      font-family: var(--font-display); font-size: 1.35rem; font-weight: 700;
+      color: var(--gold-pale); line-height: 1;
+    }
+    .prop-price-label { font-size: 0.65rem; color: var(--text-muted); font-weight: 400; font-family: var(--font-body); margin-top: 3px; }
+    .prop-btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+      color: var(--navy-deepest);
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+      border: none; border-radius: 100px;
+      padding: 0.5rem 1.05rem; cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: 0 4px 16px rgba(201,168,76,0.25);
+    }
+    .prop-btn svg { transition: transform var(--transition); }
+    .prop-card:hover .prop-btn { filter: brightness(1.08); box-shadow: 0 6px 20px rgba(201,168,76,0.4); }
+    .prop-card:hover .prop-btn svg { transform: translateX(3px); }
+
+    /* ─── SELL BAND ──────────────────────────── */
+    .sell-band {
+      background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-light) 100%);
+      border-top: 1px solid rgba(201,168,76,0.15);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      padding: clamp(3.5rem,7vw,5.5rem) 0; position: relative; overflow: hidden;
     }
     .sell-band::before {
       content: '';
-      position: absolute;
-      right: -100px; top: -100px;
+      position: absolute; right: -100px; top: -100px;
       width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(184,148,58,0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+      animation: pulseGlow 8s ease-in-out infinite alternate;
     }
     .sell-band-inner {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 2rem;
-      position: relative;
-      z-index: 1;
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 2.5rem; position: relative; z-index: 1;
     }
     .sell-band h2 {
-      font-family: var(--font-display);
-      font-size: clamp(1.8rem,3vw,2.6rem);
-      font-weight: 600;
-      color: var(--white);
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      margin-bottom: 0.6rem;
+      font-family: var(--font-display); font-size: clamp(1.8rem,3vw,2.8rem);
+      font-weight: 600; color: var(--white); letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 0.6rem;
     }
     .sell-band h2 em { font-style: italic; font-weight: 400; color: var(--gold-pale); }
-    .sell-band p { font-size: 0.95rem; color: rgba(255,255,255,0.5); }
+    .sell-band p { font-size: 0.9rem; color: var(--text-muted); max-width: 420px; }
     .sell-band-actions { display: flex; gap: 0.7rem; flex-shrink: 0; flex-wrap: wrap; }
 
-    /* ── Why section ── */
-    .why-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-    }
-    .why-img {
-      position: relative;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      aspect-ratio: 4/5;
-    }
+    /* ─── WHY SECTION ────────────────────────── */
+    .why-section { background: var(--navy-deep); }
+    .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .why-img { position: relative; border-radius: var(--radius-xl); overflow: hidden; aspect-ratio: 4/5; }
     .why-img img { width: 100%; height: 100%; object-fit: cover; }
+    .why-img::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(4,13,26,0.5));
+    }
     .why-img-badge {
-      position: absolute;
-      bottom: 1.5rem; right: 1.5rem;
-      background: var(--white);
-      border-radius: var(--radius-lg);
-      padding: 1.1rem 1.4rem;
-      box-shadow: var(--shadow-md);
-      text-align: center;
+      position: absolute; bottom: 1.5rem; right: 1.5rem; z-index: 1;
+      background: var(--navy-mid); border: 1px solid var(--gold-border);
+      border-radius: var(--radius-lg); padding: 1.1rem 1.4rem; text-align: center;
+      box-shadow: var(--shadow-glow);
     }
     .why-img-badge .n { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--gold); line-height: 1; }
-    .why-img-badge .l { font-size: 0.7rem; color: var(--text-light); font-weight: 500; margin-top: 0.2rem; }
+    .why-img-badge .l { font-size: 0.7rem; color: var(--text-muted); font-weight: 500; margin-top: 0.2rem; }
     .why-features { margin-top: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
-    .why-feat {
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-    }
+    .why-feat { display: flex; gap: 1rem; align-items: flex-start; }
     .why-feat-icon {
-      width: 42px; height: 42px;
-      background: var(--ivory-dark);
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--gold);
-      flex-shrink: 0;
+      width: 44px; height: 44px; border-radius: var(--radius-md); flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.1) 0%, rgba(201,168,76,0.04) 100%);
+      border: 1px solid rgba(201,168,76,0.2);
+      display: flex; align-items: center; justify-content: center; color: var(--gold);
     }
-    .why-feat h4 { font-size: 0.95rem; font-weight: 600; color: var(--charcoal); margin-bottom: 0.25rem; }
-    .why-feat p { font-size: 0.83rem; color: var(--text-light); line-height: 1.7; }
+    .why-feat h4 { font-size: 0.95rem; font-weight: 600; color: var(--white); margin-bottom: 0.25rem; }
+    .why-feat p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.75; }
 
-    /* ── Testimonials ── */
-    .testi-section { background: var(--charcoal); }
+    /* ─── TESTIMONIALS ───────────────────────── */
+    .testi-section { background: var(--navy-deep); }
     .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
     .testi-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: var(--radius-lg);
-      padding: 1.8rem;
+      background: var(--navy-mid);
+      border: 1px solid rgba(201,168,76,0.1);
+      border-radius: var(--radius-lg); padding: 1.8rem;
+      transition: border-color var(--transition), transform var(--transition);
     }
-    .testi-stars { color: var(--gold-light); font-size: 0.85rem; margin-bottom: 1rem; letter-spacing: 0.05em; }
+    .testi-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-4px); }
+    .testi-stars { color: var(--gold-bright); font-size: 0.85rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
     .testi-text {
-      font-family: var(--font-display);
-      font-size: 1rem;
-      font-style: italic;
-      font-weight: 400;
-      color: rgba(255,255,255,0.75);
-      line-height: 1.75;
-      margin-bottom: 1.4rem;
+      font-family: var(--font-display); font-size: 1rem; font-style: italic; font-weight: 400;
+      color: rgba(255,255,255,0.75); line-height: 1.8; margin-bottom: 1.5rem;
     }
     .testi-author { display: flex; align-items: center; gap: 0.8rem; }
     .testi-avatar {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      background: rgba(184,148,58,0.2);
-      border: 1px solid rgba(184,148,58,0.4);
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, rgba(201,168,76,0.2) 0%, rgba(201,168,76,0.08) 100%);
+      border: 1.5px solid rgba(201,168,76,0.35);
       display: flex; align-items: center; justify-content: center;
-      font-family: var(--font-display);
-      font-size: 0.9rem;
-      color: var(--gold-light);
-      flex-shrink: 0;
+      font-family: var(--font-display); font-size: 0.95rem; color: var(--gold-pale); flex-shrink: 0;
     }
     .testi-name { font-size: 0.87rem; font-weight: 600; color: var(--white); }
-    .testi-role { font-size: 0.72rem; color: rgba(255,255,255,0.4); }
+    .testi-role { font-size: 0.72rem; color: var(--text-muted); }
 
-    /* Responsive */
+    /* ─── FOOTER ─────────────────────────────── */
+    .footer {
+      background: var(--navy-deepest);
+      border-top: 1px solid rgba(201,168,76,0.12);
+      padding: clamp(4rem,7vw,5rem) 0 2rem;
+    }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 3rem; margin-bottom: 3rem; }
+    .footer-logo-text { font-family: var(--font-display); font-size: 1.7rem; font-weight: 700; color: var(--white); margin-bottom: 0.8rem; }
+    .footer-logo-text span { color: var(--gold); }
+    .footer-brand p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.8; max-width: 280px; }
+    .footer-social { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+    .footer-social a {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 600; color: var(--text-muted);
+      transition: all var(--transition);
+    }
+    .footer-social a:hover { background: var(--gold-glow); border-color: var(--gold-border); color: var(--gold); }
+    .footer-heading { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .footer-links a { font-size: 0.83rem; color: var(--text-muted); transition: color var(--transition); }
+    .footer-links a:hover { color: var(--gold-pale); }
+    .footer-contact-item { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.6rem; }
+    .footer-contact-item svg { margin-top: 3px; color: var(--gold-dim); flex-shrink: 0; }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+      padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-bottom p { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ─── WHATSAPP FLOAT ─────────────────────── */
+    .wa-float {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 800;
+      width: 54px; height: 54px; border-radius: 50%;
+      background: #25D366; color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .wa-float:hover { transform: scale(1.08); box-shadow: 0 8px 30px rgba(37,211,102,0.5); }
+
+    /* ─── SCROLL ANIMATIONS ──────────────────── */
+    .fade-up {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-in { opacity: 0; transition: opacity 0.8s ease; }
+    .fade-in.visible { opacity: 1; }
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+
+    /* ─── MOBILE MENU ────────────────────────── */
+    .nav-mobile-menu {
+      display: none; flex-direction: column;
+      position: fixed; top: 72px; left: 0; right: 0;
+      background: var(--navy-deep);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      padding: 1.2rem clamp(1rem,3vw,2.5rem) 1.5rem;
+      z-index: 899; gap: 0.6rem;
+    }
+    .nav-mobile-menu.open { display: flex; }
+    .nav-mobile-menu a { font-size: 0.9rem; color: var(--text-mid); padding: 0.4rem 0; }
+    .nav-mobile-menu .cta-mobile {
+      color: var(--gold); font-weight: 600; margin-top: 0.4rem;
+      border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.8rem;
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────── */
     @media (max-width: 1024px) {
       .hero { grid-template-columns: 1fr; min-height: auto; }
-      .hero-right { height: 50vw; min-height: 300px; }
+      .hero-right { height: 55vw; min-height: 320px; }
       .props-grid { grid-template-columns: repeat(2, 1fr); }
+      .budget-controls { grid-template-columns: 1fr 1fr; }
+      .budget-controls .range-wrap { grid-column: span 2; }
       .why-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .why-img { display: none; }
       .sell-band-inner { grid-template-columns: 1fr; }
       .testi-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .nav-links { display: none; }
+      .nav-contact-link { display: none; }
+      .nav-toggle { display: flex; }
+      .stat-bar { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 640px) {
       .hero-left { padding: 3rem 1.2rem; }
       .props-grid { grid-template-columns: 1fr; }
       .testi-grid { grid-template-columns: 1fr; }
       .filter-tabs { display: grid; grid-template-columns: 1fr 1fr; }
+      .budget-controls { grid-template-columns: 1fr; }
+      .budget-controls .range-wrap { grid-column: span 1; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .sell-band-actions { flex-direction: column; }
     }
   </style>
 </head>
@@ -339,7 +731,7 @@
       </div>
     </a>
     <div class="nav-links">
-      <a href="index.html">Home</a>
+      <a href="index.html" class="active">Home</a>
       <a href="properties.html">Properties</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
@@ -348,16 +740,15 @@
       <a href="tel:+94771234567" class="nav-contact-link">+94 77 123 4567</a>
       <a href="sell-with-us.html" class="btn-nav-cta">
         Sell With Us
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <button class="nav-toggle" aria-label="Menu">
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
 </nav>
 
-<!-- Mobile menu -->
 <div class="nav-mobile-menu" id="mobileMenu">
   <a href="index.html">Home</a>
   <a href="properties.html">Properties</a>
@@ -375,43 +766,142 @@
         Find Your Perfect
         <em>Property</em>
       </h1>
-      <p class="hero-sub">Exceptional homes, investment properties and land across Colombo's most prestigious addresses.</p>
+      <p class="hero-sub">Exceptional homes, investment properties and land across Colombo's most prestigious addresses. Curated for the discerning few.</p>
       <div class="hero-actions">
         <a href="properties.html" class="btn-gold">Browse Properties</a>
-        <a href="sell-with-us.html" class="btn-outline-ivory">Sell With Us</a>
+        <a href="sell-with-us.html" class="btn-outline">Sell With Us</a>
       </div>
-      <div class="hero-search-bar">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" id="heroSearchInput" placeholder="Search by location or type…">
-        <button class="hero-search-btn" onclick="doHeroSearch()">Search</button>
-      </div>
-      <div class="hero-quick-tags">
-        <span class="hero-tag" onclick="filterGo('Colombo 7')">Colombo 7</span>
-        <span class="hero-tag" onclick="filterGo('Mount Lavinia')">Mount Lavinia</span>
-        <span class="hero-tag" onclick="filterGo('Battaramulla')">Battaramulla</span>
-        <span class="hero-tag" onclick="filterGo('For Rent')">For Rent</span>
+      <div class="hero-search-wrap">
+        <div class="hero-search-label">Quick Search</div>
+        <div class="hero-search-row">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="heroSearchInput" placeholder="Search by location or property type…">
+          <button class="hero-search-btn" onclick="doHeroSearch()">Search</button>
+        </div>
+        <div class="hero-quick-tags">
+          <span class="hero-tag" onclick="filterGo('Colombo 7')">Colombo 7</span>
+          <span class="hero-tag" onclick="filterGo('Mount Lavinia')">Mount Lavinia</span>
+          <span class="hero-tag" onclick="filterGo('Battaramulla')">Battaramulla</span>
+          <span class="hero-tag" onclick="filterGo('For Rent')">For Rent</span>
+          <span class="hero-tag" onclick="filterGo('Land')">Land</span>
+        </div>
       </div>
     </div>
   </div>
-  <div class="hero-right">
-    <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1400&q=85" alt="Luxury property" loading="eager">
-    <div class="hero-right-overlay">
+
+  <div class="hero-right" id="heroSlider">
+    <div class="hero-slide active">
+      <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1400&q=85" alt="Luxury villa" loading="eager">
+    </div>
+    <div class="hero-slide">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=85" alt="Modern apartment">
+    </div>
+    <div class="hero-slide">
+      <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1400&q=85" alt="Penthouse view">
+    </div>
+    <div class="hero-slide">
+      <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=85" alt="Luxury home">
+    </div>
+    <div class="hero-right-overlay"></div>
+    <div class="hero-stat-pills">
       <div class="hero-stat-pill"><div class="n">350+</div><div class="l">Properties Sold</div></div>
       <div class="hero-stat-pill"><div class="n">12</div><div class="l">Years Experience</div></div>
-      <div class="hero-stat-pill"><div class="n">98%</div><div class="l">Client Satisfaction</div></div>
+      <div class="hero-stat-pill"><div class="n">98%</div><div class="l">Satisfaction Rate</div></div>
     </div>
+    <div class="slide-dots" id="slideDots"></div>
   </div>
 </section>
 
-<!-- ── STATS ── -->
-<div class="stat-bar-wrap container">
+<!-- ── STAT BAR ── -->
+<div class="stat-bar-wrap">
   <div class="stat-bar">
-    <div class="stat-item"><div class="stat-num">350<span>+</span></div><div class="stat-label">Properties Sold</div></div>
-    <div class="stat-item"><div class="stat-num">12<span> Yrs</span></div><div class="stat-label">Market Experience</div></div>
-    <div class="stat-item"><div class="stat-num">98<span>%</span></div><div class="stat-label">Client Satisfaction</div></div>
-    <div class="stat-item"><div class="stat-num">2.5<span>Bn+</span></div><div class="stat-label">LKR Transacted</div></div>
+    <div class="stat-item">
+      <div class="stat-num">350<span>+</span></div>
+      <div class="stat-label">Properties Sold</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">12<span> Yrs</span></div>
+      <div class="stat-label">Market Experience</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">98<span>%</span></div>
+      <div class="stat-label">Client Satisfaction</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">2.5<span>Bn+</span></div>
+      <div class="stat-label">LKR Transacted</div>
+    </div>
   </div>
 </div>
+
+<!-- ── BUDGET FILTER ── -->
+<section class="budget-section">
+  <div class="container">
+    <div class="budget-wrap">
+      <div class="budget-header">
+        <div>
+          <div class="section-tag">Smart Search</div>
+          <div class="budget-title">Find Within Your Budget</div>
+        </div>
+        <div class="budget-price-display" id="budgetDisplay">Up to LKR 200 Mn</div>
+      </div>
+      <div class="budget-controls">
+        <div class="filter-group">
+          <label for="filterType">Property Type</label>
+          <select class="filter-select" id="filterType">
+            <option value="all">All Types</option>
+            <option value="house">House / Villa</option>
+            <option value="apartment">Apartment</option>
+            <option value="land">Land</option>
+            <option value="commercial">Commercial</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterLocation">Location</label>
+          <select class="filter-select" id="filterLocation">
+            <option value="all">All Areas</option>
+            <option value="colombo7">Colombo 7</option>
+            <option value="colombo3">Colombo 3</option>
+            <option value="battaramulla">Battaramulla</option>
+            <option value="rajagiriya">Rajagiriya</option>
+            <option value="mountlavinia">Mount Lavinia</option>
+            <option value="nugegoda">Nugegoda</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterBeds">Bedrooms</label>
+          <select class="filter-select" id="filterBeds">
+            <option value="any">Any</option>
+            <option value="1">1 Bedroom</option>
+            <option value="2">2 Bedrooms</option>
+            <option value="3">3 Bedrooms</option>
+            <option value="4">4+ Bedrooms</option>
+          </select>
+        </div>
+        <div class="filter-group range-wrap">
+          <label>Max Budget</label>
+          <div style="display:flex; align-items:center; gap:1rem;">
+            <span style="font-size:0.75rem; color:var(--text-muted); white-space:nowrap;">LKR 5 Mn</span>
+            <div style="flex:1; position:relative;">
+              <div class="range-track">
+                <div class="range-fill" id="rangeFill" style="width:40%"></div>
+              </div>
+              <input type="range" class="budget-slider" id="budgetSlider" min="5" max="500" value="200" step="5"
+                style="position:absolute; top:-8px; left:0; right:0;">
+            </div>
+            <span style="font-size:0.75rem; color:var(--text-muted); white-space:nowrap;">LKR 500 Mn</span>
+          </div>
+        </div>
+      </div>
+      <div class="budget-footer">
+        <button class="btn-gold" onclick="applyBudgetFilter()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Search Properties
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ── FEATURED PROPERTIES ── -->
 <section class="section props-section">
@@ -426,10 +916,11 @@
         <button class="ftab" data-f="For Sale">For Sale</button>
         <button class="ftab" data-f="For Rent">For Rent</button>
         <button class="ftab" data-f="Land">Land</button>
+        <button class="ftab" data-f="Commercial">Commercial</button>
       </div>
     </div>
     <div class="props-grid" id="propsGrid"></div>
-    <div style="text-align:center; margin-top:2.5rem;">
+    <div style="text-align:center; margin-top:3rem;">
       <a href="properties.html" class="btn-outline">View All Properties</a>
     </div>
   </div>
@@ -441,18 +932,18 @@
     <div class="sell-band-inner">
       <div>
         <h2>Ready to Sell? List With <em>Mosh Realty</em></h2>
-        <p>Commission-only. Professional photography. Qualified buyers. Zero upfront cost.</p>
+        <p>Commission-only. Professional photography. Qualified buyers reaching 350,000+ people. Zero upfront cost.</p>
       </div>
       <div class="sell-band-actions">
         <a href="sell-with-us.html" class="btn-gold">Sell With Us</a>
-        <a href="contact.html" class="btn-outline-ivory">Talk to Us</a>
+        <a href="contact.html" class="btn-outline">Talk to Us</a>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ── WHY MOSH ── -->
-<section class="section" style="background: var(--ivory);">
+<section class="section why-section">
   <div class="container">
     <div class="why-grid">
       <div class="why-img fade-in">
@@ -462,22 +953,37 @@
       <div>
         <div class="section-tag">Why Choose Us</div>
         <h2 class="section-title">The Mosh Realty <em>Difference</em></h2>
-        <p class="section-sub">We go beyond transactions — delivering a bespoke experience that matches exceptional clients with exceptional properties.</p>
+        <p style="font-size:0.93rem; color:var(--text-muted); line-height:1.85; margin-top:0.8rem; max-width:440px;">We go beyond transactions — delivering a bespoke experience that matches exceptional clients with exceptional properties.</p>
         <div class="why-features">
           <div class="why-feat fade-up">
-            <div class="why-feat-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-            <div><h4>Verified Listings Only</h4><p>Every property is personally verified — clear title, accurate measurements, no hidden surprises.</p></div>
+            <div class="why-feat-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <h4>Verified Listings Only</h4>
+              <p>Every property is personally verified — clear title, accurate measurements, no hidden surprises.</p>
+            </div>
           </div>
           <div class="why-feat fade-up stagger-1">
-            <div class="why-feat-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M3 21v-2a7 7 0 0114 0v2"/></svg></div>
-            <div><h4>Dedicated Property Advisor</h4><p>One expert contact from first viewing to final handover — responsive and entirely on your side.</p></div>
+            <div class="why-feat-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M3 21v-2a7 7 0 0114 0v2"/></svg>
+            </div>
+            <div>
+              <h4>Dedicated Property Advisor</h4>
+              <p>One expert contact from first viewing to final handover — responsive and entirely on your side.</p>
+            </div>
           </div>
           <div class="why-feat fade-up stagger-2">
-            <div class="why-feat-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-            <div><h4>Deep Market Intelligence</h4><p>Precise knowledge of Colombo's micro-markets ensures you buy at the right price — and sell at the best.</p></div>
+            <div class="why-feat-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div>
+              <h4>Deep Market Intelligence</h4>
+              <p>Precise knowledge of Colombo's micro-markets ensures you buy at the right price — and sell at the best.</p>
+            </div>
           </div>
         </div>
-        <div style="margin-top:2rem;"><a href="about.html" class="btn-primary">Learn More About Us</a></div>
+        <div style="margin-top:2.2rem;"><a href="about.html" class="btn-gold">Learn More About Us</a></div>
       </div>
     </div>
   </div>
@@ -488,23 +994,32 @@
   <div class="container">
     <div style="text-align:center;">
       <div class="section-tag" style="justify-content:center;">Client Stories</div>
-      <h2 class="section-title" style="color:var(--white);">Real Results, <em style="color:var(--gold-pale);">Real People</em></h2>
+      <h2 class="section-title">Real Results, <em>Real People</em></h2>
     </div>
     <div class="testi-grid">
       <div class="testi-card fade-up">
         <div class="testi-stars">★★★★★</div>
         <p class="testi-text">"Mosh Realty found us our dream home in Colombo 7 within three weeks. Their network of off-market listings is unmatched."</p>
-        <div class="testi-author"><div class="testi-avatar">RS</div><div><div class="testi-name">Rajan S.</div><div class="testi-role">Purchased — Colombo 7</div></div></div>
+        <div class="testi-author">
+          <div class="testi-avatar">RS</div>
+          <div><div class="testi-name">Rajan S.</div><div class="testi-role">Purchased — Colombo 7</div></div>
+        </div>
       </div>
       <div class="testi-card fade-up stagger-1">
         <div class="testi-stars">★★★★★</div>
         <p class="testi-text">"Sold our property at 12% above asking price in under 30 days. The photography and listing strategy was exceptional."</p>
-        <div class="testi-author"><div class="testi-avatar">DP</div><div><div class="testi-name">Dilanka P.</div><div class="testi-role">Sold — Battaramulla</div></div></div>
+        <div class="testi-author">
+          <div class="testi-avatar">DP</div>
+          <div><div class="testi-name">Dilanka P.</div><div class="testi-role">Sold — Battaramulla</div></div>
+        </div>
       </div>
       <div class="testi-card fade-up stagger-2">
         <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"As an overseas Sri Lankan, I needed complete trust. Mosh handled everything professionally and transparently."</p>
-        <div class="testi-author"><div class="testi-avatar">NA</div><div><div class="testi-name">Nirosha A.</div><div class="testi-role">Investment — Rajagiriya</div></div></div>
+        <p class="testi-text">"As an overseas Sri Lankan, I needed complete trust. Mosh handled everything professionally and transparently — seamless."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">NA</div>
+          <div><div class="testi-name">Nirosha A.</div><div class="testi-role">Investment — Rajagiriya</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -559,10 +1074,58 @@
   <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
+<!-- ── PROPERTIES DATA ── -->
 <script src="js/properties.js"></script>
-<script src="js/main.js"></script>
 <script>
-// Properties grid
+// PROPERTIES comes from js/properties.js — the same catalog used by every
+// other page on the site, so cards here link to real, matching property pages.
+
+function badgeClassFor(status) {
+  if (status === 'For Sale') return 'sale';
+  if (status === 'For Rent') return 'rent';
+  if (status === 'Commercial') return 'commercial';
+  return 'land';
+}
+
+function renderPropCard(p, i) {
+  const specs = [];
+  if (p.beds) specs.push(`<span class="prop-spec"><span class="prop-spec-icon"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>${p.beds} Beds</span>`);
+  if (p.baths) specs.push(`<span class="prop-spec"><span class="prop-spec-icon"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12V4a1 1 0 011-1h5a1 1 0 011 1v3M2 20h20M20 20v-8a2 2 0 00-2-2h-6"/></svg></span>${p.baths} Baths</span>`);
+  if (p.sqft) specs.push(`<span class="prop-spec"><span class="prop-spec-icon"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></span>${p.sqft}${p.beds ? ' sq.ft' : ''}</span>`);
+
+  return `
+    <a href="property-${p.id}.html" class="prop-card" style="transition-delay:${i * 0.07}s">
+      <div class="prop-img-wrap">
+        <img src="${p.image}" alt="${p.name}" loading="lazy">
+        <div class="prop-img-gradient"></div>
+        <span class="prop-badge ${badgeClassFor(p.status)}">${p.status}</span>
+        <div class="prop-fav" onclick="event.preventDefault();event.stopPropagation();this.classList.toggle('liked')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        </div>
+        ${p.featured ? `<div class="prop-featured-tag"><svg width="11" height="11" viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 6.9L12 17.3 5.7 20.8l1.7-6.9L2 9.2l7.1-.6z"/></svg>Featured</div>` : ''}
+        <div class="prop-type-pill">${p.type}</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-location">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          ${p.location}
+        </div>
+        <div class="prop-name">${p.name}</div>
+        <div class="prop-specs">${specs.join('')}</div>
+        <div class="prop-bottom">
+          <div>
+            <div class="prop-price">${p.price}</div>
+            <div class="prop-price-label">${p.status === 'For Rent' ? 'Monthly rent' : 'Asking price'}</div>
+          </div>
+          <span class="prop-btn">View Details
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>`;
+}
+
+// Grid rendering
 let activeFilter = 'all';
 const grid = document.getElementById('propsGrid');
 
@@ -571,17 +1134,14 @@ function renderGrid() {
     ? PROPERTIES.slice(0, 6)
     : PROPERTIES.filter(p => p.status === activeFilter).slice(0, 6);
   grid.innerHTML = list.length
-    ? list.map(p => renderPropCard(p)).join('')
-    : '<p style="color:var(--text-light);padding:2rem 0;">No properties match this filter.</p>';
-  // Re-trigger animations
-  grid.querySelectorAll('.prop-card').forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    setTimeout(() => {
-      el.style.transition = 'opacity 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease, transform 0.3s ease';
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-    }, i * 80);
+    ? list.map((p, i) => renderPropCard(p, i)).join('')
+    : '<p style="color:var(--text-muted);padding:2rem 0;">No properties match this filter.</p>';
+
+  // Animate in
+  requestAnimationFrame(() => {
+    grid.querySelectorAll('.prop-card').forEach(el => {
+      requestAnimationFrame(() => el.classList.add('visible'));
+    });
   });
 }
 
@@ -590,21 +1150,81 @@ document.querySelectorAll('.ftab').forEach(btn => {
     document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     activeFilter = btn.dataset.f;
-    renderGrid();
+    grid.querySelectorAll('.prop-card').forEach(el => el.classList.remove('visible'));
+    setTimeout(renderGrid, 50);
   });
 });
 
 renderGrid();
 
+// Hero search
 function doHeroSearch() {
   const q = document.getElementById('heroSearchInput').value.trim();
   location.href = q ? `properties.html?q=${encodeURIComponent(q)}` : 'properties.html';
 }
-document.getElementById('heroSearchInput').addEventListener('keydown', e => { if(e.key === 'Enter') doHeroSearch(); });
+document.getElementById('heroSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doHeroSearch(); });
+function filterGo(q) { location.href = `properties.html?q=${encodeURIComponent(q)}`; }
 
-function filterGo(q) {
-  location.href = `properties.html?q=${encodeURIComponent(q)}`;
+// Budget slider
+const slider = document.getElementById('budgetSlider');
+const display = document.getElementById('budgetDisplay');
+const fill = document.getElementById('rangeFill');
+function updateSlider() {
+  const val = parseInt(slider.value);
+  const pct = ((val - 5) / (500 - 5)) * 100;
+  fill.style.width = pct + '%';
+  if (val >= 500) display.textContent = 'LKR 500 Mn+';
+  else if (val >= 100) display.textContent = `Up to LKR ${val} Mn`;
+  else display.textContent = `Up to LKR ${val} Mn`;
 }
+slider.addEventListener('input', updateSlider);
+updateSlider();
+
+// Budget/type/location search → properties listing (type maps to property "type", location to a text search)
+function applyBudgetFilter() {
+  const typeMap = { house: 'House', apartment: 'Apartment', land: 'Land', commercial: 'Commercial' };
+  const locMap = { colombo7: 'Colombo 7', colombo3: 'Colombo 3', battaramulla: 'Battaramulla', rajagiriya: 'Rajagiriya', mountlavinia: 'Mount Lavinia', nugegoda: 'Nugegoda' };
+  const type = document.getElementById('filterType').value;
+  const loc = document.getElementById('filterLocation').value;
+  const q = locMap[loc] || typeMap[type] || '';
+  location.href = q ? `properties.html?q=${encodeURIComponent(q)}` : 'properties.html';
+}
+
+// Hero slider
+const slides = document.querySelectorAll('.hero-slide');
+const dotsWrap = document.getElementById('slideDots');
+let current = 0;
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'slide-dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goSlide(i);
+  dotsWrap.appendChild(d);
+});
+function goSlide(n) {
+  slides[current].classList.remove('active');
+  dotsWrap.children[current].classList.remove('active');
+  current = n;
+  slides[current].classList.add('active');
+  dotsWrap.children[current].classList.add('active');
+}
+setInterval(() => goSlide((current + 1) % slides.length), 4500);
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').style.background =
+    window.scrollY > 60 ? 'rgba(4,13,26,0.97)' : 'rgba(4,13,26,0.85)';
+});
+
+// Mobile nav
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
+
+// Intersection observer for scroll animations
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-up, .fade-in').forEach(el => io.observe(el));
 </script>
 </body>
 </html>

@@ -77,30 +77,30 @@
       <div class="filter-section">
         <h5>Status</h5>
         <div class="chk-list">
-          <label class="chk-item"><input type="checkbox" value="For Sale" checked> For Sale</label>
-          <label class="chk-item"><input type="checkbox" value="For Rent" checked> For Rent</label>
-          <label class="chk-item"><input type="checkbox" value="Land" checked> Land</label>
-          <label class="chk-item"><input type="checkbox" value="Commercial" checked> Commercial</label>
+          <label class="chk-item"><input type="checkbox" value="For Sale" data-group="status" checked> For Sale</label>
+          <label class="chk-item"><input type="checkbox" value="For Rent" data-group="status" checked> For Rent</label>
+          <label class="chk-item"><input type="checkbox" value="Land" data-group="status" checked> Land</label>
+          <label class="chk-item"><input type="checkbox" value="Commercial" data-group="status" checked> Commercial</label>
         </div>
       </div>
       <div class="filter-section">
         <h5>Property Type</h5>
         <div class="chk-list">
-          <label class="chk-item"><input type="checkbox" value="Penthouse" checked> Penthouse</label>
-          <label class="chk-item"><input type="checkbox" value="Villa" checked> Villa</label>
-          <label class="chk-item"><input type="checkbox" value="House" checked> House</label>
-          <label class="chk-item"><input type="checkbox" value="Apartment" checked> Apartment</label>
-          <label class="chk-item"><input type="checkbox" value="Land" checked> Land</label>
-          <label class="chk-item"><input type="checkbox" value="Commercial" checked> Commercial</label>
+          <label class="chk-item"><input type="checkbox" value="Penthouse" data-group="type" checked> Penthouse</label>
+          <label class="chk-item"><input type="checkbox" value="Villa" data-group="type" checked> Villa</label>
+          <label class="chk-item"><input type="checkbox" value="House" data-group="type" checked> House</label>
+          <label class="chk-item"><input type="checkbox" value="Apartment" data-group="type" checked> Apartment</label>
+          <label class="chk-item"><input type="checkbox" value="Land" data-group="type" checked> Land</label>
+          <label class="chk-item"><input type="checkbox" value="Commercial" data-group="type" checked> Commercial</label>
         </div>
       </div>
       <div class="filter-section">
         <h5>Bedrooms</h5>
         <div class="chk-list">
-          <label class="chk-item"><input type="checkbox" value="2" checked> 2+</label>
-          <label class="chk-item"><input type="checkbox" value="3" checked> 3+</label>
-          <label class="chk-item"><input type="checkbox" value="4" checked> 4+</label>
-          <label class="chk-item"><input type="checkbox" value="5" checked> 5+</label>
+          <label class="chk-item"><input type="checkbox" value="2" data-group="beds" checked> 2+</label>
+          <label class="chk-item"><input type="checkbox" value="3" data-group="beds" checked> 3+</label>
+          <label class="chk-item"><input type="checkbox" value="4" data-group="beds" checked> 4+</label>
+          <label class="chk-item"><input type="checkbox" value="5" data-group="beds" checked> 5+</label>
         </div>
       </div>
       <button class="apply-btn" onclick="applyFilters()">Apply Filters</button>
@@ -140,14 +140,17 @@
 <script>
 let current = [...PROPERTIES];
 function applyFilters() {
-  const statuses = [...document.querySelectorAll('.chk-item input[value="For Sale"],.chk-item input[value="For Rent"],.chk-item input[value="Land"],.chk-item input[value="Commercial"]')].filter(c=>c.checked).map(c=>c.value);
-  const types = [...document.querySelectorAll('.chk-item input[value="Penthouse"],.chk-item input[value="Villa"],.chk-item input[value="House"],.chk-item input[value="Apartment"],.chk-item input[value="Land"],.chk-item input[value="Commercial"]')].filter(c=>c.checked).map(c=>c.value);
+  const statuses = [...document.querySelectorAll('input[data-group="status"]')].filter(c=>c.checked).map(c=>c.value);
+  const types = [...document.querySelectorAll('input[data-group="type"]')].filter(c=>c.checked).map(c=>c.value);
+  const bedVals = [...document.querySelectorAll('input[data-group="beds"]')].filter(c=>c.checked).map(c=>parseInt(c.value, 10));
+  const minBed = bedVals.length ? Math.min(...bedVals) : null;
   const q = document.getElementById('searchInput').value.toLowerCase();
   current = PROPERTIES.filter(p => {
     const ms = !statuses.length || statuses.includes(p.status);
     const mt = !types.length || types.includes(p.type);
-    const mq = !q || p.name.toLowerCase().includes(q) || p.location.toLowerCase().includes(q) || p.type.toLowerCase().includes(q);
-    return ms && mt && mq;
+    const mb = !minBed || p.beds == null || p.beds >= minBed;
+    const mq = !q || p.name.toLowerCase().includes(q) || p.location.toLowerCase().includes(q) || p.type.toLowerCase().includes(q) || p.status.toLowerCase().includes(q);
+    return ms && mt && mb && mq;
   });
   if (document.getElementById('sortSel').value === 'az') current.sort((a,b)=>a.name.localeCompare(b.name));
   render();
@@ -167,7 +170,11 @@ function render() {
 const p = new URLSearchParams(location.search);
 const urlQ = p.get('q'), urlF = p.get('f');
 if (urlQ) document.getElementById('searchInput').value = urlQ;
-if (urlF) { document.querySelectorAll('.chk-item input').forEach(c=>{c.checked=c.value===urlF;}); }
+if (urlF) {
+  const statusVals = ['For Sale','For Rent','Land','Commercial'];
+  const group = statusVals.includes(urlF) ? 'status' : 'type';
+  document.querySelectorAll(`input[data-group="${group}"]`).forEach(c=>{ c.checked = c.value === urlF; });
+}
 applyFilters();
 </script>
 </body>
