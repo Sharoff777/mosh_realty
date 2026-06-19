@@ -109,26 +109,6 @@ const PROPERTIES = [
     features: ['Ocean Views', 'Corner Plot', 'All Utilities', 'Development Approval', 'Clear Title', 'Paved Road Access', 'Low-rise Zone', 'Fenced & Secured'],
     whatsapp: '94771234567',
   },
-  {
-    id: 'nugegoda-commercial',
-    status: 'Commercial',
-    badgeClass: 'badge-commercial',
-    price: 'LKR 340 Mn',
-    name: 'Nugegoda Commercial Complex',
-    location: 'High Level Road, Nugegoda',
-    beds: null, baths: null, sqft: '12,000 sqft',
-    type: 'Commercial',
-    featured: false,
-    image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
-    gallery: [
-      'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&q=80',
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80',
-      'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&q=80',
-    ],
-    description: 'Purpose-built commercial complex in Nugegoda\'s busiest corridor. Ground floor retail with three upper floors of open-plan office space, eight car parks, and a rooftop level approved for F&B. Fully tenanted with blue-chip anchors.',
-    features: ['Fully Tenanted', 'Retail Ground Floor', 'Office Floors', '8 Car Parks', 'Rooftop F&B Approval', 'Central Location', 'Elevator', 'Generator Backup'],
-    whatsapp: '94771234567',
-  },
 ];
 
 window.PROPERTIES = PROPERTIES;
