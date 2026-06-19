@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell With Us — Mosh Realty</title>
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    /* ── SELL HERO ── */
+    .sell-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 72vh;
+      margin-top: 72px;
+    }
+    .sell-hero-left {
+      background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-light) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(3rem,6vw,5rem) clamp(2rem,5vw,4.5rem);
+      position: relative;
+      overflow: hidden;
+    }
+    .sell-hero-left::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+      animation: pulseGlow 7s ease-in-out infinite alternate;
+    }
+    .sell-hero-left::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+    }
+    @keyframes pulseGlow { from { transform: scale(1); opacity:.8; } to { transform: scale(1.25); opacity:1; } }
+
+    .sell-hero-content { position: relative; z-index: 1; max-width: 520px; }
+    .hero-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .hero-eyebrow::before { content: ''; width: 24px; height: 1.5px; background: var(--gold); }
+    .sell-hero-left h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem,4vw,3.8rem);
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+    }
+    .sell-hero-left h1 em { font-style: italic; font-weight: 400; color: var(--gold-pale); }
+    .sell-hero-left p { font-size: 1rem; color: var(--text-muted); line-height: 1.85; margin-bottom: 2rem; }
+    .hero-metrics { display: flex; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .hero-metric .n {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold-pale);
+      line-height: 1;
+    }
+    .hero-metric .l { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem; font-weight: 500; letter-spacing: 0.04em; }
+    .sell-hero-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+
+    .sell-hero-right {
+      background: url('https://images.unsplash.com/photo-1560520031-3a4dc4e9de0c?w=1200&q=80') center/cover;
+      position: relative;
+      min-height: 400px;
+    }
+    .sell-hero-right::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(7,21,38,0.4) 0%, transparent 60%),
+                  linear-gradient(to top, rgba(4,13,26,0.4) 0%, transparent 40%);
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps-section { background: var(--navy-deep); }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+      position: relative;
+    }
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 28px; left: calc(12.5% + 28px); right: calc(12.5% + 28px);
+      height: 1.5px;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-dim));
+      pointer-events: none;
+    }
+    .step-card {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: linear-gradient(165deg, var(--navy-mid) 0%, var(--navy) 100%);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: var(--radius-lg);
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .step-card:hover { border-color: rgba(201,168,76,0.35); transform: translateY(-4px); }
+    .step-circle {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+      color: var(--navy-deepest);
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      box-shadow: 0 6px 24px rgba(201,168,76,0.4);
+    }
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+    }
+    .step-text { font-size: 0.83rem; color: var(--text-muted); line-height: 1.75; }
+
+    /* ── BENEFITS ── */
+    .benefits-section { background: var(--navy-deepest); }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .benefit-card {
+      background: linear-gradient(165deg, var(--navy-mid) 0%, var(--navy) 100%);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.8rem;
+      transition: border-color var(--transition), transform var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .benefit-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+    }
+    .benefit-card:hover { border-color: rgba(201,168,76,0.35); transform: translateY(-4px); }
+    .benefit-card.highlight {
+      background: linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(232,195,90,0.06) 100%);
+      border-color: rgba(201,168,76,0.3);
+    }
+    .benefit-icon {
+      width: 46px; height: 46px;
+      border-radius: var(--radius);
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+    .benefit-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+    }
+    .benefit-text { font-size: 0.83rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 1rem; }
+    .benefit-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── FORM SECTION ── */
+    .form-section { background: var(--navy-deep); }
+    .form-layout {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 4rem;
+      align-items: start;
+    }
+    .form-left h3 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem,3vw,2.6rem);
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.8rem;
+    }
+    .form-left h3 em { font-style: italic; font-weight: 400; color: var(--gold-pale); }
+    .form-left > p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.85; margin-bottom: 1.5rem; }
+    .form-promise {
+      background: rgba(201,168,76,0.08);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+    }
+    .form-promise strong { color: var(--gold); }
+    .form-wa-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #25D366;
+      transition: opacity var(--transition);
+      padding: 0.7rem 1.2rem;
+      background: rgba(37,211,102,0.08);
+      border: 1px solid rgba(37,211,102,0.2);
+      border-radius: var(--radius);
+    }
+    .form-wa-link:hover { background: rgba(37,211,102,0.14); opacity: 0.9; }
+
+    /* Form card */
+    .form-card {
+      background: linear-gradient(165deg, var(--navy-mid) 0%, var(--navy) 100%);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+    }
+    .form-card h4 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+    .form-sub { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+    /* Progress */
+    .form-progress { display: flex; gap: 4px; margin-bottom: 1.8rem; }
+    .progress-step {
+      height: 3px;
+      flex: 1;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      transition: background 0.3s ease;
+    }
+    .progress-step.done { background: var(--gold-dim); }
+    .progress-step.active { background: linear-gradient(90deg, var(--gold), var(--gold-bright)); }
+
+    /* Step panels */
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+    .step-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .step-heading { font-size: 0.95rem; font-weight: 600; color: var(--white); margin-bottom: 1.3rem; }
+
+    .form-nav { display: flex; gap: 0.7rem; margin-top: 1.4rem; }
+    .btn-next, .btn-back {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.8rem 1.4rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all var(--transition);
+      border: none;
+    }
+    .btn-next {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+      color: var(--navy-deepest);
+      flex: 1;
+    }
+    .btn-next:hover { filter: brightness(1.1); }
+    .btn-back {
+      background: rgba(255,255,255,0.06);
+      color: var(--text-mid);
+      border: 1.5px solid rgba(255,255,255,0.1);
+    }
+    .btn-back:hover { border-color: rgba(201,168,76,0.4); color: var(--white); }
+    .btn-submit { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%); color: var(--navy-deepest); flex: 1; }
+    .btn-submit:hover { filter: brightness(1.1); }
+
+    /* Type selector */
+    .type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+    .type-btn {
+      padding: 0.65rem 0.5rem;
+      background: rgba(255,255,255,0.04);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all var(--transition);
+      text-align: center;
+    }
+    .type-btn:hover { border-color: rgba(201,168,76,0.35); color: var(--white); }
+    .type-btn.selected {
+      background: rgba(201,168,76,0.15);
+      color: var(--gold-pale);
+      border-color: rgba(201,168,76,0.5);
+    }
+
+    /* Photo upload zone */
+    .upload-zone {
+      border: 2px dashed rgba(201,168,76,0.3);
+      border-radius: var(--radius);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+      background: rgba(255,255,255,0.02);
+      margin-bottom: 1rem;
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: rgba(201,168,76,0.7);
+      background: rgba(201,168,76,0.05);
+    }
+    .upload-zone svg { display: block; margin: 0 auto 0.5rem; opacity: 0.5; }
+    .upload-zone p { font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
+    .upload-zone span { color: var(--gold-pale); text-decoration: underline; cursor: pointer; }
+    .upload-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .upload-thumb {
+      position: relative;
+      aspect-ratio: 4/3;
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.05);
+    }
+    .upload-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .upload-thumb .remove-btn {
+      position: absolute;
+      top: 4px; right: 4px;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.65);
+      border: none;
+      color: #fff;
+      font-size: 13px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0;
+    }
+    .upload-progress {
+      font-size: 0.78rem;
+      color: var(--gold-pale);
+      margin-bottom: 0.5rem;
+      min-height: 1.1rem;
+      text-align: center;
+    }
+    .upload-limit { font-size: 0.75rem; color: var(--text-muted); text-align: center; }
+    .btn-submit:disabled { opacity: 0.55; cursor: not-allowed; filter: none; }
+
+    /* Success */
+    .form-success { display: none; text-align: center; padding: 2.5rem 0.5rem; }
+    .form-success.show { display: block; }
+    .success-icon {
+      width: 68px; height: 68px;
+      background: rgba(37,162,68,0.12);
+      border: 1px solid rgba(37,162,68,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+    }
+    .form-success h4 { font-family: var(--font-display); font-size: 1.6rem; color: var(--white); margin-bottom: 0.5rem; }
+    .form-success p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.75; }
+
+    @media (max-width: 1024px) {
+      .sell-hero { grid-template-columns: 1fr; }
+      .sell-hero-right { height: 300px; }
+      .steps-grid { grid-template-columns: 1fr 1fr; }
+      .steps-grid::before { display: none; }
+      .benefits-grid { grid-template-columns: 1fr 1fr; }
+      .form-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+    @media (max-width: 640px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .type-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="./689525326_1252441576876300_6291122596398590486_n-removebg.png" alt="Mosh Realty" class="nav-logo-img">
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="properties.html">Properties</a>
+    </div>
+    <div class="nav-right">
+      <a href="tel:+94777150066" class="nav-contact-link">+94 77 715 0066</a>
+      <a href="sell-with-us.html" class="btn-nav-cta active">
+        Sell With Us
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="properties.html">Properties</a>
+  <a href="sell-with-us.html" class="cta-mobile">Sell With Us →</a>
+</div>
+
+<!-- HERO -->
+<section class="sell-hero">
+  <div class="sell-hero-left">
+    <div class="sell-hero-content">
+      <div class="hero-eyebrow">List Your Property</div>
+      <h1>Sell With <em>Mosh Realty</em></h1>
+      <p>No upfront cost. We only earn when you do — and we work tirelessly to get you there.</p>
+      <div class="hero-metrics">
+        <div class="hero-metric"><div class="n">24hr</div><div class="l">Response guarantee</div></div>
+      </div>
+      <div class="sell-hero-actions">
+        <a href="#list-form" class="btn-gold">List My Property</a>
+        <a href="tel:+94777150066" class="btn-outline-ivory">Talk to an Advisor</a>
+      </div>
+    </div>
+  </div>
+  <div class="sell-hero-right"></div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section steps-section">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="section-tag" style="justify-content:center;">Our Process</div>
+      <h2 class="section-title">Simple. <em>Transparent.</em> Effective.</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card fade-up">
+        <div class="step-circle">1</div>
+        <div class="step-title">Submit Details</div>
+        <p class="step-text">Fill our simple 3-step form. Takes under 2 minutes. We review and call you within 24 hours.</p>
+      </div>
+      <div class="step-card fade-up stagger-1">
+        <div class="step-circle">2</div>
+        <div class="step-title">Free Photography</div>
+        <p class="step-text">We arrange a complimentary professional shoot — interiors, exteriors, drone aerials, all edited.</p>
+      </div>
+      <div class="step-card fade-up stagger-2">
+        <div class="step-circle">3</div>
+        <div class="step-title">We Market It</div>
+        <p class="step-text">Your listing goes live on our site, Instagram, Facebook ads, and our qualified buyer database.</p>
+      </div>
+      <div class="step-card fade-up stagger-3">
+        <div class="step-circle">4</div>
+        <div class="step-title">You Get Paid</div>
+        <p class="step-text">We handle viewings, negotiation, and all paperwork end-to-end — so you can focus on what's next.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="section benefits-section">
+  <div class="container">
+    <div class="section-tag">What's Included</div>
+    <h2 class="section-title">Everything You Need, <em>Nothing You Don't</em></h2>
+    <div class="benefits-grid">
+      <div class="benefit-card fade-up">
+        <div class="benefit-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="benefit-title">Professional Photography</div>
+        <p class="benefit-text">Complimentary wide-angle interior shots, exterior photography, and drone aerials — fully edited and ready to publish.</p>
+        <div class="benefit-tag">✓ Free of charge</div>
+      </div>
+      <div class="benefit-card fade-up stagger-1">
+        <div class="benefit-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div class="benefit-title">Targeted Meta & Instagram Ads</div>
+        <p class="benefit-text">Paid advertising funded by Mosh Realty — reaching buyers actively searching in your price range and area.</p>
+        <div class="benefit-tag">✓ Paid by us</div>
+      </div>
+      <div class="benefit-card fade-up stagger-2">
+        <div class="benefit-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div class="benefit-title">Qualified Buyer Network</div>
+        <p class="benefit-text">Instant exposure to our curated database of pre-qualified buyers, investors, and NRSLs actively looking.</p>
+        <div class="benefit-tag">✓ Qualified buyers only</div>
+      </div>
+      <div class="benefit-card fade-up">
+        <div class="benefit-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="benefit-title">Privacy & Plate Coverage</div>
+        <p class="benefit-text">We protect your personal information. Property identifiers and number plates managed discreetly throughout.</p>
+        <div class="benefit-tag">✓ Full discretion</div>
+      </div>
+      <div class="benefit-card fade-up stagger-1">
+        <div class="benefit-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="benefit-title">Legal & Documentation</div>
+        <p class="benefit-text">Our legal partners handle title deed checks, transfer documents, and all paperwork end-to-end.</p>
+        <div class="benefit-tag">✓ Stress-free process</div>
+      </div>
+      <div class="benefit-card highlight fade-up stagger-2">
+        <div class="benefit-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="benefit-title">Zero Upfront Fees</div>
+        <p class="benefit-text">No listing charge, no photography cost, no admin fees. You pay nothing until your property is successfully dealt.</p>
+        <div class="benefit-tag">✓ You pay nothing until sold</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM SECTION -->
+<section class="section form-section" id="list-form">
+  <div class="container">
+    <div class="form-layout">
+      <div class="form-left fade-up">
+        <div class="section-tag">Get Started Today</div>
+        <h3>List Your Property <em>Now</em></h3>
+        <p>Complete our simple 3-step form. No obligations, no upfront costs. Our team will contact you within 24 hours to discuss your property and agree a strategy.</p>
+        <div class="form-promise">
+          <strong>Our Promise:</strong> We'll give you an honest market valuation, a clear plan, and only proceed if we genuinely believe we can achieve your target.
+        </div>
+        <a href="https://wa.me/94777150066?text=Hi%2C%20I%27d%20like%20to%20list%20my%20property%20with%20Mosh%20Realty." class="form-wa-link" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Prefer WhatsApp? Chat with us directly
+        </a>
+      </div>
+
+      <div class="form-card fade-up stagger-1">
+        <div id="formBody">
+          <h4>Property Submission</h4>
+          <p class="form-sub">3 quick steps — under 2 minutes</p>
+          <div class="form-progress">
+            <div class="progress-step active" id="ps1"></div>
+            <div class="progress-step" id="ps2"></div>
+            <div class="progress-step" id="ps3"></div>
+          </div>
+
+          <!-- Step 1 -->
+          <div class="form-step active" id="step1">
+            <div class="step-label">Step 1 of 3</div>
+            <div class="step-heading">Tell us about yourself</div>
+            <div class="form-row">
+              <div class="form-group"><label>Full Name *</label><input type="text" id="f-name" placeholder="Your name"></div>
+              <div class="form-group"><label>WhatsApp Number *</label><input type="tel" id="f-phone" placeholder="+94 77 000 0000"></div>
+            </div>
+            <div class="form-group"><label>Email (optional)</label><input type="email" id="f-email" placeholder="you@example.com"></div>
+            <div class="form-group">
+              <label>Are you the…</label>
+              <select id="f-role">
+                <option value="owner">Owner</option>
+                <option value="agent">Agent representing owner</option>
+                <option value="family">Family member of owner</option>
+              </select>
+            </div>
+            <div class="form-nav">
+              <button class="btn-next" onclick="goStep(2)">Next: Property Details →</button>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="form-step" id="step2">
+            <div class="step-label">Step 2 of 3</div>
+            <div class="step-heading">About your property</div>
+            <div class="form-group"><label>Property Type *</label>
+              <div class="type-grid" id="typeGrid">
+                <button class="type-btn" data-val="House" onclick="selectType(this)">🏠 House</button>
+                <button class="type-btn" data-val="Apartment" onclick="selectType(this)">🏢 Apartment</button>
+                <button class="type-btn" data-val="Villa" onclick="selectType(this)">🌴 Villa</button>
+                <button class="type-btn" data-val="Penthouse" onclick="selectType(this)">🏙️ Penthouse</button>
+                <button class="type-btn" data-val="Land" onclick="selectType(this)">🌿 Land</button>
+                <button class="type-btn" data-val="Commercial" onclick="selectType(this)">🏪 Commercial</button>
+              </div>
+            </div>
+            <div class="form-group"><label>Full Address / Location *</label><input type="text" id="f-address" placeholder="e.g. 12 Marine Drive, Mount Lavinia"></div>
+            <div class="form-row">
+              <div class="form-group"><label>Listing Purpose</label><select id="f-purpose"><option>For Sale</option><option>For Rent</option><option>Both</option></select></div>
+              <div class="form-group"><label>Bedrooms</label><select id="f-beds"><option value="">N/A</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select></div>
+            </div>
+            <div class="form-group"><label>Asking Price (LKR) *</label><input type="text" id="f-price" placeholder="e.g. 75,000,000 or 150,000/month"></div>
+            <div class="form-nav">
+              <button class="btn-back" onclick="goStep(1)">← Back</button>
+              <button class="btn-next" onclick="goStep(3)">Next: Final Details →</button>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="form-step" id="step3">
+            <div class="step-label">Step 3 of 3</div>
+            <div class="step-heading">Final details & photos</div>
+            <div class="form-group"><label>Land Size or Built-up Area</label><input type="text" id="f-size" placeholder="e.g. 3,500 sqft or 20 perches"></div>
+            <div class="form-group"><label>Key Features / Recent Renovations</label><textarea id="f-notes" placeholder="e.g. new kitchen 2023, pool, ocean view, solar panels…"></textarea></div>
+            <div class="form-group"><label>Best time to call you</label><select id="f-time"><option>Anytime</option><option>Morning (8am–12pm)</option><option>Afternoon (12pm–5pm)</option><option>Evening (5pm–8pm)</option></select></div>
+
+            <!-- Photo upload -->
+            <div class="form-group">
+              <label>Property Photos <span style="color:var(--text-muted);font-weight:400">(optional, up to 10)</span></label>
+              <input type="file" id="photoInput" accept="image/*" multiple style="display:none">
+              <div class="upload-zone" id="uploadZone" onclick="document.getElementById('photoInput').click()">
+                <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <p>Drag &amp; drop photos here, or <span>browse</span></p>
+                <p style="margin-top:4px">JPG, PNG, WEBP · Max 8MB each</p>
+              </div>
+              <div class="upload-grid" id="uploadGrid"></div>
+              <div class="upload-progress" id="uploadProgress"></div>
+              <p class="upload-limit" id="uploadLimit"></p>
+            </div>
+
+            <div class="form-nav">
+              <button class="btn-back" onclick="goStep(2)">← Back</button>
+              <button class="btn-next btn-submit" id="btnSubmit" onclick="submitForm()">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+                Submit My Property
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">
+            <svg width="28" height="28" fill="none" stroke="#25a244" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h4>Submission Received!</h4>
+          <p>Thank you — our team will reach out within 24 hours. In the meantime, feel free to WhatsApp us directly.</p>
+          <a href="https://wa.me/94777150066?text=Hi%2C%20I%20just%20submitted%20my%20property%20listing%20on%20Mosh%20Realty." class="btn-gold" target="_blank" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem; margin-top:0.5rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Follow up on WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-text">Mosh <span>Realty</span></div>
+        <p>Sri Lanka's most trusted luxury real estate agency. We match exceptional properties with exceptional people.</p>
+        <div class="footer-social">
+          <a href="https://wa.me/94777150066" target="_blank">WA</a>
+          <a href="#" target="_blank">IG</a>
+          <a href="#" target="_blank">FB</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Navigate</div>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="properties.html">Properties</a></li>
+          <li><a href="sell-with-us.html">Sell With Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Listings</div>
+        <ul class="footer-links">
+          <li><a href="properties.html?f=For+Sale">For Sale</a></li>
+          <li><a href="properties.html?f=For+Rent">For Rent</a></li>
+          <li><a href="properties.html?f=Land">Land</a></li>
+          <li><a href="properties.html?f=Commercial">Commercial</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contact</div>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Courtyard Wing, Cinnamon Grand
+        </div>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12 19.79 19.79 0 011.65 3.38 2 2 0 013.62 1.22h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          +94 77 715 0066
+        </div>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          hello@moshrealty.lk
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Mosh Realty (Pvt) Ltd. All rights reserved.</p>
+      <p>Luxury · Integrity · Results</p>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/94777150066" class="wa-float" target="_blank" aria-label="WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script src="js/main.js"></script>
+<script>
+/* ── State ── */
+let currentStep = 1;
+let selectedType = '';
+const MAX_PHOTOS = 10;
+const MAX_SIZE_MB = 8;
+let selectedFiles = []; // { file, previewUrl }
+
+/* ── Step navigation ── */
+function goStep(n) {
+  if (n > currentStep) {
+    if (currentStep === 1) {
+      if (!document.getElementById('f-name').value.trim() || !document.getElementById('f-phone').value.trim()) {
+        alert('Please enter your name and WhatsApp number.'); return;
+      }
+    }
+    if (currentStep === 2) {
+      if (!selectedType) { alert('Please select a property type.'); return; }
+      if (!document.getElementById('f-address').value.trim()) { alert('Please enter the property address.'); return; }
+      if (!document.getElementById('f-price').value.trim()) { alert('Please enter an asking price.'); return; }
+    }
+  }
+  document.getElementById('step' + currentStep).classList.remove('active');
+  document.getElementById('ps'   + currentStep).classList.remove('active');
+  document.getElementById('ps'   + currentStep).classList.add('done');
+  currentStep = n;
+  document.getElementById('step' + n).classList.add('active');
+  document.getElementById('ps'   + n).classList.add('active');
+  if (n < 3) document.getElementById('ps' + n).classList.remove('done');
+  document.getElementById('list-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function selectType(btn) {
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedType = btn.dataset.val;
+}
+
+/* ── Photo upload ── */
+const photoInput  = document.getElementById('photoInput');
+const uploadZone  = document.getElementById('uploadZone');
+const uploadGrid  = document.getElementById('uploadGrid');
+const uploadLimit = document.getElementById('uploadLimit');
+
+photoInput.addEventListener('change', e => addFiles([...e.target.files]));
+
+uploadZone.addEventListener('dragover',  e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag-over');
+  addFiles([...e.dataTransfer.files]);
+});
+
+function addFiles(files) {
+  for (const f of files) {
+    if (!f.type.startsWith('image/')) continue;
+    if (f.size > MAX_SIZE_MB * 1024 * 1024) { alert(`"${f.name}" is over ${MAX_SIZE_MB}MB — skipped.`); continue; }
+    if (selectedFiles.length >= MAX_PHOTOS) { alert(`Max ${MAX_PHOTOS} photos allowed.`); break; }
+    selectedFiles.push({ file: f, previewUrl: URL.createObjectURL(f) });
+  }
+  renderThumbs();
+  // reset input so same file can be re-added after removal
+  photoInput.value = '';
+}
+
+function renderThumbs() {
+  uploadGrid.innerHTML = '';
+  selectedFiles.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'upload-thumb';
+    div.innerHTML = `
+      <img src="${item.previewUrl}" alt="photo ${i+1}">
+      <button class="remove-btn" onclick="removeThumb(${i})" type="button">✕</button>
+    `;
+    uploadGrid.appendChild(div);
+  });
+  uploadLimit.textContent = selectedFiles.length
+    ? `${selectedFiles.length} / ${MAX_PHOTOS} photo${selectedFiles.length > 1 ? 's' : ''} selected`
+    : '';
+}
+
+function removeThumb(i) {
+  URL.revokeObjectURL(selectedFiles[i].previewUrl);
+  selectedFiles.splice(i, 1);
+  renderThumbs();
+}
+
+/* ── Upload single file to Vercel Blob via /api/upload ── */
+async function uploadToBlob(fileObj) {
+  const res = await fetch(`/api/upload?filename=${encodeURIComponent(fileObj.file.name)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': fileObj.file.type },
+    body: fileObj.file,
+  });
+  if (!res.ok) throw new Error(`Upload failed for ${fileObj.file.name}`);
+  const data = await res.json();
+  return { url: data.url, name: fileObj.file.name, type: fileObj.file.type };
+}
+
+/* ── Main submit ── */
+async function submitForm() {
+  const btn      = document.getElementById('btnSubmit');
+  const progress = document.getElementById('uploadProgress');
+
+  btn.disabled = true;
+
+  try {
+    // 1. Upload photos to blob store
+    const blobUrls = [];
+    for (let i = 0; i < selectedFiles.length; i++) {
+      progress.textContent = `Uploading photo ${i + 1} of ${selectedFiles.length}…`;
+      const result = await uploadToBlob(selectedFiles[i]);
+      blobUrls.push(result);
+    }
+
+    progress.textContent = selectedFiles.length ? 'Sending email…' : 'Sending…';
+
+    // 2. POST form data + blob URLs to /api/submit
+    const payload = {
+      name:         document.getElementById('f-name').value.trim(),
+      phone:        document.getElementById('f-phone').value.trim(),
+      email:        document.getElementById('f-email').value.trim(),
+      role:         document.getElementById('f-role').value,
+      propertyType: selectedType,
+      address:      document.getElementById('f-address').value.trim(),
+      purpose:      document.getElementById('f-purpose').value,
+      bedrooms:     document.getElementById('f-beds').value,
+      price:        document.getElementById('f-price').value.trim(),
+      size:         document.getElementById('f-size').value.trim(),
+      notes:        document.getElementById('f-notes').value.trim(),
+      callTime:     document.getElementById('f-time').value,
+      blobUrls,
+    };
+
+    const res = await fetch('/api/submit', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Unknown server error');
+
+    // 3. Show success state
+    progress.textContent = '';
+    document.getElementById('formBody').style.display    = 'none';
+    document.getElementById('formSuccess').classList.add('show');
+
+  } catch (err) {
+    progress.textContent = '';
+    btn.disabled = false;
+    alert('Something went wrong: ' + err.message + '\n\nPlease try again or contact us on WhatsApp.');
+  }
+}
+</script>
+</body>
+</html>

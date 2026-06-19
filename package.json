@@ -1,0 +1,10 @@
+{
+  "name": "mosh-realty",
+  "version": "1.0.0",
+  "description": "Mosh Realty backend — property submission form with Vercel Blob + Nodemailer",
+  "type": "commonjs",
+  "dependencies": {
+    "@vercel/blob": "^0.27.0",
+    "nodemailer": "^6.9.0"
+  }
+}

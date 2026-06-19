@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Properties — Mosh Realty</title>
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    .page-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      padding: 2.5rem clamp(1rem,3vw,2.5rem);
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: sticky;
+      top: 90px;
+      height: fit-content;
+    }
+    .filter-box {
+      background: linear-gradient(165deg, var(--navy-mid) 0%, var(--navy) 100%);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: var(--radius-lg);
+      padding: 1.6rem;
+      box-shadow: var(--shadow-md);
+    }
+    .filter-box-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .filter-box-title::before { content: ''; width: 16px; height: 1.5px; background: var(--gold); }
+    .filter-section {
+      margin-bottom: 1.4rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 1.4rem;
+    }
+    .filter-section:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .filter-section h5 {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.8rem;
+    }
+    .chk-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .chk-item {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.83rem;
+      color: var(--text-mid);
+      cursor: pointer;
+      padding: 0.2rem 0;
+      transition: color var(--transition);
+    }
+    .chk-item:hover { color: var(--white); }
+    .chk-item input {
+      width: 15px; height: 15px;
+      accent-color: var(--gold);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* Search bar */
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 0.65rem 0.9rem;
+      margin-bottom: 1rem;
+      transition: border-color var(--transition);
+    }
+    .search-box:focus-within { border-color: var(--gold-border); }
+    .search-box svg { color: rgba(255,255,255,0.3); flex-shrink: 0; }
+    .search-box input {
+      flex: 1; background: none; border: none; outline: none;
+      font-size: 0.88rem; color: var(--white);
+    }
+    .search-box input::placeholder { color: rgba(255,255,255,0.25); }
+
+    /* Listing header */
+    .listing-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.4rem;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
+    .listing-count { font-size: 0.85rem; color: var(--text-muted); }
+    .listing-count strong { color: var(--gold-pale); font-weight: 600; }
+    .sort-sel {
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 0.5rem 2.2rem 0.5rem 0.9rem;
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      outline: none;
+      cursor: pointer;
+      font-family: var(--font-body);
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.7rem center;
+    }
+    .sort-sel option { background: var(--navy-mid); }
+
+    /* Listing grid */
+    .listing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .no-results {
+      grid-column: 1/-1;
+      padding: 4rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    /* Filter buttons */
+    .apply-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+      color: var(--navy-deepest);
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: filter var(--transition);
+      font-family: var(--font-body);
+    }
+    .apply-btn:hover { filter: brightness(1.1); }
+    .clear-btn {
+      width: 100%;
+      padding: 0.6rem;
+      background: transparent;
+      color: var(--text-muted);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      font-size: 0.78rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: all var(--transition);
+      font-family: var(--font-body);
+    }
+    .clear-btn:hover { border-color: rgba(201,168,76,0.4); color: var(--gold); }
+
+    /* Mobile filter toggle */
+    .mobile-filter-toggle {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 0.65rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      color: var(--text-mid);
+      width: 100%;
+      font-family: var(--font-body);
+      transition: border-color var(--transition);
+    }
+    .mobile-filter-toggle:hover { border-color: var(--gold-border); color: var(--white); }
+
+    @media (max-width: 900px) {
+      .page-layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .mobile-filter-toggle { display: flex; }
+      .sidebar.hidden { display: none; }
+    }
+    @media (max-width: 500px) {
+      .listing-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="./689525326_1252441576876300_6291122596398590486_n-removebg.png" alt="Mosh Realty" class="nav-logo-img">
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="properties.html" class="active">Properties</a>
+    </div>
+    <div class="nav-right">
+      <a href="tel:+94777150066" class="nav-contact-link">+94 77 715 0066</a>
+      <a href="sell-with-us.html" class="btn-nav-cta">
+        Sell With Us
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="properties.html">Properties</a>
+  <a href="sell-with-us.html" class="cta-mobile">Sell With Us →</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="container">
+    <div class="page-hero-eyebrow">Browse Listings</div>
+    <h1>Our <em>Properties</em></h1>
+    <p>Exceptional homes, land and commercial spaces across Sri Lanka's finest addresses.</p>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="page-layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="filter-box">
+      <div class="filter-box-title">Filter Listings</div>
+      <div class="filter-section">
+        <h5>Status</h5>
+        <div class="chk-list">
+          <label class="chk-item"><input type="checkbox" value="For Sale" data-group="status" checked> For Sale</label>
+          <label class="chk-item"><input type="checkbox" value="For Rent" data-group="status" checked> For Rent</label>
+          <label class="chk-item"><input type="checkbox" value="Land" data-group="status" checked> Land</label>
+          <label class="chk-item"><input type="checkbox" value="Commercial" data-group="status" checked> Commercial</label>
+        </div>
+      </div>
+      <div class="filter-section">
+        <h5>Property Type</h5>
+        <div class="chk-list">
+          <label class="chk-item"><input type="checkbox" value="Penthouse" data-group="type" checked> Penthouse</label>
+          <label class="chk-item"><input type="checkbox" value="Villa" data-group="type" checked> Villa</label>
+          <label class="chk-item"><input type="checkbox" value="House" data-group="type" checked> House</label>
+          <label class="chk-item"><input type="checkbox" value="Apartment" data-group="type" checked> Apartment</label>
+          <label class="chk-item"><input type="checkbox" value="Land" data-group="type" checked> Land</label>
+          <label class="chk-item"><input type="checkbox" value="Commercial" data-group="type" checked> Commercial</label>
+        </div>
+      </div>
+      <div class="filter-section">
+        <h5>Bedrooms</h5>
+        <div class="chk-list">
+          <label class="chk-item"><input type="checkbox" value="2" data-group="beds" checked> 2+</label>
+          <label class="chk-item"><input type="checkbox" value="3" data-group="beds" checked> 3+</label>
+          <label class="chk-item"><input type="checkbox" value="4" data-group="beds" checked> 4+</label>
+          <label class="chk-item"><input type="checkbox" value="5" data-group="beds" checked> 5+</label>
+        </div>
+      </div>
+      <button class="apply-btn" onclick="applyFilters()">Apply Filters</button>
+      <button class="clear-btn" onclick="clearFilters()">Clear All</button>
+    </div>
+  </aside>
+
+  <div>
+    <button class="mobile-filter-toggle" onclick="document.getElementById('sidebar').classList.toggle('hidden')">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>
+      Filter Properties
+    </button>
+    <div class="search-box">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search by name, location or type…" oninput="applyFilters()">
+    </div>
+    <div class="listing-header">
+      <div class="listing-count" id="countEl">Showing <strong>0</strong> properties</div>
+      <select class="sort-sel" id="sortSel" onchange="applyFilters()">
+        <option value="default">Sort: Default</option>
+        <option value="az">Name A–Z</option>
+      </select>
+    </div>
+    <div class="listing-grid" id="listingGrid"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-text">Mosh <span>Realty</span></div>
+        <p>Sri Lanka's most trusted luxury real estate agency. We match exceptional properties with exceptional people.</p>
+        <div class="footer-social">
+          <a href="https://wa.me/94777150066" target="_blank">WA</a>
+          <a href="#" target="_blank">IG</a>
+          <a href="#" target="_blank">FB</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Properties</div>
+        <ul class="footer-links">
+          <li><a href="properties.html?f=For+Sale">For Sale</a></li>
+          <li><a href="properties.html?f=For+Rent">For Rent</a></li>
+          <li><a href="properties.html?f=Land">Land</a></li>
+          <li><a href="properties.html?f=Commercial">Commercial</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Company</div>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="sell-with-us.html">Sell With Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contact</div>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12 19.79 19.79 0 011.65 3.38 2 2 0 013.62 1.22h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          +94 77 715 0066
+        </div>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          hello@moshrealty.lk
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Mosh Realty (Pvt) Ltd. All rights reserved.</p>
+      <p>Luxury · Integrity · Results</p>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/94777150066" class="wa-float" target="_blank" aria-label="WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script src="js/properties.js"></script>
+<script src="js/main.js"></script>
+<script>
+let current = [...PROPERTIES];
+
+function applyFilters() {
+  const statuses = [...document.querySelectorAll('input[data-group="status"]')].filter(c=>c.checked).map(c=>c.value);
+  const types    = [...document.querySelectorAll('input[data-group="type"]')].filter(c=>c.checked).map(c=>c.value);
+  const bedVals  = [...document.querySelectorAll('input[data-group="beds"]')].filter(c=>c.checked).map(c=>parseInt(c.value,10));
+  const minBed   = bedVals.length ? Math.min(...bedVals) : null;
+  const q        = document.getElementById('searchInput').value.toLowerCase();
+  const maxBudgetMn = window._urlBudget || null;
+  const minBedsUrl  = window._urlBeds   || null;
+
+  current = PROPERTIES.filter(p => {
+    const ms = !statuses.length || statuses.includes(p.status);
+    const mt = !types.length    || types.includes(p.type);
+    const mb = !minBed          || p.beds == null || p.beds >= minBed;
+    const mq = !q               || p.name.toLowerCase().includes(q) || p.location.toLowerCase().includes(q) || p.type.toLowerCase().includes(q) || p.status.toLowerCase().includes(q);
+    let budgetOk = true;
+    if (maxBudgetMn) { const n = parseFloat((p.price||'').replace(/[^\d.]/g,'')); budgetOk = isNaN(n) || n <= maxBudgetMn; }
+    const bedsOk = !minBedsUrl || p.beds == null || p.beds >= minBedsUrl;
+    return ms && mt && mb && mq && budgetOk && bedsOk;
+  });
+
+  if (document.getElementById('sortSel').value === 'az') current.sort((a,b)=>a.name.localeCompare(b.name));
+  render();
+}
+
+function clearFilters() {
+  document.querySelectorAll('.chk-item input').forEach(c=>c.checked=true);
+  document.getElementById('searchInput').value='';
+  window._urlBudget = null; window._urlBeds = null;
+  current=[...PROPERTIES]; render();
+}
+
+function render() {
+  const g = document.getElementById('listingGrid');
+  document.getElementById('countEl').innerHTML = `Showing <strong>${current.length}</strong> propert${current.length === 1 ? 'y' : 'ies'}`;
+  if (!current.length) { g.innerHTML='<div class="no-results"><svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 1rem;color:var(--text-muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>No properties match your search.</p></div>'; return; }
+  g.innerHTML = current.map(p => renderPropCard(p)).join('');
+  // Animate in
+  requestAnimationFrame(() => {
+    g.querySelectorAll('.prop-card').forEach((el,i) => {
+      el.style.transitionDelay = (i * 0.07) + 's';
+      requestAnimationFrame(() => el.classList.add('visible'));
+    });
+  });
+}
+
+// URL params
+const p = new URLSearchParams(location.search);
+const urlQ = p.get('q'), urlF = p.get('f'), urlBeds = p.get('beds'), urlBudget = p.get('budget');
+if (urlQ) document.getElementById('searchInput').value = urlQ;
+if (urlF) {
+  const statusVals = ['For Sale','For Rent','Land','Commercial'];
+  const group = statusVals.includes(urlF) ? 'status' : 'type';
+  document.querySelectorAll(`input[data-group="${group}"]`).forEach(c => { c.checked = c.value === urlF; });
+}
+window._urlBeds   = urlBeds   ? parseInt(urlBeds)   : null;
+window._urlBudget = urlBudget ? parseInt(urlBudget) : null;
+applyFilters();
+</script>
+</body>
+</html>

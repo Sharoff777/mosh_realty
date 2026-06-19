@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pgTitle">Property — Mosh Realty</title>
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      padding: 1rem clamp(1rem,3vw,2.5rem);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+    .breadcrumb a { color: var(--text-muted); transition: color var(--transition); }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb svg { color: rgba(255,255,255,0.2); }
+
+    /* ══════════════════════════════════════
+       AIRBNB-STYLE MOSAIC GALLERY
+    ══════════════════════════════════════ */
+    .gallery-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 clamp(1rem,3vw,2.5rem);
+    }
+
+    /* Mosaic container — badge lives here */
+    .gallery-mosaic {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      /* 5-cell grid: 1 big left + 2×2 right */
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 3px;
+      height: clamp(320px, 52vw, 580px);
+      background: var(--navy-mid);
+    }
+
+    /* Main (left) cell spans both rows */
+    .gm-main {
+      grid-column: 1;
+      grid-row: 1 / 3;
+      position: relative;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
+    /* Four smaller cells on the right */
+    .gm-sub {
+      grid-column: 2;
+      position: relative;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
+    .gm-sub:nth-child(2) { grid-row: 1; }
+    .gm-sub:nth-child(3) { grid-row: 1; }
+    .gm-sub:nth-child(4) { grid-row: 2; }
+    .gm-sub:nth-child(5) { grid-row: 2; }
+
+    /* Right column — split into 2 columns */
+    .gm-right {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 3px;
+    }
+    .gm-right-cell {
+      position: relative;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
+
+    /* All images fill their cell */
+    .gm-main img,
+    .gm-right-cell img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+      user-select: none;
+    }
+    .gm-main:hover img,
+    .gm-right-cell:hover img { transform: scale(1.04); }
+
+    /* Hover overlay */
+    .gm-main::after,
+    .gm-right-cell::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(4,13,26,0);
+      transition: background 0.3s;
+      pointer-events: none;
+    }
+    .gm-main:hover::after,
+    .gm-right-cell:hover::after { background: rgba(4,13,26,0.18); }
+
+    /* Dim cells beyond 5 */
+    .gm-right-cell.overflow-dim img { filter: brightness(0.45); }
+    .gm-right-cell.overflow-dim:hover img { filter: brightness(0.55); }
+
+    /* Badge */
+    .gallery-badge {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      z-index: 4;
+    }
+
+    /* "Show all photos" button — Airbnb style, bottom-right of mosaic */
+    .gallery-show-all {
+      position: absolute;
+      bottom: 1.1rem; right: 1.1rem;
+      z-index: 6;
+      background: rgba(255,255,255,0.96);
+      border: 1.5px solid rgba(255,255,255,0.9);
+      border-radius: 10px;
+      padding: 0.52rem 1.15rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.2s;
+      font-family: var(--font-body);
+      letter-spacing: 0.01em;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.22);
+    }
+    .gallery-show-all:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--navy-deepest);
+      box-shadow: 0 4px 20px rgba(201,168,76,0.4);
+      transform: translateY(-1px);
+    }
+    .gallery-show-all svg { flex-shrink: 0; }
+
+    /* Count overlay on last visible cell (when >5 images) */
+    .gm-extra-count {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 3;
+      pointer-events: none;
+      color: var(--white);
+      font-family: var(--font-display);
+    }
+    .gm-extra-count .ec-num {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .gm-extra-count .ec-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      opacity: 0.85;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    /* Mobile: collapse to single image + strip */
+    @media (max-width: 640px) {
+      .gallery-mosaic {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        height: auto;
+        aspect-ratio: 4/3;
+        border-radius: var(--radius);
+      }
+      .gm-main {
+        grid-column: 1;
+        grid-row: 1;
+        aspect-ratio: 4/3;
+        height: 100%;
+      }
+      .gm-right { display: none; }
+      .gallery-show-all { bottom: 0.7rem; right: 0.7rem; }
+    }
+
+    /* ══════════════════════════════════════
+       FULL-SCREEN LIGHTBOX
+    ══════════════════════════════════════ */
+    .lb {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.96);
+      z-index: 3000;
+      display: none;
+      flex-direction: column;
+    }
+    .lb.open { display: flex; }
+
+    /* Top bar */
+    .lb-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      flex-shrink: 0;
+    }
+    .lb-counter {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.05em;
+    }
+    .lb-close {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white); cursor: pointer; font-size: 1.1rem;
+      transition: all 0.2s;
+    }
+    .lb-close:hover { background: rgba(201,168,76,0.5); border-color: var(--gold); }
+
+    /* Main image area */
+    .lb-stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 0 5rem;
+    }
+    .lb-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: var(--radius);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+      transition: opacity 0.2s;
+    }
+
+    /* Side arrow buttons */
+    .lb-arrow {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 52px; height: 52px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1.1rem;
+      z-index: 2;
+    }
+    .lb-arrow:hover { background: var(--gold); border-color: var(--gold); color: var(--navy-deepest); }
+    .lb-arrow.lb-prev { left: 1rem; }
+    .lb-arrow.lb-next { right: 1rem; }
+    .lb-arrow.hidden { display: none; }
+
+    /* Thumbnail strip at bottom */
+    .lb-strip {
+      flex-shrink: 0;
+      padding: 1rem 1.5rem 1.4rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.4rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .lb-strip::-webkit-scrollbar { display: none; }
+    .lb-strip-thumb {
+      flex: 0 0 64px;
+      height: 48px;
+      border-radius: 6px;
+      overflow: hidden;
+      opacity: 0.45;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lb-strip-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .lb-strip-thumb:hover { opacity: 0.8; }
+    .lb-strip-thumb.act { opacity: 1; border-color: var(--gold); }
+
+    @media (max-width: 600px) {
+      .lb-stage { padding: 0 3rem; }
+      .lb-arrow { width: 40px; height: 40px; }
+      .lb-arrow.lb-prev { left: 0.4rem; }
+      .lb-arrow.lb-next { right: 0.4rem; }
+      .lb-strip-thumb { flex: 0 0 48px; height: 36px; }
+    }
+
+    /* ── DETAIL LAYOUT ── */
+    .detail-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2.5rem clamp(1rem,3vw,2.5rem);
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 3rem;
+      align-items: start;
+    }
+    .detail-price {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold-pale);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.2rem;
+      line-height: 1;
+    }
+    .detail-name {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+    .detail-loc {
+      font-size: 0.82rem;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .specs-bar {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      padding: 1.2rem 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 1.8rem;
+    }
+    .spec-i {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--text-mid);
+    }
+    .spec-i svg { color: var(--gold); }
+    .spec-i strong { color: var(--white); }
+
+    .detail-section-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.7rem;
+    }
+    .detail-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.9;
+      margin-bottom: 2rem;
+    }
+    .feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .feat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.83rem;
+      color: var(--text-mid);
+    }
+    .feat-check {
+      width: 20px; height: 20px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ── SIDEBAR ── */
+    .prop-sidebar {
+      position: sticky;
+      top: 90px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .enq-card {
+      background: linear-gradient(165deg, var(--navy-mid) 0%, var(--navy) 100%);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .enq-head {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+      padding: 1.3rem 1.6rem;
+    }
+    .enq-head h4 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--navy-deepest);
+      margin-bottom: 0.15rem;
+      font-weight: 700;
+    }
+    .enq-head p { font-size: 0.75rem; color: rgba(4,13,26,0.6); }
+    .enq-body { padding: 1.4rem 1.6rem; }
+
+    .btn-wa {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.9rem;
+      background: #25D366;
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+      margin-bottom: 0.6rem;
+      font-family: var(--font-body);
+    }
+    .btn-wa:hover { background: #1da851; transform: translateY(-1px); }
+
+    .btn-call {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem;
+      background: rgba(255,255,255,0.05);
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+      margin-bottom: 1.2rem;
+      font-family: var(--font-body);
+    }
+    .btn-call:hover { border-color: rgba(201,168,76,0.4); color: var(--gold-pale); }
+
+    .enq-form-mini .form-group { margin-bottom: 0.7rem; }
+    .enq-form-mini input, .enq-form-mini textarea {
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 0.65rem 0.85rem;
+      color: var(--white);
+      font-size: 0.85rem;
+      outline: none;
+      width: 100%;
+      transition: border-color var(--transition);
+      font-family: var(--font-body);
+    }
+    .enq-form-mini input:focus, .enq-form-mini textarea:focus { border-color: var(--gold-border); }
+    .enq-form-mini textarea { min-height: 70px; resize: vertical; }
+    .enq-form-mini label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .sell-nudge {
+      background: linear-gradient(165deg, var(--navy-mid) 0%, var(--navy) 100%);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: var(--radius-lg);
+      padding: 1.4rem 1.5rem;
+    }
+    .sell-nudge-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .sell-nudge p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 0.9rem; }
+
+    /* ── SIMILAR ── */
+    .similar-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 clamp(1rem,3vw,2.5rem) 5rem;
+    }
+    .similar-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .similar-section-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.2rem;
+    }
+
+
+    @media (max-width: 1100px) {
+      .detail-wrap { grid-template-columns: 1fr; }
+      .prop-sidebar { position: static; }
+    }
+    @media (max-width: 768px) {
+      .similar-grid { grid-template-columns: 1fr 1fr; }
+      .feat-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 500px) {
+      .similar-grid { grid-template-columns: 1fr; }
+      .gallery-thumbs { gap: 0.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="./689525326_1252441576876300_6291122596398590486_n-removebg.png" alt="Mosh Realty" class="nav-logo-img">
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="properties.html">Properties</a>
+    </div>
+    <div class="nav-right">
+      <a href="tel:+94777150066" class="nav-contact-link">+94 77 715 0066</a>
+      <a href="sell-with-us.html" class="btn-nav-cta">
+        Sell With Us
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="properties.html">Properties</a>
+  <a href="sell-with-us.html" class="cta-mobile">Sell With Us →</a>
+</div>
+
+<!-- Spacer for fixed nav -->
+<div style="height:72px;"></div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Home</a>
+  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+  <a href="properties.html">Properties</a>
+  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+  <span id="bcName" style="color:var(--gold-pale);">Property</span>
+</div>
+
+<!-- GALLERY — Airbnb-style mosaic -->
+<div class="gallery-wrap">
+  <div class="gallery-mosaic" id="galleryMosaic">
+    <!-- Badge -->
+    <div class="gallery-badge"><span id="mainBadge" class="prop-badge"></span></div>
+
+    <!-- Main (large left) cell -->
+    <div class="gm-main" id="gmMain" onclick="openLb(0)" role="button" aria-label="View photos">
+      <img id="gmMainImg" src="" alt="">
+    </div>
+
+    <!-- Right 2×2 grid — built by JS -->
+    <div class="gm-right" id="gmRight"></div>
+
+    <!-- Show all photos button -->
+    <button class="gallery-show-all" id="showAllBtn" onclick="openLb(0)">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span id="showAllLabel">Show all photos</span>
+    </button>
+  </div>
+</div>
+
+<!-- LIGHTBOX — full-screen immersive -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo gallery">
+  <!-- Top bar -->
+  <div class="lb-topbar">
+    <div class="lb-counter" id="lbCounter"></div>
+    <button class="lb-close" onclick="closeLb()" aria-label="Close">✕</button>
+  </div>
+
+  <!-- Image stage -->
+  <div class="lb-stage">
+    <button class="lb-arrow lb-prev" id="lbPrev" onclick="lbNav(-1)" aria-label="Previous photo">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <img class="lb-img" id="lbImg" src="" alt="">
+    <button class="lb-arrow lb-next" id="lbNext" onclick="lbNav(1)" aria-label="Next photo">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+
+  <!-- Thumbnail strip -->
+  <div class="lb-strip" id="lbStrip"></div>
+</div>
+
+<!-- DETAIL -->
+<div class="detail-wrap">
+  <div>
+    <div class="detail-price" id="detailPrice"></div>
+    <div class="detail-name" id="detailName"></div>
+    <div class="detail-loc">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span id="detailLoc"></span>
+    </div>
+    <div class="specs-bar" id="specsBar"></div>
+    <div class="detail-section-title">About This Property</div>
+    <p class="detail-desc" id="detailDesc"></p>
+    <div class="detail-section-title">Features & Amenities</div>
+    <div class="feat-grid" id="featGrid"></div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="prop-sidebar">
+    <div class="enq-card">
+      <div class="enq-head">
+        <h4>Enquire Now</h4>
+        <p>Speak directly with our property advisor</p>
+      </div>
+      <div class="enq-body">
+        <a id="btnWa" href="#" class="btn-wa" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp Us Now
+        </a>
+        <a href="tel:+94777150066" class="btn-call">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12 19.79 19.79 0 011.65 3.38 2 2 0 013.62 1.22h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          Call +94 77 715 0066
+        </a>
+        <div class="enq-form-mini">
+          <div class="form-group"><label>Your Name</label><input type="text" id="eq-name" placeholder="Full name"></div>
+          <div class="form-group"><label>WhatsApp Number</label><input type="tel" id="eq-phone" placeholder="+94 77 000 0000"></div>
+          <div class="form-group"><label>Message</label><textarea id="eq-msg" placeholder="I'm interested in this property…"></textarea></div>
+          <button class="btn-gold" style="width:100%;justify-content:center;" onclick="sendEnquiry()">Send Enquiry</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sell-nudge">
+      <div class="sell-nudge-title">Have a property to sell?</div>
+      <p>Zero upfront costs, professional photography included, and a dedicated advisor from day one.</p>
+      <a href="sell-with-us.html" class="btn-outline" style="width:100%;justify-content:center;">List Your Property →</a>
+    </div>
+  </div>
+</div>
+
+<!-- SIMILAR PROPERTIES -->
+<div class="similar-wrap">
+  <div class="section-tag">You May Also Like</div>
+  <div class="similar-section-title">Similar <em style="font-style:italic;font-weight:400;color:var(--gold-pale);">Properties</em></div>
+  <div class="similar-grid" id="similarGrid"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-text">Mosh <span>Realty</span></div>
+        <p>Sri Lanka's most trusted luxury real estate agency. We match exceptional properties with exceptional people.</p>
+        <div class="footer-social">
+          <a href="https://wa.me/94777150066" target="_blank">WA</a>
+          <a href="#" target="_blank">IG</a>
+          <a href="#" target="_blank">FB</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Properties</div>
+        <ul class="footer-links">
+          <li><a href="properties.html?f=For+Sale">For Sale</a></li>
+          <li><a href="properties.html?f=For+Rent">For Rent</a></li>
+          <li><a href="properties.html?f=Land">Land</a></li>
+          <li><a href="properties.html?f=Commercial">Commercial</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Company</div>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="sell-with-us.html">Sell With Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contact</div>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12 19.79 19.79 0 011.65 3.38 2 2 0 013.62 1.22h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          +94 77 715 0066
+        </div>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          hello@moshrealty.lk
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Mosh Realty (Pvt) Ltd. All rights reserved.</p>
+      <p>Luxury · Integrity · Results</p>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/94777150066" class="wa-float" target="_blank" aria-label="WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script src="js/properties.js"></script>
+<script src="js/main.js"></script>
+<script>
+// Determine which property to show from filename
+const pageId = location.pathname.split('/').pop().replace('property-','').replace('.html','');
+const prop = PROPERTIES.find(p => p.id === pageId) || PROPERTIES[0];
+
+// Page title & meta
+document.getElementById('pgTitle').textContent = prop.name + ' — Mosh Realty';
+document.getElementById('bcName').textContent = prop.name;
+document.getElementById('detailPrice').textContent = prop.price;
+document.getElementById('detailName').textContent = prop.name;
+document.getElementById('detailLoc').textContent = prop.location;
+document.getElementById('detailDesc').textContent = prop.description;
+
+// Badge
+const badge = document.getElementById('mainBadge');
+badge.textContent = prop.status;
+badge.className = 'prop-badge ' + (prop.status === 'For Sale' ? 'sale' : prop.status === 'For Rent' ? 'rent' : prop.status === 'Commercial' ? 'commercial' : 'land');
+
+// ══════════════════════════════════
+// GALLERY — Airbnb-style mosaic
+// ══════════════════════════════════
+const imgs = prop.gallery || [prop.image];
+let lbIdx = 0;
+
+// Build mosaic
+const gmMainImg = document.getElementById('gmMainImg');
+const gmRight   = document.getElementById('gmRight');
+
+gmMainImg.src = imgs[0];
+gmMainImg.alt = prop.name + ' — photo 1';
+
+// Right grid: show up to 4 cells (cells 1–4 from imgs array)
+const rightCount = Math.min(4, imgs.length - 1);
+for (let i = 0; i < rightCount; i++) {
+  const cell = document.createElement('div');
+  cell.className = 'gm-right-cell';
+  const idx = i + 1;
+  const isLastVisible = (i === 3) && (imgs.length > 5);
+  if (isLastVisible) cell.classList.add('overflow-dim');
+  cell.onclick = () => openLb(idx);
+  cell.setAttribute('role', 'button');
+  cell.setAttribute('aria-label', `View photo ${idx + 1}`);
+  cell.innerHTML = `<img src="${imgs[idx]}" alt="${prop.name} — photo ${idx + 1}" loading="lazy">`;
+  if (isLastVisible) {
+    const extra = imgs.length - 5;
+    cell.innerHTML += `<div class="gm-extra-count"><div class="ec-num">+${extra + 1}</div><div class="ec-label">photos</div></div>`;
+  }
+  gmRight.appendChild(cell);
+}
+
+// Update "Show all" button label
+const showAllLabel = document.getElementById('showAllLabel');
+if (imgs.length === 1) {
+  document.getElementById('showAllBtn').style.display = 'none';
+} else {
+  showAllLabel.textContent = `Show all ${imgs.length} photos`;
+}
+
+// Hide right grid if only 1 image
+if (imgs.length === 1) gmRight.style.display = 'none';
+
+// ══════════════════════════════════
+// LIGHTBOX — full-screen immersive
+// ══════════════════════════════════
+const lbEl      = document.getElementById('lb');
+const lbImgEl   = document.getElementById('lbImg');
+const lbCountEl = document.getElementById('lbCounter');
+const lbStripEl = document.getElementById('lbStrip');
+const lbPrevBtn = document.getElementById('lbPrev');
+const lbNextBtn = document.getElementById('lbNext');
+
+// Build thumbnail strip
+const lbThumbs = [];
+imgs.forEach((src, i) => {
+  const t = document.createElement('div');
+  t.className = 'lb-strip-thumb' + (i === 0 ? ' act' : '');
+  t.innerHTML = `<img src="${src}" alt="${prop.name} ${i+1}" loading="lazy">`;
+  t.onclick = () => lbGoTo(i);
+  lbStripEl.appendChild(t);
+  lbThumbs.push(t);
+});
+
+// Hide arrows if single image
+if (imgs.length <= 1) {
+  lbPrevBtn.classList.add('hidden');
+  lbNextBtn.classList.add('hidden');
+}
+
+function lbGoTo(i) {
+  lbIdx = (i + imgs.length) % imgs.length;
+  lbImgEl.style.opacity = '0';
+  setTimeout(() => {
+    lbImgEl.src = imgs[lbIdx];
+    lbImgEl.style.opacity = '1';
+  }, 100);
+  lbCountEl.textContent = `${lbIdx + 1} / ${imgs.length}`;
+  lbThumbs.forEach((t, j) => t.classList.toggle('act', j === lbIdx));
+  lbThumbs[lbIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+
+function openLb(i) {
+  lbIdx = i !== undefined ? i : 0;
+  lbImgEl.src = imgs[lbIdx];
+  lbCountEl.textContent = `${lbIdx + 1} / ${imgs.length}`;
+  lbThumbs.forEach((t, j) => t.classList.toggle('act', j === lbIdx));
+  lbEl.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLb() {
+  lbEl.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function lbNav(d) { lbGoTo(lbIdx + d); }
+
+// Click backdrop to close
+lbEl.addEventListener('click', e => { if (e.target === lbEl) closeLb(); });
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (!lbEl.classList.contains('open')) return;
+  if (e.key === 'Escape')      closeLb();
+  if (e.key === 'ArrowLeft')   lbNav(-1);
+  if (e.key === 'ArrowRight')  lbNav(1);
+});
+
+// Touch/swipe on lightbox
+(function(){
+  let tx = 0;
+  lbEl.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  lbEl.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 40) lbNav(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+
+// Specs
+const specs = [];
+if (prop.beds)  specs.push(`<div class="spec-i"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><strong>${prop.beds}</strong> Bedrooms</div>`);
+if (prop.baths) specs.push(`<div class="spec-i"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12V4a1 1 0 011-1h5a1 1 0 011 1v3M2 20h20M20 20v-8a2 2 0 00-2-2h-6"/></svg><strong>${prop.baths}</strong> Bathrooms</div>`);
+if (prop.sqft)  specs.push(`<div class="spec-i"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/></svg><strong>${prop.sqft}</strong>${prop.beds ? ' sq.ft' : ''}</div>`);
+document.getElementById('specsBar').innerHTML = specs.join('');
+
+// Features
+document.getElementById('featGrid').innerHTML = (prop.features || []).map(f =>
+  `<div class="feat-item"><div class="feat-check"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>${f}</div>`
+).join('');
+
+// WA link
+const waMsg = `Hi, I'm interested in the *${prop.name}* (${prop.price}) listed on Mosh Realty. Please send me more details.`;
+document.getElementById('btnWa').href = `https://wa.me/${prop.whatsapp || '94777150066'}?text=${encodeURIComponent(waMsg)}`;
+
+// Enquiry form
+function sendEnquiry() {
+  const name  = document.getElementById('eq-name').value.trim();
+  const phone = document.getElementById('eq-phone').value.trim();
+  const msg   = document.getElementById('eq-msg').value.trim();
+  if (!name || !phone) { alert('Please enter your name and number.'); return; }
+  const waMsg = `🏠 *Property Enquiry — Mosh Realty*\n\n*Property:* ${prop.name}\n*Price:* ${prop.price}\n\n*Name:* ${name}\n*Phone:* ${phone}\n\n*Message:* ${msg || 'No message'}`;
+  window.open(`https://wa.me/${prop.whatsapp || '94777150066'}?text=${encodeURIComponent(waMsg)}`, '_blank');
+}
+
+// Similar properties
+const similar = PROPERTIES.filter(p => p.id !== prop.id && (p.status === prop.status || p.type === prop.type)).slice(0, 3);
+const simGrid = document.getElementById('similarGrid');
+if (similar.length) {
+  simGrid.innerHTML = similar.map(p => renderPropCard(p)).join('');
+  requestAnimationFrame(() => {
+    simGrid.querySelectorAll('.prop-card').forEach((el, i) => {
+      el.style.transitionDelay = (i * 0.1) + 's';
+      requestAnimationFrame(() => el.classList.add('visible'));
+    });
+  });
+} else {
+  simGrid.closest('.similar-wrap').style.display = 'none';
+}
+</script>
+</body>
+</html>

@@ -126,7 +126,7 @@
       display: flex; align-items: center; justify-content: space-between;
       height: 72px; gap: 1.5rem;
     }
-    .nav-logo { display: flex; align-items: center; gap: 0.7rem; width: 7%;}
+    .nav-logo { display: flex; align-items: center; gap: 0.7rem;}
     .nav-logo-text {
       font-family: var(--font-display);
       font-size: 1.5rem; font-weight: 700;
@@ -707,9 +707,7 @@
       .stat-bar { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 640px) {
-      .nav-logo {
-        width: 14%;
-      }
+      
       .hero-left { padding: 3rem 1.2rem; }
       .props-grid { grid-template-columns: 1fr; }
       .testi-grid { grid-template-columns: 1fr; }
@@ -786,7 +784,7 @@
 <nav class="nav" id="mainNav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
-      <img src="./689525326_1252441576876300_6291122596398590486_n-removebg.png" alt="Mosh Realty" class="nav-logo-img">
+      <img src="./689525326_1252441576876300_6291122596398590486_n-removebg.png" alt="Mosh Realty" class="nav-logo-img" style="border-radius:50%;">
     </a>
     <div class="nav-links">
       <a href="index.html" class="active">Home</a>
@@ -866,10 +864,6 @@
 <div class="stat-bar-wrap">
   <div class="stat-bar">
     <div class="stat-item">
-      <div class="stat-num">100<span>+</span></div>
-      <div class="stat-label">Properties Sold</div>
-    </div>
-    <div class="stat-item">
       <div class="stat-num">4<span> Yrs</span></div>
       <div class="stat-label">Market Experience</div>
     </div>
@@ -878,8 +872,12 @@
       <div class="stat-label">Client Satisfaction</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num">100<span>Mn+</span></div>
-      <div class="stat-label">LKR Transacted</div>
+      <div class="stat-num">24<span>hr</span></div>
+      <div class="stat-label">Avg. Response Time</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">350<span>K+</span></div>
+      <div class="stat-label">Buyer Network Reach</div>
     </div>
   </div>
 </div>
@@ -982,7 +980,7 @@
     <div class="sell-band-inner">
       <div>
         <h2>Ready to Sell? List With <em>Mosh Realty</em></h2>
-        <p>Commission-only. Professional photography. Qualified buyers reaching 350,000+ people. Zero upfront cost.</p>
+        <p>Professional photography. A curated network of qualified buyers. Zero upfront cost — full-service, start to finish.</p>
       </div>
       <div class="sell-band-actions">
         <a href="sell-with-us.html" class="btn-gold">Sell With Us</a>
