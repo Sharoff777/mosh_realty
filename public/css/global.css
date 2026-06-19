@@ -88,11 +88,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transition: background var(--transition), border-color var(--transition);
 }
 .nav.scrolled {
-  background: rgba(4,13,26,0.97);
-  border-bottom-color: rgba(201,168,76,0.18);
+  background: #0e1130;
+  border-bottom-color: #0e1130;
   box-shadow: 0 4px 30px rgba(0,0,0,0.5);
 }
+
+nav {
+  background-color: #0e1130;
+}
+
 .nav-inner {
+  background-color: #0e1130;
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;

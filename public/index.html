@@ -115,18 +115,19 @@
     /* ─── NAV ────────────────────────────────── */
     .nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 900;
-      background: rgba(4,13,26,0.85);
+      background: #0e1130;
       backdrop-filter: blur(18px);
       border-bottom: 1px solid rgba(201,168,76,0.1);
       transition: background var(--transition);
     }
     .nav-inner {
+      background-color: #0e1130;
       max-width: 1240px; margin: 0 auto;
       padding: 0 clamp(1rem,3vw,2.5rem);
       display: flex; align-items: center; justify-content: space-between;
       height: 72px; gap: 1.5rem;
     }
-    .nav-logo { display: flex; align-items: center; gap: 0.7rem;}
+    .nav-logo { display: flex; align-items: center; gap: 0.7rem; width: 6%;}
     .nav-logo-text {
       font-family: var(--font-display);
       font-size: 1.5rem; font-weight: 700;
@@ -707,7 +708,9 @@
       .stat-bar { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 640px) {
-      
+      .nav-logo {
+        width: 15%;
+      }
       .hero-left { padding: 3rem 1.2rem; }
       .props-grid { grid-template-columns: 1fr; }
       .testi-grid { grid-template-columns: 1fr; }
@@ -784,7 +787,7 @@
 <nav class="nav" id="mainNav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
-      <img src="./689525326_1252441576876300_6291122596398590486_n-removebg.png" alt="Mosh Realty" class="nav-logo-img" style="border-radius:50%;">
+      <img src="./logo_cir.png" alt="Mosh Realty" class="nav-logo-img" style="border-radius:50%;">
     </a>
     <div class="nav-links">
       <a href="index.html" class="active">Home</a>
