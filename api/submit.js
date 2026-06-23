@@ -51,6 +51,10 @@ module.exports = async (req, res) => {
       process.env.RECIPIENT_EMAIL_3,
     ].filter(Boolean).join(', ');
 
+
+    console.log('SMTP_USER:', process.env.SMTP_USER);
+    console.log('SMTP_PASS length:', process.env.SMTP_PASS?.length);
+    console.log('SMTP_HOST:', process.env.SMTP_HOST);
     await transporter.sendMail({
       from:    process.env.SMTP_USER,
       to:      recipients,
