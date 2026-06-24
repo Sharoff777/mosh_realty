@@ -9,7 +9,7 @@
 /* ── TOKENS ── */
 :root {
   /* === LOGO NAVY (exact logo background: #0e1338) === */
-  --navy-bar:     #0e1338;   /* nav + footer bars */
+  --navy-bar:     #0e1130;   /* nav + footer bars */
   --navy-deepest: #080d24;   /* darkest shade for footer bottom */
   --navy-deep:    #0e1338;
   --navy:         #162050;
@@ -701,6 +701,7 @@ nav { background-color: var(--navy-bar); }
   font-weight: 700;
   color: var(--white);
   margin-bottom: 0.8rem;
+  width: 20%;
 }
 .footer-logo-text span { color: var(--gold); }
 .footer-brand p {
@@ -712,11 +713,7 @@ nav { background-color: var(--navy-bar); }
 }
 .footer-social { display: flex; gap: 0.6rem; }
 .footer-social a {
-  width: 36px; height: 36px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(200,169,110,0.22);
-  border-radius: var(--radius);
-  display: flex;
+  width: 25px; height: 25px;
   align-items: center;
   justify-content: center;
   color: rgba(255,255,255,0.45);
