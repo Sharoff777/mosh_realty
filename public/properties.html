@@ -96,56 +96,46 @@
       /* Filter groups row */
       .filter-groups {
         display: flex;
-        gap: 2rem;
+        gap: 1rem;
         flex-wrap: wrap;
-        align-items: flex-start;
+        align-items: flex-end;
       }
 
       .filter-group {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.35rem;
+        flex: 1;
+        min-width: 140px;
       }
 
       .filter-group-label {
-        font-size: 0.68rem;
+        font-size: 0.66rem;
         font-weight: 700;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--text-soft);
-        margin-bottom: 0.2rem;
       }
 
-      .chk-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem 1rem;
-      }
-
-      .chk-item {
-        display: flex;
-        align-items: center;
-        gap: 0.45rem;
-        font-size: 0.83rem;
+      .filter-sel {
+        background: var(--page-bg-soft);
+        border: 1.5px solid var(--border-soft);
+        border-radius: var(--radius);
+        padding: 0.55rem 2.2rem 0.55rem 0.9rem;
+        font-size: 0.82rem;
         color: var(--text-body);
+        outline: none;
         cursor: pointer;
-        white-space: nowrap;
-        transition: color var(--transition);
+        font-family: var(--font-body);
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.7rem center;
+        width: 100%;
+        transition: border-color var(--transition);
       }
-      .chk-item:hover { color: var(--navy-bar); }
-      .chk-item input {
-        width: 15px; height: 15px;
-        accent-color: var(--gold);
-        cursor: pointer; flex-shrink: 0;
-      }
-
-      /* divider between groups */
-      .filter-divider {
-        width: 1px;
-        background: var(--border-soft);
-        align-self: stretch;
-        flex-shrink: 0;
-      }
+      .filter-sel:focus, .filter-sel:hover { border-color: var(--gold-border); }
+      .filter-sel option { background: var(--page-bg); color: var(--text-dark); }
 
       /* Action buttons */
       .filter-actions {
@@ -233,8 +223,8 @@
       .mobile-filter-toggle:hover { border-color: var(--gold-border); color: var(--navy-bar); }
 
       @media (max-width: 768px) {
-        .filter-groups { gap: 1.2rem; }
-        .filter-divider { display: none; }
+        .filter-groups { gap: 0.75rem; }
+        .filter-group { min-width: calc(50% - 0.5rem); flex: none; }
         .filter-actions { margin-left: 0; width: 100%; }
         .apply-btn, .clear-btn { flex: 1; text-align: center; }
         .mobile-filter-toggle { display: flex; }
@@ -332,52 +322,49 @@
 
             <div class="filter-group">
               <div class="filter-group-label">Status</div>
-              <div class="chk-row">
-                <label class="chk-item"><input type="checkbox" value="For Sale" data-group="status" checked /> For Sale</label>
-                <label class="chk-item"><input type="checkbox" value="For Rent" data-group="status" checked /> For Rent</label>
-                <label class="chk-item"><input type="checkbox" value="Land" data-group="status" checked /> Land</label>
-                <label class="chk-item"><input type="checkbox" value="Commercial" data-group="status" checked /> Commercial</label>
-              </div>
+              <select class="filter-sel" id="statusSel" onchange="applyFilters()">
+                <option value="">All Statuses</option>
+                <option value="For Sale">For Sale</option>
+                <option value="For Rent">For Rent</option>
+                <option value="Land">Land</option>
+                <option value="Commercial">Commercial</option>
+              </select>
             </div>
-
-            <div class="filter-divider"></div>
 
             <div class="filter-group">
               <div class="filter-group-label">Property Type</div>
-              <div class="chk-row">
-                <label class="chk-item"><input type="checkbox" value="Penthouse" data-group="type" checked /> Penthouse</label>
-                <label class="chk-item"><input type="checkbox" value="Villa" data-group="type" checked /> Villa</label>
-                <label class="chk-item"><input type="checkbox" value="House" data-group="type" checked /> House</label>
-                <label class="chk-item"><input type="checkbox" value="Apartment" data-group="type" checked /> Apartment</label>
-                <label class="chk-item"><input type="checkbox" value="Land" data-group="type" checked /> Land</label>
-                <label class="chk-item"><input type="checkbox" value="Commercial" data-group="type" checked /> Commercial</label>
-              </div>
+              <select class="filter-sel" id="typeSel" onchange="applyFilters()">
+                <option value="">All Types</option>
+                <option value="Penthouse">Penthouse</option>
+                <option value="Villa">Villa</option>
+                <option value="House">House</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Land">Land</option>
+                <option value="Commercial">Commercial</option>
+              </select>
             </div>
-
-            <div class="filter-divider"></div>
 
             <div class="filter-group">
               <div class="filter-group-label">Bedrooms</div>
-              <div class="chk-row">
-                <label class="chk-item"><input type="checkbox" value="2" data-group="beds" checked /> 2+</label>
-                <label class="chk-item"><input type="checkbox" value="3" data-group="beds" checked /> 3+</label>
-                <label class="chk-item"><input type="checkbox" value="4" data-group="beds" checked /> 4+</label>
-                <label class="chk-item"><input type="checkbox" value="5" data-group="beds" checked /> 5+</label>
-              </div>
+              <select class="filter-sel" id="bedsSel" onchange="applyFilters()">
+                <option value="">Any</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+                <option value="5">5+</option>
+              </select>
             </div>
-
-            <div class="filter-divider"></div>
 
             <div class="filter-group">
               <div class="filter-group-label">Bathrooms</div>
-              <div class="chk-row">
-                <label class="chk-item"><input type="checkbox" value="1" data-group="baths" checked /> 1+</label>
-                <label class="chk-item"><input type="checkbox" value="2" data-group="baths" checked /> 2+</label>
-                <label class="chk-item"><input type="checkbox" value="3" data-group="baths" checked /> 3+</label>
-                <label class="chk-item"><input type="checkbox" value="4" data-group="baths" checked /> 4+</label>
-              </div>
+              <select class="filter-sel" id="bathsSel" onchange="applyFilters()">
+                <option value="">Any</option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+              </select>
             </div>
-
             <div class="filter-actions">
               <button class="clear-btn" onclick="clearFilters()">Clear</button>
               <button class="apply-btn" onclick="applyFilters()">Apply Filters</button>
@@ -455,21 +442,19 @@
       let current = [...PROPERTIES];
 
       function applyFilters() {
-        const statuses = [...document.querySelectorAll('input[data-group="status"]')].filter(c => c.checked).map(c => c.value);
-        const types    = [...document.querySelectorAll('input[data-group="type"]')].filter(c => c.checked).map(c => c.value);
-        const bedVals  = [...document.querySelectorAll('input[data-group="beds"]')].filter(c => c.checked).map(c => parseInt(c.value, 10));
-        const minBed   = bedVals.length ? Math.min(...bedVals) : null;
-        const bathVals = [...document.querySelectorAll('input[data-group="baths"]')].filter(c => c.checked).map(c => parseInt(c.value, 10));
-        const minBath  = bathVals.length ? Math.min(...bathVals) : null;
+        const status   = document.getElementById("statusSel").value;
+        const type     = document.getElementById("typeSel").value;
+        const minBed   = document.getElementById("bedsSel").value ? parseInt(document.getElementById("bedsSel").value) : null;
+        const minBath  = document.getElementById("bathsSel").value ? parseInt(document.getElementById("bathsSel").value) : null;
         const q        = document.getElementById("searchInput").value.toLowerCase();
         const maxBudgetMn = window._urlBudget || null;
         const minBedsUrl  = window._urlBeds   || null;
 
         current = PROPERTIES.filter(p => {
-          const ms    = !statuses.length || statuses.includes(p.status);
-          const mt    = !types.length    || types.includes(p.type);
-          const mb    = !minBed          || p.beds == null || p.beds >= minBed;
-          const mbath = !minBath         || p.baths == null || p.baths >= minBath;
+          const ms    = !status   || p.status === status;
+          const mt    = !type     || p.type === type;
+          const mb    = !minBed   || p.beds == null || p.beds >= minBed;
+          const mbath = !minBath  || p.baths == null || p.baths >= minBath;
           const mq    = !q || p.name.toLowerCase().includes(q) || p.location.toLowerCase().includes(q) || p.type.toLowerCase().includes(q) || p.status.toLowerCase().includes(q);
           let budgetOk = true;
           if (maxBudgetMn) { const n = parseFloat((p.price||'').replace(/[^\d.]/g,'')); budgetOk = isNaN(n) || n <= maxBudgetMn; }
@@ -483,7 +468,10 @@
       }
 
       function clearFilters() {
-        document.querySelectorAll(".chk-item input").forEach(c => c.checked = true);
+        document.getElementById("statusSel").value = "";
+        document.getElementById("typeSel").value = "";
+        document.getElementById("bedsSel").value = "";
+        document.getElementById("bathsSel").value = "";
         document.getElementById("searchInput").value = "";
         window._urlBudget = null;
         window._urlBeds = null;
@@ -513,8 +501,11 @@
       if (urlQ) document.getElementById("searchInput").value = urlQ;
       if (urlF) {
         const statusVals = ["For Sale", "For Rent", "Land", "Commercial"];
-        const group = statusVals.includes(urlF) ? "status" : "type";
-        document.querySelectorAll(`input[data-group="${group}"]`).forEach(c => { c.checked = c.value === urlF; });
+        if (statusVals.includes(urlF)) {
+          document.getElementById("statusSel").value = urlF;
+        } else {
+          document.getElementById("typeSel").value = urlF;
+        }
       }
       window._urlBeds = urlBeds ? parseInt(urlBeds) : null;
       window._urlBudget = urlBudget ? parseInt(urlBudget) : null;
