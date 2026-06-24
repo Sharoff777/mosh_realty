@@ -12,7 +12,7 @@
   <style>
     /* ─── TOKENS (overrides global.css) ─────── */
     :root {
-      --navy-bar:     #0e1338;
+      --navy-bar:     #0e1130;
       --navy-deepest: #080d24;
       --navy-deep:    #0e1338;
       --navy:         #162050;
@@ -96,16 +96,16 @@
     .btn-outline {
       display: inline-flex; align-items: center; gap: 0.5rem;
       background: transparent;
-      color: var(--gold-pale);
+      color: black;
       font-family: var(--font-body);
       font-size: 0.82rem; font-weight: 600;
       letter-spacing: 0.06em; text-transform: uppercase;
       padding: 0.8rem 1.8rem; border-radius: var(--radius);
-      border: 1.5px solid var(--gold-border);
+      border: 2px solid rgb(131, 120, 57);
       cursor: pointer;
       transition: all var(--transition);
     }
-    .btn-outline:hover { background: var(--gold-glow); border-color: var(--gold); color: var(--gold-pale); transform: translateY(-2px); }
+    .btn-outline:hover { background: var(--navy-bar); border-color: var(--gold); color: var(--gold-pale); transform: translateY(-2px); }
 
     /* gold line tag */
     .section-tag {
@@ -119,8 +119,8 @@
     .section-title {
       font-family: var(--font-display);
       font-size: clamp(2rem,3.5vw,3rem);
-      font-weight: 600;
-      color: var(--white);
+      font-weight: 100;
+      color: black;
       line-height: 1.15;
       letter-spacing: -0.01em;
     }
@@ -342,8 +342,8 @@
       max-width: 1240px; margin: 0 auto;
     }
     .stat-bar {
-      background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-light) 100%);
-      border: 1px solid rgba(201,168,76,0.2);
+      background: white;
+      border: 3px solid rgba(143, 111, 23);
       border-radius: var(--radius-lg);
       padding: 1.6rem 2.5rem;
       display: grid; grid-template-columns: repeat(4, 1fr);
@@ -352,11 +352,11 @@
     }
     .stat-item { text-align: center; }
     .stat-num {
-      font-family: var(--font-display); font-size: 2rem; font-weight: 700;
-      color: var(--gold-pale); line-height: 1;
+      font-family: var(--font-display); font-size: 2rem; font-weight: 800;
+      color: black; line-height: 1;
     }
-    .stat-num span { font-size: 1.1rem; color: var(--gold-dim); font-weight: 400; }
-    .stat-label { font-size: 0.7rem; color: var(--text-soft); font-weight: 500; margin-top: 0.3rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .stat-num span { font-size: 1.1rem; color: black; font-weight: 400; }
+    .stat-label { font-size: 0.7rem; color: rgb(168, 147, 27); font-weight: 900; margin-top: 0.3rem; letter-spacing: 0.05em; text-transform: uppercase; }
 
     /* ─── BUDGET FILTER ──────────────────────── */
     .budget-section {
@@ -364,7 +364,7 @@
     }
     .budget-wrap {
       background: var(--page-bg-soft);
-      border: 1px solid var(--border-soft);
+      border: 2px solid black;
       border-radius: var(--radius-xl);
       padding: 2.5rem clamp(1.5rem,4vw,3rem);
     }
@@ -372,8 +372,8 @@
       display: flex; align-items: flex-end; justify-content: space-between;
       flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;
     }
-    .budget-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: var(--text-dark); }
-    .budget-price-display { font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; color: var(--gold-dim); }
+    .budget-title { font-family: var(--font-display); font-size: 2rem; font-weight: 600; color: var(--text-dark); }
+    .budget-price-display { font-family: rgb(212, 188, 48); font-size: 2.7rem; font-weight: 500; color: var(--gold-dim); }
     .budget-controls {
       display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem 2.5rem;
       align-items: start;
@@ -381,7 +381,7 @@
     .filter-group label {
       display: block; font-size: 0.67rem; font-weight: 600;
       letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 0.5rem;
+      color: black; margin-bottom: 0.5rem;
     }
     .filter-select {
       width: 100%; background: var(--page-bg);
