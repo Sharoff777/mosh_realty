@@ -38,6 +38,24 @@ const PROPERTIES = [
     description: 'Tower A',
     features: ['Swimming Pool', 'Gym', 'Lift', 'Generator', 'AC', '1 Car Parking'],
     whatsapp: '+94777150066',
+  },
+  {
+    id: '3storey-apartment',
+    status: 'For Sale',
+    badgeClass: 'badge-sale',
+    price: 'LKR 385 Mn',
+    name: '3-Storey Apartment',
+    location: 'Colombo 07',
+    beds: 9, baths: 13, sqft: '9,885',
+    type: 'Apartment',
+    featured: true,
+    image: './Images/building-malasekara/1.jpeg',
+    gallery: [
+      ''
+    ],
+    description: 'Tower A',
+    features: ['Swimming Pool', 'Gym', 'Lift', 'Generator', 'AC', '1 Car Parking'],
+    whatsapp: '+94777150066',
   }
 ];
 
