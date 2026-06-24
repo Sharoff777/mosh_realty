@@ -60,7 +60,7 @@ const PROPERTIES = [
       './Images/606-address/8.jpeg',
       
     ],
-    description: 'Tower A',
+    description: 'A spacious 2,425 sq. ft. luxury 3-bedroom, 3-bathroom apartment at 606 The Address, Colombo 03, offering breathtaking panoramic ocean views stretching from Colpetty to Port City, complemented by a modern pantry, high-end bathroom fittings, and 2 dedicated parking spaces. Ideally situated in the heart of Colombo 03, the building features an in-house coffee shop and supermarket, with leading restaurants, essential amenities, and fuel stations just moments away — a rare opportunity to own a residence that perfectly combines stunning views, comfort, and convenience.',
     features: ['Swimming Pool', 'Gym', 'Lift', 'Generator', 'AC', '1 Car Parking'],
     whatsapp: '+94777150066',
   }
