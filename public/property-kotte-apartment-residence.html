@@ -47,24 +47,6 @@
   <span id="bcName" style="color:var(--gold-pale);">Property</span>
 </div>
 
-<!-- MOBILE SLIDER (≤640px) — built by JS -->
-<div class="gallery-slider" id="gallerySlider">
-  <div class="slider-badge"><span id="sliderBadge" class="prop-badge"></span></div>
-  <div class="gallery-slider-track" id="sliderTrack"></div>
-  <div class="slider-counter" id="sliderCounter">1 / 1</div>
-  <div class="slider-dots" id="sliderDots"></div>
-  <button class="slider-arrow sl-prev hidden" id="slPrev" aria-label="Previous">
-    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-  </button>
-  <button class="slider-arrow sl-next hidden" id="slNext" aria-label="Next">
-    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-  </button>
-  <button class="slider-view-all" id="slViewAll" onclick="openLb(slIdx)">
-    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-    <span id="slViewAllLabel">All photos</span>
-  </button>
-</div>
-
 <!-- GALLERY — Airbnb-style mosaic -->
 <div class="gallery-wrap">
   <div class="gallery-mosaic" id="galleryMosaic">
@@ -249,8 +231,8 @@ const gmMainImg = document.getElementById('gmMainImg');
 const gmRight   = document.getElementById('gmRight');
 
 gmMainImg.src = imgs[0];
-
 gmMainImg.alt = prop.name + ' — photo 1';
+
 // Right grid: show up to 4 cells (cells 1–4 from imgs array)
 const rightCount = Math.min(4, imgs.length - 1);
 for (let i = 0; i < rightCount; i++) {
@@ -307,8 +289,6 @@ if (imgs.length <= 1) {
   lbPrevBtn.classList.add('hidden');
   lbNextBtn.classList.add('hidden');
 }
-
-  viewAllLbl.textContent = `All ${imgs.length} photos`;
 
 function lbGoTo(i) {
   lbIdx = (i + imgs.length) % imgs.length;
@@ -385,95 +365,7 @@ function sendEnquiry() {
   window.open(`https://wa.me/${prop.whatsapp || '94777150066'}?text=${encodeURIComponent(waMsg)}`, '_blank');
 }
 
-// ══════════════════════════════════════
-// MOBILE SWIPE SLIDER
-// ══════════════════════════════════════
-(function() {
-  const sliderEl   = document.getElementById('gallerySlider');
-  const track      = document.getElementById('sliderTrack');
-  const counter    = document.getElementById('sliderCounter');
-  const dotsWrap   = document.getElementById('sliderDots');
-  const prevBtn    = document.getElementById('slPrev');
-  const nextBtn    = document.getElementById('slNext');
-  const slBadge    = document.getElementById('sliderBadge');
-  const viewAllLbl = document.getElementById('slViewAllLabel');
-
-  // Copy badge text/class
-  slBadge.textContent = badge.textContent;
-  slBadge.className   = badge.className;
-
-  // Build slides
-  imgs.forEach((src, i) => {
-    const slide = document.createElement('div');
-    slide.className = 'gallery-slider-slide';
-    slide.innerHTML = `<img src="${src}" alt="${prop.name} photo ${i+1}" loading="${i===0?'eager':'lazy'}">`;
-    slide.addEventListener('click', () => openLb(slIdx));
-    track.appendChild(slide);
-  });
-
-  // Dots (max 7 visible dots; collapse extras)
-  const MAX_DOTS = 7;
-  const dotsCount = Math.min(imgs.length, MAX_DOTS);
-  const dots = [];
-  for (let i = 0; i < dotsCount; i++) {
-    const d = document.createElement('div');
-    d.className = 'slider-dot' + (i === 0 ? ' act' : '');
-    dotsWrap.appendChild(d);
-    dots.push(d);
-  }
-
-  // Arrows visibility
-  if (imgs.length > 1) {
-    prevBtn.classList.remove('hidden');
-    nextBtn.classList.remove('hidden');
-  }
-
-  // State
-  window.slIdx = 0;
-
-  function slGoTo(i) {
-    window.slIdx = (i + imgs.length) % imgs.length;
-    track.style.transform = `translateX(-${window.slIdx * 100}%)`;
-    counter.textContent = `${window.slIdx + 1} / ${imgs.length}`;
-    // Update dots (map to max dots range)
-    const dotIdx = Math.min(window.slIdx, MAX_DOTS - 1);
-    dots.forEach((d, j) => d.classList.toggle('act', j === dotIdx));
-  }
-
-  prevBtn.addEventListener('click', () => slGoTo(window.slIdx - 1));
-  nextBtn.addEventListener('click', () => slGoTo(window.slIdx + 1));
-
-  // Touch swipe
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let isSwiping = false;
-
-  track.addEventListener('touchstart', e => {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-    isSwiping = false;
-  }, { passive: true });
-
-  track.addEventListener('touchmove', e => {
-    const dx = Math.abs(e.touches[0].clientX - touchStartX);
-    const dy = Math.abs(e.touches[0].clientY - touchStartY);
-    if (dx > dy && dx > 8) isSwiping = true;
-  }, { passive: true });
-
-  track.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    if (isSwiping && Math.abs(dx) > 40) slGoTo(window.slIdx + (dx < 0 ? 1 : -1));
-  }, { passive: true });
-
-  // Auto-advance (optional, gentle)
-  if (imgs.length > 1) {
-    let autoTimer = setInterval(() => slGoTo(window.slIdx + 1), 4500);
-    sliderEl.addEventListener('touchstart', () => clearInterval(autoTimer), { passive: true, once: true });
-  }
-})();
-
-// Sync lightbox open from slider: use slIdx if on mobile
-
+// Similar properties
 const similar = PROPERTIES.filter(p => p.id !== prop.id && (p.status === prop.status || p.type === prop.type)).slice(0, 3);
 const simGrid = document.getElementById('similarGrid');
 if (similar.length) {
