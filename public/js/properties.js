@@ -10,7 +10,7 @@ const PROPERTIES = [
     status: 'For Sale',
     badgeClass: 'badge-sale',
     price: 'LKR 67 Mn',
-    name: 'The Residence',
+    name: 'The Residencies',
     location: '27 Thalapathpitiya Rd, Nugegoda',
     beds: 2, baths: 2, sqft: '823',
     type: 'Apartment',
