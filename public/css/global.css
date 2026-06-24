@@ -684,9 +684,9 @@ nav { background-color: var(--navy-bar); }
 
 /* ── FOOTER — navy bar, matching nav ── */
 .footer {
-  background: var(--navy-bar);
+  background: white;
   border-top: 3px solid var(--gold);
-  color: var(--white);
+  color: black;
   padding: clamp(3rem,6vw,5rem) 0 0;
 }
 .footer-grid {
@@ -699,14 +699,15 @@ nav { background-color: var(--navy-bar); }
   font-family: var(--font-display);
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--white);
+  color: black;
   margin-bottom: 0.8rem;
   width: 20%;
 }
-.footer-logo-text span { color: var(--gold); }
+.footer-logo-text span { color: black; }
 .footer-brand p {
+  font-weight: 600;
   font-size: 0.83rem;
-  color: rgba(255,255,255,0.5);
+  color: black;
   line-height: 1.8;
   margin-bottom: 1.5rem;
   max-width: 280px;
@@ -716,14 +717,14 @@ nav { background-color: var(--navy-bar); }
   width: 25px; height: 25px;
   align-items: center;
   justify-content: center;
-  color: rgba(255,255,255,0.45);
+  color: black;
   font-size: 0.7rem;
   font-weight: 600;
   transition: all var(--transition);
 }
-.footer-social a:hover { background: var(--gold-glow); border-color: var(--gold-border); color: var(--gold); }
+.footer-social a:hover { background: var(--gold-glow); border-color: var(--gold-border); color: black; }
 .footer-heading {
-  font-size: 0.68rem;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -732,8 +733,9 @@ nav { background-color: var(--navy-bar); }
 }
 .footer-links { display: flex; flex-direction: column; gap: 0.6rem; }
 .footer-links a {
-  font-size: 0.83rem;
-  color: rgba(255,255,255,0.5);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: black;
   transition: color var(--transition);
 }
 .footer-links a:hover { color: var(--gold-pale); }
@@ -741,9 +743,10 @@ nav { background-color: var(--navy-bar); }
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
+  font-weight: 600;
   margin-bottom: 0.8rem;
   font-size: 0.83rem;
-  color: rgba(255,255,255,0.5);
+  color: black;
   line-height: 1.6;
 }
 .footer-contact-item svg { color: var(--gold-dim); flex-shrink: 0; margin-top: 2px; }

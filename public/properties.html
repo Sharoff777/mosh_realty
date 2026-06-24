@@ -1,475 +1,524 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Properties — Mosh Realty</title>
-  <link rel="stylesheet" href="./css/global.css">
-  <style>
-    .nav {
-      background-color: #0e1330;
-    }
-    .page-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 2rem;
-      padding: 2.5rem clamp(1rem,3vw,2.5rem);
-      max-width: 1280px;
-      margin: 0 auto;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Properties — Mosh Realty</title>
+    <link rel="stylesheet" href="./css/global.css" />
+    <style>
+      .nav { background-color: #0e1330; }
 
-    /* ── SIDEBAR ── */
-    .sidebar {
-      position: sticky;
-      top: 90px;
-      height: fit-content;
-    }
-    .filter-box {
-      background: var(--page-bg);
-      border: 1px solid var(--border-soft);
-      border-radius: var(--radius-lg);
-      padding: 1.6rem;
-      box-shadow: var(--shadow-md);
-    }
-    .filter-box-title {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.4rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .filter-box-title::before { content: ''; width: 16px; height: 1.5px; background: var(--gold); }
-    .filter-section {
-      margin-bottom: 1.4rem;
-      border-bottom: 1px solid var(--border-soft);
-      padding-bottom: 1.4rem;
-    }
-    .filter-section:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .filter-section h5 {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-soft);
-      margin-bottom: 0.8rem;
-    }
-    .chk-list { display: flex; flex-direction: column; gap: 0.5rem; }
-    .chk-item {
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      font-size: 0.83rem;
-      color: var(--text-body);
-      cursor: pointer;
-      padding: 0.2rem 0;
-      transition: color var(--transition);
-    }
-    .chk-item:hover { color: var(--navy-bar); }
-    .chk-item input {
-      width: 15px; height: 15px;
-      accent-color: var(--gold);
-      cursor: pointer;
-      flex-shrink: 0;
-    }
+      .page-content {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 2.5rem clamp(1rem, 3vw, 2.5rem);
+      }
 
-    /* Search bar */
-    .search-box {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: var(--page-bg-soft);
-      border: 1.5px solid var(--border-soft);
-      border-radius: var(--radius);
-      padding: 0.65rem 0.9rem;
-      margin-bottom: 1rem;
-      transition: border-color var(--transition);
-    }
-    .search-box:focus-within { border-color: var(--gold-border); }
-    .search-box svg { color: var(--text-muted); flex-shrink: 0; }
-    .search-box input {
-      flex: 1; background: none; border: none; outline: none;
-      font-size: 0.88rem; color: var(--text-dark);
-    }
-    .search-box input::placeholder { color: var(--text-muted); }
+      /* ── TOP FILTER BAR ── */
+      .filter-bar {
+        background: var(--page-bg);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-lg);
+        padding: 1.2rem 1.6rem;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 1.8rem;
+      }
 
-    /* Listing header */
-    .listing-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.4rem;
-      flex-wrap: wrap;
-      gap: 0.7rem;
-    }
-    .listing-count { font-size: 0.85rem; color: var(--text-soft); }
-    .listing-count strong { color: var(--navy-bar); font-weight: 600; }
-    .sort-sel {
-      background: var(--page-bg-soft);
-      border: 1.5px solid var(--border-soft);
-      border-radius: var(--radius);
-      padding: 0.5rem 2.2rem 0.5rem 0.9rem;
-      font-size: 0.82rem;
-      color: var(--text-body);
-      outline: none;
-      cursor: pointer;
-      font-family: var(--font-body);
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 0.7rem center;
-    }
-    .sort-sel option { background: var(--page-bg); color: var(--text-dark); }
+      .filter-bar-top {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-soft);
+      }
 
-    /* Listing grid */
-    .listing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-    .no-results {
-      grid-column: 1/-1;
-      padding: 4rem 2rem;
-      text-align: center;
-      color: var(--text-muted);
-    }
+      .filter-bar-title {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--gold-dim);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .filter-bar-title::before {
+        content: "";
+        width: 16px;
+        height: 1.5px;
+        background: var(--gold);
+      }
 
-    /* Filter buttons */
-    .apply-btn {
-      width: 100%;
-      padding: 0.75rem;
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
-      color: var(--navy-deepest);
-      border: none;
-      border-radius: var(--radius);
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: filter var(--transition);
-      font-family: var(--font-body);
-    }
-    .apply-btn:hover { filter: brightness(1.1); }
-    .clear-btn {
-      width: 100%;
-      padding: 0.6rem;
-      background: transparent;
-      color: var(--text-muted);
-      border: 1.5px solid var(--border-soft);
-      border-radius: var(--radius);
-      font-size: 0.78rem;
-      cursor: pointer;
-      margin-top: 0.5rem;
-      transition: all var(--transition);
-      font-family: var(--font-body);
-    }
-    .clear-btn:hover { border-color: var(--gold-border); color: var(--gold-dim); }
+      /* Search inside top bar */
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: var(--page-bg-soft);
+        border: 1.5px solid var(--border-soft);
+        border-radius: var(--radius);
+        padding: 0.55rem 0.9rem;
+        flex: 1;
+        min-width: 200px;
+        max-width: 340px;
+        transition: border-color var(--transition);
+      }
+      .search-box:focus-within { border-color: var(--gold-border); }
+      .search-box svg { color: var(--text-muted); flex-shrink: 0; }
+      .search-box input {
+        flex: 1; background: none; border: none; outline: none;
+        font-size: 0.88rem; color: var(--text-dark); font-family: var(--font-body);
+      }
+      .search-box input::placeholder { color: var(--text-muted); }
 
-    /* Mobile filter toggle */
-    .mobile-filter-toggle {
-      display: none;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--page-bg-soft);
-      border: 1.5px solid var(--border-soft);
-      border-radius: var(--radius);
-      padding: 0.65rem 1rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      margin-bottom: 1rem;
-      color: var(--text-body);
-      width: 100%;
-      font-family: var(--font-body);
-      transition: border-color var(--transition);
-    }
-    .mobile-filter-toggle:hover { border-color: var(--gold-border); color: var(--navy-bar); }
+      .sort-sel {
+        background: var(--page-bg-soft);
+        border: 1.5px solid var(--border-soft);
+        border-radius: var(--radius);
+        padding: 0.55rem 2.2rem 0.55rem 0.9rem;
+        font-size: 0.82rem;
+        color: var(--text-body);
+        outline: none;
+        cursor: pointer;
+        font-family: var(--font-body);
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.7rem center;
+        flex-shrink: 0;
+      }
+      .sort-sel option { background: var(--page-bg); color: var(--text-dark); }
 
-    @media (max-width: 900px) {
-      .page-layout { grid-template-columns: 1fr; }
-      .sidebar { position: static; }
-      .mobile-filter-toggle { display: flex; }
-      .sidebar.hidden { display: none; }
-    }
-    @media (max-width: 500px) {
-      .listing-grid { grid-template-columns: 1fr; }
-    }
-  </style>
-</head>
-<body>
-<!-- ── LOADING SCREEN ── -->
-<!-- Paste this right after your <body> tag, before everything else -->
+      /* Filter groups row */
+      .filter-groups {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
 
-<div id="loader" style="
-  position: fixed;
-  inset: 0;
-  background: var(--navy-bar);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-">
-  <img src="logo_cir.png" alt="Mosh Realty" style="
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    animation: loaderPulse 1.6s ease-in-out infinite;
-  ">
-  <div style="
-    margin-top: 28px;
-    width: 48px;
-    height: 2px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 2px;
-    overflow: hidden;
-  ">
-    <div style="
-      height: 100%;
-      width: 40%;
-      background: #B8943A;
-      border-radius: 2px;
-      animation: loaderBar 1.6s ease-in-out infinite;
-    "></div>
-  </div>
-</div>
+      .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
 
-<style>
-  @keyframes loaderPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.75; transform: scale(0.96); }
-  }
-  @keyframes loaderBar {
-    0% { transform: translateX(-100%); }
-    50% { transform: translateX(150%); }
-    100% { transform: translateX(-100%); }
-  }
-</style>
+      .filter-group-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-soft);
+        margin-bottom: 0.2rem;
+      }
 
-<script>
-  window.addEventListener('load', () => {
-    const loader = document.getElementById('loader');
-    loader.style.opacity = '0';
-    loader.style.visibility = 'hidden';
-    // Remove from DOM after fade completes
-    setTimeout(() => loader.remove(), 500);
-  });
-</script>
+      .chk-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 1rem;
+      }
 
-<!-- NAV -->
-<nav class="nav" id="mainNav">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">
-      <img src="logo_cir.png" alt="Mosh Realty" class="nav-logo-img">
-    </a>
-    <div class="nav-links">
+      .chk-item {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.83rem;
+        color: var(--text-body);
+        cursor: pointer;
+        white-space: nowrap;
+        transition: color var(--transition);
+      }
+      .chk-item:hover { color: var(--navy-bar); }
+      .chk-item input {
+        width: 15px; height: 15px;
+        accent-color: var(--gold);
+        cursor: pointer; flex-shrink: 0;
+      }
+
+      /* divider between groups */
+      .filter-divider {
+        width: 1px;
+        background: var(--border-soft);
+        align-self: stretch;
+        flex-shrink: 0;
+      }
+
+      /* Action buttons */
+      .filter-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-left: auto;
+        flex-shrink: 0;
+      }
+
+      .apply-btn {
+        padding: 0.6rem 1.3rem;
+        background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+        color: var(--navy-deepest);
+        border: none;
+        border-radius: var(--radius);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: filter var(--transition);
+        font-family: var(--font-body);
+        white-space: nowrap;
+      }
+      .apply-btn:hover { filter: brightness(1.1); }
+
+      .clear-btn {
+        padding: 0.6rem 1rem;
+        background: transparent;
+        color: var(--text-muted);
+        border: 1.5px solid var(--border-soft);
+        border-radius: var(--radius);
+        font-size: 0.78rem;
+        cursor: pointer;
+        transition: all var(--transition);
+        font-family: var(--font-body);
+        white-space: nowrap;
+      }
+      .clear-btn:hover { border-color: var(--gold-border); color: var(--gold-dim); }
+
+      /* Listing header */
+      .listing-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.4rem;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+      }
+      .listing-count { font-size: 0.85rem; color: var(--text-soft); }
+      .listing-count strong { color: var(--navy-bar); font-weight: 600; }
+
+      /* Listing grid */
+      .listing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+      .no-results {
+        grid-column: 1/-1;
+        padding: 4rem 2rem;
+        text-align: center;
+        color: var(--text-muted);
+      }
+
+      /* Mobile filter toggle */
+      .mobile-filter-toggle {
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--page-bg-soft);
+        border: 1.5px solid var(--border-soft);
+        border-radius: var(--radius);
+        padding: 0.65rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        margin-bottom: 1rem;
+        color: var(--text-body);
+        width: 100%;
+        font-family: var(--font-body);
+        transition: border-color var(--transition);
+      }
+      .mobile-filter-toggle:hover { border-color: var(--gold-border); color: var(--navy-bar); }
+
+      @media (max-width: 768px) {
+        .filter-groups { gap: 1.2rem; }
+        .filter-divider { display: none; }
+        .filter-actions { margin-left: 0; width: 100%; }
+        .apply-btn, .clear-btn { flex: 1; text-align: center; }
+        .mobile-filter-toggle { display: flex; }
+        .filter-groups-wrap.hidden { display: none; }
+        .search-box { max-width: 100%; }
+      }
+      @media (max-width: 500px) {
+        .listing-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- LOADING SCREEN -->
+    <div id="loader" style="position:fixed;inset:0;background:var(--navy-bar);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.5s ease,visibility 0.5s ease;">
+      <img src="logo_cir.png" alt="Mosh Realty" style="width:110px;height:110px;border-radius:50%;animation:loaderPulse 1.6s ease-in-out infinite;" />
+      <div style="margin-top:28px;width:48px;height:2px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">
+        <div style="height:100%;width:40%;background:#b8943a;border-radius:2px;animation:loaderBar 1.6s ease-in-out infinite;"></div>
+      </div>
+    </div>
+    <style>
+      @keyframes loaderPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.75;transform:scale(.96)} }
+      @keyframes loaderBar { 0%{transform:translateX(-100%)} 50%{transform:translateX(150%)} 100%{transform:translateX(-100%)} }
+    </style>
+    <script>
+      window.addEventListener("load", () => {
+        const loader = document.getElementById("loader");
+        loader.style.opacity = "0"; loader.style.visibility = "hidden";
+        setTimeout(() => loader.remove(), 500);
+      });
+    </script>
+
+    <!-- NAV -->
+    <nav class="nav" id="mainNav">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+          <img src="logo_cir.png" alt="Mosh Realty" class="nav-logo-img" />
+        </a>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="properties.html" class="active">Properties</a>
+          <a href="sell-with-us.html">Sell With Us</a>
+        </div>
+        <div class="nav-right">
+          <a href="tel:+94777150066" class="nav-contact-link">+94 77 715 0066</a>
+          <a href="sell-with-us.html" class="btn-nav-cta">
+            Sell With Us
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <button class="nav-toggle" id="navToggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div class="nav-mobile-menu" id="mobileMenu">
       <a href="index.html">Home</a>
-      <a href="properties.html" class="active">Properties</a>
-      <a href="sell-with-us.html">Sell With Us</a>
+      <a href="properties.html">Properties</a>
+      <a href="sell-with-us.html" class="cta-mobile">Sell With Us →</a>
     </div>
-    <div class="nav-right">
-      <a href="tel:+94777150066" class="nav-contact-link">+94 77 715 0066</a>
-      <a href="sell-with-us.html" class="btn-nav-cta">
-        Sell With Us
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+      <div class="container">
+        <div class="page-hero-eyebrow">Browse Listings</div>
+        <h1>Our <em>Properties</em></h1>
+        <p>Exceptional homes, land and commercial spaces across Sri Lanka's finest addresses.</p>
+      </div>
     </div>
-  </div>
-</nav>
-<div class="nav-mobile-menu" id="mobileMenu">
-  <a href="index.html">Home</a>
-  <a href="properties.html">Properties</a>
-  <a href="sell-with-us.html" class="cta-mobile">Sell With Us →</a>
-</div>
 
-<!-- PAGE HERO -->
-<div class="page-hero">
-  <div class="container">
-    <div class="page-hero-eyebrow">Browse Listings</div>
-    <h1>Our <em>Properties</em></h1>
-    <p>Exceptional homes, land and commercial spaces across Sri Lanka's finest addresses.</p>
-  </div>
-</div>
+    <!-- MAIN CONTENT -->
+    <div class="page-content">
 
-<!-- MAIN LAYOUT -->
-<div class="page-layout">
-  <aside class="sidebar" id="sidebar">
-    <div class="filter-box">
-      <div class="filter-box-title">Filter Listings</div>
-      <div class="filter-section">
-        <h5>Status</h5>
-        <div class="chk-list">
-          <label class="chk-item"><input type="checkbox" value="For Sale" data-group="status" checked> For Sale</label>
-          <label class="chk-item"><input type="checkbox" value="For Rent" data-group="status" checked> For Rent</label>
-          <label class="chk-item"><input type="checkbox" value="Land" data-group="status" checked> Land</label>
-          <label class="chk-item"><input type="checkbox" value="Commercial" data-group="status" checked> Commercial</label>
+      <!-- TOP FILTER BAR -->
+      <div class="filter-bar">
+        <!-- Top row: search + sort -->
+        <div class="filter-bar-top">
+          <div class="filter-bar-title">Filter Listings</div>
+          <div class="search-box">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" id="searchInput" placeholder="Search by name, location or type…" oninput="applyFilters()" />
+          </div>
+          <select class="sort-sel" id="sortSel" onchange="applyFilters()">
+            <option value="default">Sort: Default</option>
+            <option value="az">Name A–Z</option>
+          </select>
+          <button class="mobile-filter-toggle" onclick="document.getElementById('filterGroupsWrap').classList.toggle('hidden')">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>
+            Filters
+          </button>
+        </div>
+
+        <!-- Bottom row: filter groups -->
+        <div class="filter-groups-wrap" id="filterGroupsWrap">
+          <div class="filter-groups">
+
+            <div class="filter-group">
+              <div class="filter-group-label">Status</div>
+              <div class="chk-row">
+                <label class="chk-item"><input type="checkbox" value="For Sale" data-group="status" checked /> For Sale</label>
+                <label class="chk-item"><input type="checkbox" value="For Rent" data-group="status" checked /> For Rent</label>
+                <label class="chk-item"><input type="checkbox" value="Land" data-group="status" checked /> Land</label>
+                <label class="chk-item"><input type="checkbox" value="Commercial" data-group="status" checked /> Commercial</label>
+              </div>
+            </div>
+
+            <div class="filter-divider"></div>
+
+            <div class="filter-group">
+              <div class="filter-group-label">Property Type</div>
+              <div class="chk-row">
+                <label class="chk-item"><input type="checkbox" value="Penthouse" data-group="type" checked /> Penthouse</label>
+                <label class="chk-item"><input type="checkbox" value="Villa" data-group="type" checked /> Villa</label>
+                <label class="chk-item"><input type="checkbox" value="House" data-group="type" checked /> House</label>
+                <label class="chk-item"><input type="checkbox" value="Apartment" data-group="type" checked /> Apartment</label>
+                <label class="chk-item"><input type="checkbox" value="Land" data-group="type" checked /> Land</label>
+                <label class="chk-item"><input type="checkbox" value="Commercial" data-group="type" checked /> Commercial</label>
+              </div>
+            </div>
+
+            <div class="filter-divider"></div>
+
+            <div class="filter-group">
+              <div class="filter-group-label">Bedrooms</div>
+              <div class="chk-row">
+                <label class="chk-item"><input type="checkbox" value="2" data-group="beds" checked /> 2+</label>
+                <label class="chk-item"><input type="checkbox" value="3" data-group="beds" checked /> 3+</label>
+                <label class="chk-item"><input type="checkbox" value="4" data-group="beds" checked /> 4+</label>
+                <label class="chk-item"><input type="checkbox" value="5" data-group="beds" checked /> 5+</label>
+              </div>
+            </div>
+
+            <div class="filter-divider"></div>
+
+            <div class="filter-group">
+              <div class="filter-group-label">Bathrooms</div>
+              <div class="chk-row">
+                <label class="chk-item"><input type="checkbox" value="1" data-group="baths" checked /> 1+</label>
+                <label class="chk-item"><input type="checkbox" value="2" data-group="baths" checked /> 2+</label>
+                <label class="chk-item"><input type="checkbox" value="3" data-group="baths" checked /> 3+</label>
+                <label class="chk-item"><input type="checkbox" value="4" data-group="baths" checked /> 4+</label>
+              </div>
+            </div>
+
+            <div class="filter-actions">
+              <button class="clear-btn" onclick="clearFilters()">Clear</button>
+              <button class="apply-btn" onclick="applyFilters()">Apply Filters</button>
+            </div>
+
+          </div>
         </div>
       </div>
-      <div class="filter-section">
-        <h5>Property Type</h5>
-        <div class="chk-list">
-          <label class="chk-item"><input type="checkbox" value="Penthouse" data-group="type" checked> Penthouse</label>
-          <label class="chk-item"><input type="checkbox" value="Villa" data-group="type" checked> Villa</label>
-          <label class="chk-item"><input type="checkbox" value="House" data-group="type" checked> House</label>
-          <label class="chk-item"><input type="checkbox" value="Apartment" data-group="type" checked> Apartment</label>
-          <label class="chk-item"><input type="checkbox" value="Land" data-group="type" checked> Land</label>
-          <label class="chk-item"><input type="checkbox" value="Commercial" data-group="type" checked> Commercial</label>
+
+      <!-- LISTING -->
+      <div class="listing-header">
+        <div class="listing-count" id="countEl">Showing <strong>0</strong> properties</div>
+      </div>
+      <div class="listing-grid" id="listingGrid"></div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo-text">
+              <img src="logo.jpg" alt="logo" />
+            </div>
+            <p>Sri Lanka's most trusted luxury real estate agency. We match exceptional properties with exceptional people.</p>
+            <div class="footer-social">
+              <a href="https://wa.me/94777150066" target="_blank"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M16 31C23.732 31 30 24.732 30 17C30 9.26801 23.732 3 16 3C8.26801 3 2 9.26801 2 17C2 19.5109 2.661 21.8674 3.81847 23.905L2 31L9.31486 29.3038C11.3014 30.3854 13.5789 31 16 31ZM16 28.8462C22.5425 28.8462 27.8462 23.5425 27.8462 17C27.8462 10.4576 22.5425 5.15385 16 5.15385C9.45755 5.15385 4.15385 10.4576 4.15385 17C4.15385 19.5261 4.9445 21.8675 6.29184 23.7902L5.23077 27.7692L9.27993 26.7569C11.1894 28.0746 13.5046 28.8462 16 28.8462Z" fill="#BFC8D0"></path> <path d="M28 16C28 22.6274 22.6274 28 16 28C13.4722 28 11.1269 27.2184 9.19266 25.8837L5.09091 26.9091L6.16576 22.8784C4.80092 20.9307 4 18.5589 4 16C4 9.37258 9.37258 4 16 4C22.6274 4 28 9.37258 28 16Z" fill="url(#paint0_linear_87_7264)"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M16 30C23.732 30 30 23.732 30 16C30 8.26801 23.732 2 16 2C8.26801 2 2 8.26801 2 16C2 18.5109 2.661 20.8674 3.81847 22.905L2 30L9.31486 28.3038C11.3014 29.3854 13.5789 30 16 30ZM16 27.8462C22.5425 27.8462 27.8462 22.5425 27.8462 16C27.8462 9.45755 22.5425 4.15385 16 4.15385C9.45755 4.15385 4.15385 9.45755 4.15385 16C4.15385 18.5261 4.9445 20.8675 6.29184 22.7902L5.23077 26.7692L9.27993 25.7569C11.1894 27.0746 13.5046 27.8462 16 27.8462Z" fill="white"></path> <path d="M12.5 9.49989C12.1672 8.83131 11.6565 8.8905 11.1407 8.8905C10.2188 8.8905 8.78125 9.99478 8.78125 12.05C8.78125 13.7343 9.52345 15.578 12.0244 18.3361C14.438 20.9979 17.6094 22.3748 20.2422 22.3279C22.875 22.2811 23.4167 20.0154 23.4167 19.2503C23.4167 18.9112 23.2062 18.742 23.0613 18.696C22.1641 18.2654 20.5093 17.4631 20.1328 17.3124C19.7563 17.1617 19.5597 17.3656 19.4375 17.4765C19.0961 17.8018 18.4193 18.7608 18.1875 18.9765C17.9558 19.1922 17.6103 19.083 17.4665 19.0015C16.9374 18.7892 15.5029 18.1511 14.3595 17.0426C12.9453 15.6718 12.8623 15.2001 12.5959 14.7803C12.3828 14.4444 12.5392 14.2384 12.6172 14.1483C12.9219 13.7968 13.3426 13.254 13.5313 12.9843C13.7199 12.7145 13.5702 12.305 13.4803 12.05C13.0938 10.953 12.7663 10.0347 12.5 9.49989Z" fill="white"></path> <defs> <linearGradient id="paint0_linear_87_7264" x1="26.5" y1="7" x2="4" y2="28" gradientUnits="userSpaceOnUse"> <stop stop-color="#5BD066"></stop> <stop offset="1" stop-color="#27B43E"></stop> </linearGradient> </defs> </g></svg></a>
+              <a href="#" target="_blank"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect x="2" y="2" width="28" height="28" rx="6" fill="url(#paint0_radial_87_7153)"></rect><rect x="2" y="2" width="28" height="28" rx="6" fill="url(#paint1_radial_87_7153)"></rect><rect x="2" y="2" width="28" height="28" rx="6" fill="url(#paint2_radial_87_7153)"></rect><path d="M23 10.5C23 11.3284 22.3284 12 21.5 12C20.6716 12 20 11.3284 20 10.5C20 9.67157 20.6716 9 21.5 9C22.3284 9 23 9.67157 23 10.5Z" fill="white"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M16 21C18.7614 21 21 18.7614 21 16C21 13.2386 18.7614 11 16 11C13.2386 11 11 13.2386 11 16C11 18.7614 13.2386 21 16 21ZM16 19C17.6569 19 19 17.6569 19 16C19 14.3431 17.6569 13 16 13C14.3431 13 13 14.3431 13 16C13 17.6569 14.3431 19 16 19Z" fill="white"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M6 15.6C6 12.2397 6 10.5595 6.65396 9.27606C7.2292 8.14708 8.14708 7.2292 9.27606 6.65396C10.5595 6 12.2397 6 15.6 6H16.4C19.7603 6 21.4405 6 22.7239 6.65396C23.8529 7.2292 24.7708 8.14708 25.346 9.27606C26 10.5595 26 12.2397 26 15.6V16.4C26 19.7603 26 21.4405 25.346 22.7239C24.7708 23.8529 23.8529 24.7708 22.7239 25.346C21.4405 26 19.7603 26 16.4 26H15.6C12.2397 26 10.5595 26 9.27606 25.346C8.14708 24.7708 7.2292 23.8529 6.65396 22.7239C6 21.4405 6 19.7603 6 16.4V15.6ZM15.6 8H16.4C18.1132 8 19.2777 8.00156 20.1779 8.0751C21.0548 8.14674 21.5032 8.27659 21.816 8.43597C22.5686 8.81947 23.1805 9.43139 23.564 10.184C23.7234 10.4968 23.8533 10.9452 23.9249 11.8221C23.9984 12.7223 24 13.8868 24 15.6V16.4C24 18.1132 23.9984 19.2777 23.9249 20.1779C23.8533 21.0548 23.7234 21.5032 23.564 21.816C23.1805 22.5686 22.5686 23.1805 21.816 23.564C21.5032 23.7234 21.0548 23.8533 20.1779 23.9249C19.2777 23.9984 18.1132 24 16.4 24H15.6C13.8868 24 12.7223 23.9984 11.8221 23.9249C10.9452 23.8533 10.4968 23.7234 10.184 23.564C9.43139 23.1805 8.81947 22.5686 8.43597 21.816C8.27659 21.5032 8.14674 21.0548 8.0751 20.1779C8.00156 19.2777 8 18.1132 8 16.4V15.6C8 13.8868 8.00156 12.7223 8.0751 11.8221C8.14674 10.9452 8.27659 10.4968 8.43597 10.184C8.81947 9.43139 9.43139 8.81947 10.184 8.43597C10.4968 8.27659 10.9452 8.14674 11.8221 8.0751C12.7223 8.00156 13.8868 8 15.6 8Z" fill="white"></path><defs><radialGradient id="paint0_radial_87_7153" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(12 23) rotate(-55.3758) scale(25.5196)"><stop stop-color="#B13589"></stop><stop offset="0.79309" stop-color="#C62F94"></stop><stop offset="1" stop-color="#8A3AC8"></stop></radialGradient><radialGradient id="paint1_radial_87_7153" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(11 31) rotate(-65.1363) scale(22.5942)"><stop stop-color="#E0E8B7"></stop><stop offset="0.444662" stop-color="#FB8A2E"></stop><stop offset="0.71474" stop-color="#E2425C"></stop><stop offset="1" stop-color="#E2425C" stop-opacity="0"></stop></radialGradient><radialGradient id="paint2_radial_87_7153" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0.500002 3) rotate(-8.1301) scale(38.8909 8.31836)"><stop offset="0.156701" stop-color="#406ADC"></stop><stop offset="0.467799" stop-color="#6A45BE"></stop><stop offset="1" stop-color="#6A45BE" stop-opacity="0"></stop></radialGradient></defs></g></svg></a>
+              <a href="#"><svg viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>Facebook-color</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Color-" transform="translate(-200.000000, -160.000000)" fill="#4460A0"> <path d="M225.638355,208 L202.649232,208 C201.185673,208 200,206.813592 200,205.350603 L200,162.649211 C200,161.18585 201.185859,160 202.649232,160 L245.350955,160 C246.813955,160 248,161.18585 248,162.649211 L248,205.350603 C248,206.813778 246.813769,208 245.350955,208 L233.119305,208 L233.119305,189.411755 L239.358521,189.411755 L240.292755,182.167586 L233.119305,182.167586 L233.119305,177.542641 C233.119305,175.445287 233.701712,174.01601 236.70929,174.01601 L240.545311,174.014333 L240.545311,167.535091 C239.881886,167.446808 237.604784,167.24957 234.955552,167.24957 C229.424834,167.24957 225.638355,170.625526 225.638355,176.825209 L225.638355,182.167586 L219.383122,182.167586 L219.383122,189.411755 L225.638355,189.411755 L225.638355,208 L225.638355,208 Z" id="Facebook"> </path> </g> </g> </g></svg></a>
+            </div>
+          </div>
+          <div>
+            <div class="footer-heading">Properties</div>
+            <ul class="footer-links">
+              <li><a href="properties.html?f=For+Sale">For Sale</a></li>
+              <li><a href="properties.html?f=For+Rent">For Rent</a></li>
+              <li><a href="properties.html?f=Land">Land</a></li>
+              <li><a href="properties.html?f=Commercial">Commercial</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="footer-heading">Company</div>
+            <ul class="footer-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="sell-with-us.html">Sell With Us</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="footer-heading">Contact</div>
+            <div class="footer-contact-item">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12 19.79 19.79 0 011.65 3.38 2 2 0 013.62 1.22h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+              +94 77 715 0066
+            </div>
+            <div class="footer-contact-item">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              hello@moshrealty.lk
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2025 Mosh Realty (Pvt) Ltd. All rights reserved.</p>
+          <p>Luxury · Integrity · Results</p>
         </div>
       </div>
-      <div class="filter-section">
-        <h5>Bedrooms</h5>
-        <div class="chk-list">
-          <label class="chk-item"><input type="checkbox" value="2" data-group="beds" checked> 2+</label>
-          <label class="chk-item"><input type="checkbox" value="3" data-group="beds" checked> 3+</label>
-          <label class="chk-item"><input type="checkbox" value="4" data-group="beds" checked> 4+</label>
-          <label class="chk-item"><input type="checkbox" value="5" data-group="beds" checked> 5+</label>
-        </div>
-      </div>
-      <button class="apply-btn" onclick="applyFilters()">Apply Filters</button>
-      <button class="clear-btn" onclick="clearFilters()">Clear All</button>
-    </div>
-  </aside>
+    </footer>
 
-  <div>
-    <button class="mobile-filter-toggle" onclick="document.getElementById('sidebar').classList.toggle('hidden')">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>
-      Filter Properties
-    </button>
-    <div class="search-box">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="searchInput" placeholder="Search by name, location or type…" oninput="applyFilters()">
-    </div>
-    <div class="listing-header">
-      <div class="listing-count" id="countEl">Showing <strong>0</strong> properties</div>
-      <select class="sort-sel" id="sortSel" onchange="applyFilters()">
-        <option value="default">Sort: Default</option>
-        <option value="az">Name A–Z</option>
-      </select>
-    </div>
-    <div class="listing-grid" id="listingGrid"></div>
-  </div>
-</div>
+    <a href="https://wa.me/94777150066" class="wa-float" target="_blank" aria-label="WhatsApp">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
 
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="footer-logo-text"><img src="logo.jpg" alt="logo"></div>
-        <p>Sri Lanka's most trusted luxury real estate agency. We match exceptional properties with exceptional people.</p>
-        <div class="footer-social">
-          <a href="https://wa.me/94777150066" target="_blank"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M16 31C23.732 31 30 24.732 30 17C30 9.26801 23.732 3 16 3C8.26801 3 2 9.26801 2 17C2 19.5109 2.661 21.8674 3.81847 23.905L2 31L9.31486 29.3038C11.3014 30.3854 13.5789 31 16 31ZM16 28.8462C22.5425 28.8462 27.8462 23.5425 27.8462 17C27.8462 10.4576 22.5425 5.15385 16 5.15385C9.45755 5.15385 4.15385 10.4576 4.15385 17C4.15385 19.5261 4.9445 21.8675 6.29184 23.7902L5.23077 27.7692L9.27993 26.7569C11.1894 28.0746 13.5046 28.8462 16 28.8462Z" fill="#BFC8D0"></path> <path d="M28 16C28 22.6274 22.6274 28 16 28C13.4722 28 11.1269 27.2184 9.19266 25.8837L5.09091 26.9091L6.16576 22.8784C4.80092 20.9307 4 18.5589 4 16C4 9.37258 9.37258 4 16 4C22.6274 4 28 9.37258 28 16Z" fill="url(#paint0_linear_87_7264)"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M16 30C23.732 30 30 23.732 30 16C30 8.26801 23.732 2 16 2C8.26801 2 2 8.26801 2 16C2 18.5109 2.661 20.8674 3.81847 22.905L2 30L9.31486 28.3038C11.3014 29.3854 13.5789 30 16 30ZM16 27.8462C22.5425 27.8462 27.8462 22.5425 27.8462 16C27.8462 9.45755 22.5425 4.15385 16 4.15385C9.45755 4.15385 4.15385 9.45755 4.15385 16C4.15385 18.5261 4.9445 20.8675 6.29184 22.7902L5.23077 26.7692L9.27993 25.7569C11.1894 27.0746 13.5046 27.8462 16 27.8462Z" fill="white"></path> <path d="M12.5 9.49989C12.1672 8.83131 11.6565 8.8905 11.1407 8.8905C10.2188 8.8905 8.78125 9.99478 8.78125 12.05C8.78125 13.7343 9.52345 15.578 12.0244 18.3361C14.438 20.9979 17.6094 22.3748 20.2422 22.3279C22.875 22.2811 23.4167 20.0154 23.4167 19.2503C23.4167 18.9112 23.2062 18.742 23.0613 18.696C22.1641 18.2654 20.5093 17.4631 20.1328 17.3124C19.7563 17.1617 19.5597 17.3656 19.4375 17.4765C19.0961 17.8018 18.4193 18.7608 18.1875 18.9765C17.9558 19.1922 17.6103 19.083 17.4665 19.0015C16.9374 18.7892 15.5029 18.1511 14.3595 17.0426C12.9453 15.6718 12.8623 15.2001 12.5959 14.7803C12.3828 14.4444 12.5392 14.2384 12.6172 14.1483C12.9219 13.7968 13.3426 13.254 13.5313 12.9843C13.7199 12.7145 13.5702 12.305 13.4803 12.05C13.0938 10.953 12.7663 10.0347 12.5 9.49989Z" fill="white"></path> <defs> <linearGradient id="paint0_linear_87_7264" x1="26.5" y1="7" x2="4" y2="28" gradientUnits="userSpaceOnUse"> <stop stop-color="#5BD066"></stop> <stop offset="1" stop-color="#27B43E"></stop> </linearGradient> </defs> </g></svg></a>
-          <a href="#" target="_blank"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#paint0_radial_87_7153)"></rect> <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#paint1_radial_87_7153)"></rect> <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#paint2_radial_87_7153)"></rect> <path d="M23 10.5C23 11.3284 22.3284 12 21.5 12C20.6716 12 20 11.3284 20 10.5C20 9.67157 20.6716 9 21.5 9C22.3284 9 23 9.67157 23 10.5Z" fill="white"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M16 21C18.7614 21 21 18.7614 21 16C21 13.2386 18.7614 11 16 11C13.2386 11 11 13.2386 11 16C11 18.7614 13.2386 21 16 21ZM16 19C17.6569 19 19 17.6569 19 16C19 14.3431 17.6569 13 16 13C14.3431 13 13 14.3431 13 16C13 17.6569 14.3431 19 16 19Z" fill="white"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M6 15.6C6 12.2397 6 10.5595 6.65396 9.27606C7.2292 8.14708 8.14708 7.2292 9.27606 6.65396C10.5595 6 12.2397 6 15.6 6H16.4C19.7603 6 21.4405 6 22.7239 6.65396C23.8529 7.2292 24.7708 8.14708 25.346 9.27606C26 10.5595 26 12.2397 26 15.6V16.4C26 19.7603 26 21.4405 25.346 22.7239C24.7708 23.8529 23.8529 24.7708 22.7239 25.346C21.4405 26 19.7603 26 16.4 26H15.6C12.2397 26 10.5595 26 9.27606 25.346C8.14708 24.7708 7.2292 23.8529 6.65396 22.7239C6 21.4405 6 19.7603 6 16.4V15.6ZM15.6 8H16.4C18.1132 8 19.2777 8.00156 20.1779 8.0751C21.0548 8.14674 21.5032 8.27659 21.816 8.43597C22.5686 8.81947 23.1805 9.43139 23.564 10.184C23.7234 10.4968 23.8533 10.9452 23.9249 11.8221C23.9984 12.7223 24 13.8868 24 15.6V16.4C24 18.1132 23.9984 19.2777 23.9249 20.1779C23.8533 21.0548 23.7234 21.5032 23.564 21.816C23.1805 22.5686 22.5686 23.1805 21.816 23.564C21.5032 23.7234 21.0548 23.8533 20.1779 23.9249C19.2777 23.9984 18.1132 24 16.4 24H15.6C13.8868 24 12.7223 23.9984 11.8221 23.9249C10.9452 23.8533 10.4968 23.7234 10.184 23.564C9.43139 23.1805 8.81947 22.5686 8.43597 21.816C8.27659 21.5032 8.14674 21.0548 8.0751 20.1779C8.00156 19.2777 8 18.1132 8 16.4V15.6C8 13.8868 8.00156 12.7223 8.0751 11.8221C8.14674 10.9452 8.27659 10.4968 8.43597 10.184C8.81947 9.43139 9.43139 8.81947 10.184 8.43597C10.4968 8.27659 10.9452 8.14674 11.8221 8.0751C12.7223 8.00156 13.8868 8 15.6 8Z" fill="white"></path> <defs> <radialGradient id="paint0_radial_87_7153" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(12 23) rotate(-55.3758) scale(25.5196)"> <stop stop-color="#B13589"></stop> <stop offset="0.79309" stop-color="#C62F94"></stop> <stop offset="1" stop-color="#8A3AC8"></stop> </radialGradient> <radialGradient id="paint1_radial_87_7153" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(11 31) rotate(-65.1363) scale(22.5942)"> <stop stop-color="#E0E8B7"></stop> <stop offset="0.444662" stop-color="#FB8A2E"></stop> <stop offset="0.71474" stop-color="#E2425C"></stop> <stop offset="1" stop-color="#E2425C" stop-opacity="0"></stop> </radialGradient> <radialGradient id="paint2_radial_87_7153" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0.500002 3) rotate(-8.1301) scale(38.8909 8.31836)"> <stop offset="0.156701" stop-color="#406ADC"></stop> <stop offset="0.467799" stop-color="#6A45BE"></stop> <stop offset="1" stop-color="#6A45BE" stop-opacity="0"></stop> </radialGradient> </defs> </g></svg></a>
-          <a href="#" target="_blank"><svg viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>Facebook-color</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Color-" transform="translate(-200.000000, -160.000000)" fill="#4460A0"> <path d="M225.638355,208 L202.649232,208 C201.185673,208 200,206.813592 200,205.350603 L200,162.649211 C200,161.18585 201.185859,160 202.649232,160 L245.350955,160 C246.813955,160 248,161.18585 248,162.649211 L248,205.350603 C248,206.813778 246.813769,208 245.350955,208 L233.119305,208 L233.119305,189.411755 L239.358521,189.411755 L240.292755,182.167586 L233.119305,182.167586 L233.119305,177.542641 C233.119305,175.445287 233.701712,174.01601 236.70929,174.01601 L240.545311,174.014333 L240.545311,167.535091 C239.881886,167.446808 237.604784,167.24957 234.955552,167.24957 C229.424834,167.24957 225.638355,170.625526 225.638355,176.825209 L225.638355,182.167586 L219.383122,182.167586 L219.383122,189.411755 L225.638355,189.411755 L225.638355,208 L225.638355,208 Z" id="Facebook"> </path> </g> </g> </g></svg></a>
-        </div>
-      </div>
-      <div>
-        <div class="footer-heading">Properties</div>
-        <ul class="footer-links">
-          <li><a href="properties.html?f=For+Sale">For Sale</a></li>
-          <li><a href="properties.html?f=For+Rent">For Rent</a></li>
-          <li><a href="properties.html?f=Land">Land</a></li>
-          <li><a href="properties.html?f=Commercial">Commercial</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-heading">Company</div>
-        <ul class="footer-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="sell-with-us.html">Sell With Us</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-heading">Contact</div>
-        <div class="footer-contact-item">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12 19.79 19.79 0 011.65 3.38 2 2 0 013.62 1.22h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-          +94 77 715 0066
-        </div>
-        <div class="footer-contact-item">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          hello@moshrealty.lk
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2025 Mosh Realty (Pvt) Ltd. All rights reserved.</p>
-      <p>Luxury · Integrity · Results</p>
-    </div>
-  </div>
-</footer>
+    <script src="js/properties.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+      let current = [...PROPERTIES];
 
-<a href="https://wa.me/94777150066" class="wa-float" target="_blank" aria-label="WhatsApp">
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-</a>
+      function applyFilters() {
+        const statuses = [...document.querySelectorAll('input[data-group="status"]')].filter(c => c.checked).map(c => c.value);
+        const types    = [...document.querySelectorAll('input[data-group="type"]')].filter(c => c.checked).map(c => c.value);
+        const bedVals  = [...document.querySelectorAll('input[data-group="beds"]')].filter(c => c.checked).map(c => parseInt(c.value, 10));
+        const minBed   = bedVals.length ? Math.min(...bedVals) : null;
+        const bathVals = [...document.querySelectorAll('input[data-group="baths"]')].filter(c => c.checked).map(c => parseInt(c.value, 10));
+        const minBath  = bathVals.length ? Math.min(...bathVals) : null;
+        const q        = document.getElementById("searchInput").value.toLowerCase();
+        const maxBudgetMn = window._urlBudget || null;
+        const minBedsUrl  = window._urlBeds   || null;
 
-<script src="js/properties.js"></script>
-<script src="js/main.js"></script>
-<script>
-let current = [...PROPERTIES];
+        current = PROPERTIES.filter(p => {
+          const ms    = !statuses.length || statuses.includes(p.status);
+          const mt    = !types.length    || types.includes(p.type);
+          const mb    = !minBed          || p.beds == null || p.beds >= minBed;
+          const mbath = !minBath         || p.baths == null || p.baths >= minBath;
+          const mq    = !q || p.name.toLowerCase().includes(q) || p.location.toLowerCase().includes(q) || p.type.toLowerCase().includes(q) || p.status.toLowerCase().includes(q);
+          let budgetOk = true;
+          if (maxBudgetMn) { const n = parseFloat((p.price||'').replace(/[^\d.]/g,'')); budgetOk = isNaN(n) || n <= maxBudgetMn; }
+          const bedsOk = !minBedsUrl || p.beds == null || p.beds >= minBedsUrl;
+          return ms && mt && mb && mbath && mq && budgetOk && bedsOk;
+        });
 
-function applyFilters() {
-  const statuses = [...document.querySelectorAll('input[data-group="status"]')].filter(c=>c.checked).map(c=>c.value);
-  const types    = [...document.querySelectorAll('input[data-group="type"]')].filter(c=>c.checked).map(c=>c.value);
-  const bedVals  = [...document.querySelectorAll('input[data-group="beds"]')].filter(c=>c.checked).map(c=>parseInt(c.value,10));
-  const minBed   = bedVals.length ? Math.min(...bedVals) : null;
-  const q        = document.getElementById('searchInput').value.toLowerCase();
-  const maxBudgetMn = window._urlBudget || null;
-  const minBedsUrl  = window._urlBeds   || null;
+        if (document.getElementById("sortSel").value === "az")
+          current.sort((a, b) => a.name.localeCompare(b.name));
+        render();
+      }
 
-  current = PROPERTIES.filter(p => {
-    const ms = !statuses.length || statuses.includes(p.status);
-    const mt = !types.length    || types.includes(p.type);
-    const mb = !minBed          || p.beds == null || p.beds >= minBed;
-    const mq = !q               || p.name.toLowerCase().includes(q) || p.location.toLowerCase().includes(q) || p.type.toLowerCase().includes(q) || p.status.toLowerCase().includes(q);
-    let budgetOk = true;
-    if (maxBudgetMn) { const n = parseFloat((p.price||'').replace(/[^\d.]/g,'')); budgetOk = isNaN(n) || n <= maxBudgetMn; }
-    const bedsOk = !minBedsUrl || p.beds == null || p.beds >= minBedsUrl;
-    return ms && mt && mb && mq && budgetOk && bedsOk;
-  });
+      function clearFilters() {
+        document.querySelectorAll(".chk-item input").forEach(c => c.checked = true);
+        document.getElementById("searchInput").value = "";
+        window._urlBudget = null;
+        window._urlBeds = null;
+        current = [...PROPERTIES];
+        render();
+      }
 
-  if (document.getElementById('sortSel').value === 'az') current.sort((a,b)=>a.name.localeCompare(b.name));
-  render();
-}
+      function render() {
+        const g = document.getElementById("listingGrid");
+        document.getElementById("countEl").innerHTML = `Showing <strong>${current.length}</strong> propert${current.length === 1 ? "y" : "ies"}`;
+        if (!current.length) {
+          g.innerHTML = '<div class="no-results"><svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 1rem;color:var(--text-muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>No properties match your search.</p></div>';
+          return;
+        }
+        g.innerHTML = current.map(p => renderPropCard(p)).join("");
+        requestAnimationFrame(() => {
+          g.querySelectorAll(".prop-card").forEach((el, i) => {
+            el.style.transitionDelay = i * 0.07 + "s";
+            requestAnimationFrame(() => el.classList.add("visible"));
+          });
+        });
+      }
 
-function clearFilters() {
-  document.querySelectorAll('.chk-item input').forEach(c=>c.checked=true);
-  document.getElementById('searchInput').value='';
-  window._urlBudget = null; window._urlBeds = null;
-  current=[...PROPERTIES]; render();
-}
-
-function render() {
-  const g = document.getElementById('listingGrid');
-  document.getElementById('countEl').innerHTML = `Showing <strong>${current.length}</strong> propert${current.length === 1 ? 'y' : 'ies'}`;
-  if (!current.length) { g.innerHTML='<div class="no-results"><svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 1rem;color:var(--text-muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>No properties match your search.</p></div>'; return; }
-  g.innerHTML = current.map(p => renderPropCard(p)).join('');
-  // Animate in
-  requestAnimationFrame(() => {
-    g.querySelectorAll('.prop-card').forEach((el,i) => {
-      el.style.transitionDelay = (i * 0.07) + 's';
-      requestAnimationFrame(() => el.classList.add('visible'));
-    });
-  });
-}
-
-// URL params
-const p = new URLSearchParams(location.search);
-const urlQ = p.get('q'), urlF = p.get('f'), urlBeds = p.get('beds'), urlBudget = p.get('budget');
-if (urlQ) document.getElementById('searchInput').value = urlQ;
-if (urlF) {
-  const statusVals = ['For Sale','For Rent','Land','Commercial'];
-  const group = statusVals.includes(urlF) ? 'status' : 'type';
-  document.querySelectorAll(`input[data-group="${group}"]`).forEach(c => { c.checked = c.value === urlF; });
-}
-window._urlBeds   = urlBeds   ? parseInt(urlBeds)   : null;
-window._urlBudget = urlBudget ? parseInt(urlBudget) : null;
-applyFilters();
-</script>
-</body>
+      // URL params
+      const p = new URLSearchParams(location.search);
+      const urlQ = p.get("q"), urlF = p.get("f"), urlBeds = p.get("beds"), urlBudget = p.get("budget");
+      if (urlQ) document.getElementById("searchInput").value = urlQ;
+      if (urlF) {
+        const statusVals = ["For Sale", "For Rent", "Land", "Commercial"];
+        const group = statusVals.includes(urlF) ? "status" : "type";
+        document.querySelectorAll(`input[data-group="${group}"]`).forEach(c => { c.checked = c.value === urlF; });
+      }
+      window._urlBeds = urlBeds ? parseInt(urlBeds) : null;
+      window._urlBudget = urlBudget ? parseInt(urlBudget) : null;
+      applyFilters();
+    </script>
+  </body>
 </html>
