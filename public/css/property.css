@@ -34,14 +34,14 @@
 
 .gallery-mosaic {
   position: relative;
-  border-radius: var(--radius-lg);
+  border-radius: 0px;
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  gap: 3px;
+  gap: 10px;
   height: clamp(380px, 56vw, 640px);
-  background: var(--border-soft);
+  background: white;
   box-shadow: var(--shadow-md);
 }
 
@@ -145,7 +145,8 @@
 
 /* ── DESKTOP: taller mosaic ── */
 .gallery-mosaic {
-  height: clamp(380px, 56vw, 640px);
+  padding: 4px;
+  height: clamp(80px, 56vw, 640px);
 }
 
 /* ══════════════════════════════════════

@@ -308,6 +308,8 @@ if (imgs.length <= 1) {
   lbNextBtn.classList.add('hidden');
 }
 
+  viewAllLbl.textContent = `All ${imgs.length} photos`;
+
 function lbGoTo(i) {
   lbIdx = (i + imgs.length) % imgs.length;
   lbImgEl.style.opacity = '0';

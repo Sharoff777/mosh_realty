@@ -6,37 +6,21 @@
 
 const PROPERTIES = [
   {
-    id: 'kotte-apartment-residence',
+    id: 'the-residencies-apa',
     status: 'For Sale',
     badgeClass: 'badge-sale',
     price: 'LKR 67 Mn',
-    name: 'The Residencies',
-    location: '27 Thalapathpitiya Rd, Nugegoda',
-    beds: 2, baths: 2, sqft: '823',
+    name: 'The Residencies Apartment',
+    location: 'Kotte',
+    beds: 2, baths: 2, sqft: '890',
     type: 'Apartment',
     featured: true,
     image: './Images/the-residence/1.jpeg',
     gallery: [
-      './Images/the-residence/2.jpeg',
-      './Images/the-residence/3.jpeg',
-      './Images/the-residence/4.jpeg',
-      './Images/the-residence/5.jpeg',
-      './Images/the-residence/6.jpeg',
-      './Images/the-residence/7.jpeg',
-      './Images/the-residence/8.jpeg',
-      './Images/the-residence/9(1).jpeg',
-      './Images/the-residence/9.jpeg',
-      './Images/the-residence/10(1).jpeg',
-      './Images/the-residence/10.jpeg',
-      './Images/the-residence/11(1).jpeg',
-      './Images/the-residence/11.jpeg',
-      './Images/the-residence/13.jpeg',
-      './Images/the-residence/14.jpeg',
-      './Images/the-residence/15.jpeg',
-      './Images/the-residence/16.jpeg',
+      ''
     ],
     description: 'Tower A',
-    features: ['Swimming Pool', 'Gym', 'Lift', 'Generator', 'AC', '1 Car Parking'],
+    features: ['Swimming Pool', 'Gym', 'Lift', 'Generator', 'AC', '1 Car Parking', "Security"],
     whatsapp: '+94777150066',
   },
   {
@@ -54,7 +38,7 @@ const PROPERTIES = [
       ''
     ],
     description: 'Tower A',
-    features: ['Swimming Pool', 'Gym', 'Lift', 'Generator', 'AC', '1 Car Parking'],
+    features: ['Swimming Pool', 'Gym', 'Lift', 'Generator', 'AC', '1 Car Parking', "Security"],
     whatsapp: '+94777150066',
   }
 ];
