@@ -11,7 +11,7 @@ const PROPERTIES = [
     badgeClass: 'badge-sale',
     price: 'LKR 67 Mn',
     name: 'The Residence',
-    location: 'Cinnamon Gardens, Colombo 7',
+    location: '27 Thalapathpitiya Rd, Nugegoda',
     beds: 2, baths: 2, sqft: '823',
     type: 'Apartment',
     featured: true,
