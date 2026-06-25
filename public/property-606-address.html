@@ -7,6 +7,65 @@
   <link rel="stylesheet" href="css/property.css">
 </head>
 <body>
+<!-- ── LOADING SCREEN ── -->
+<!-- Paste this right after your <body> tag, before everything else -->
+
+<div id="loader" style="
+  position: fixed;
+  inset: 0;
+  background: var(--navy-bar);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+">
+  <img src="logo_cir.png" alt="Mosh Realty" style="
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    animation: loaderPulse 1.6s ease-in-out infinite;
+  ">
+  <div style="
+    margin-top: 28px;
+    width: 48px;
+    height: 2px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  ">
+    <div style="
+      height: 100%;
+      width: 40%;
+      background: #B8943A;
+      border-radius: 2px;
+      animation: loaderBar 1.6s ease-in-out infinite;
+    "></div>
+  </div>
+</div>
+
+<style>
+  @keyframes loaderPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.75; transform: scale(0.96); }
+  }
+  @keyframes loaderBar {
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(150%); }
+    100% { transform: translateX(-100%); }
+  }
+</style>
+
+<script>
+  window.addEventListener('load', () => {
+    const loader = document.getElementById('loader');
+    loader.style.opacity = '0';
+    loader.style.visibility = 'hidden';
+    // Remove from DOM after fade completes
+    setTimeout(() => loader.remove(), 500);
+  });
+</script>
 
 <!-- NAV -->
 <nav class="nav" id="mainNav">
@@ -49,16 +108,8 @@
 
 <!-- MOBILE SLIDER (≤640px) — built by JS -->
 <div class="gallery-slider" id="gallerySlider">
-  <div class="slider-badge"><span id="sliderBadge" class="prop-badge"></span></div>
   <div class="gallery-slider-track" id="sliderTrack"></div>
-  <div class="slider-counter" id="sliderCounter">1 / 1</div>
   <div class="slider-dots" id="sliderDots"></div>
-  <button class="slider-arrow sl-prev hidden" id="slPrev" aria-label="Previous">
-    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-  </button>
-  <button class="slider-arrow sl-next hidden" id="slNext" aria-label="Next">
-    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-  </button>
   <button class="slider-view-all" id="slViewAll" onclick="openLb(slIdx)">
     <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     <span id="slViewAllLabel">All photos</span>
@@ -390,16 +441,8 @@ function sendEnquiry() {
 (function() {
   const sliderEl   = document.getElementById('gallerySlider');
   const track      = document.getElementById('sliderTrack');
-  const counter    = document.getElementById('sliderCounter');
   const dotsWrap   = document.getElementById('sliderDots');
-  const prevBtn    = document.getElementById('slPrev');
-  const nextBtn    = document.getElementById('slNext');
-  const slBadge    = document.getElementById('sliderBadge');
   const viewAllLbl = document.getElementById('slViewAllLabel');
-
-  // Copy badge text/class
-  slBadge.textContent = badge.textContent;
-  slBadge.className   = badge.className;
 
   // Build slides
   imgs.forEach((src, i) => {
@@ -421,12 +464,6 @@ function sendEnquiry() {
     dots.push(d);
   }
 
-  // Arrows visibility
-  if (imgs.length > 1) {
-    prevBtn.classList.remove('hidden');
-    nextBtn.classList.remove('hidden');
-  }
-
   viewAllLbl.textContent = `All ${imgs.length} photos`;
 
   // State
@@ -435,14 +472,10 @@ function sendEnquiry() {
   function slGoTo(i) {
     window.slIdx = (i + imgs.length) % imgs.length;
     track.style.transform = `translateX(-${window.slIdx * 100}%)`;
-    counter.textContent = `${window.slIdx + 1} / ${imgs.length}`;
     // Update dots (map to max dots range)
     const dotIdx = Math.min(window.slIdx, MAX_DOTS - 1);
     dots.forEach((d, j) => d.classList.toggle('act', j === dotIdx));
   }
-
-  prevBtn.addEventListener('click', () => slGoTo(window.slIdx - 1));
-  nextBtn.addEventListener('click', () => slGoTo(window.slIdx + 1));
 
   // Touch swipe
   let touchStartX = 0;
