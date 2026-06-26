@@ -380,13 +380,11 @@ function openLb(i) {
   lbThumbs.forEach((t, j) => t.classList.toggle('act', j === lbIdx));
   lbEl.classList.add('open');
   document.body.style.overflow = 'hidden';
-  document.body.classList.add('lb-active'); // Add this line
 }
 
 function closeLb() {
   lbEl.classList.remove('open');
   document.body.style.overflow = '';
-  document.body.classList.remove('lb-active'); // Add this line
 }
 
 function lbNav(d) { lbGoTo(lbIdx + d); }
