@@ -105,7 +105,7 @@ const PROPERTIES = [
     status: 'For Rent',
     badgeClass: 'badge-rent',
     price: 'LKR 195k / mon',
-    name: 'the-grand-avenue',
+    name: 'The Grand',
     location: 'Sri Saranankara Place, Dehiwala',
     beds: 3, baths: 2, sqft: '1399',
     type: 'Apartment',
