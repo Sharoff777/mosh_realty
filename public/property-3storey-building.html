@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pgTitle">Property — Mosh Realty</title>
+  <link rel="shortcut icon" href="logo.jpg" type="image/x-icon">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/property.css">
+</head>
+<body>
+<!-- ── LOADING SCREEN ── -->
+<!-- Paste this right after your <body> tag, before everything else -->
+
+<div id="loader" style="
+  position: fixed;
+  inset: 0;
+  background: var(--navy-bar);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+">
+  <img src="logo_cir.png" alt="Mosh Realty" style="
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    animation: loaderPulse 1.6s ease-in-out infinite;
+  ">
+  <div style="
+    margin-top: 28px;
+    width: 48px;
+    height: 2px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  ">
+    <div style="
+      height: 100%;
+      width: 40%;
+      background: #B8943A;
+      border-radius: 2px;
+      animation: loaderBar 1.6s ease-in-out infinite;
+    "></div>
+  </div>
+</div>
+
+<style>
+  @keyframes loaderPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.75; transform: scale(0.96); }
+  }
+  @keyframes loaderBar {
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(150%); }
+    100% { transform: translateX(-100%); }
+  }
+</style>
+
+<script>
+  window.addEventListener('load', () => {
+    const loader = document.getElementById('loader');
+    loader.style.opacity = '0';
+    loader.style.visibility = 'hidden';
+    // Remove from DOM after fade completes
+    setTimeout(() => loader.remove(), 500);
+  });
+</script>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="logo.jpg" alt="Mosh Realty" class="nav-logo-img">
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="properties.html">Properties</a>
+      <a href="sell-with-us.html">Sell With Us</a>
+    </div>
+    <div class="nav-right">
+      <a href="tel:+94777150066" class="nav-contact-link">+94 77 715 0066</a>
+      <a href="sell-with-us.html" class="btn-nav-cta">
+        Sell With Us
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="properties.html">Properties</a>
+  <a href="sell-with-us.html" class="cta-mobile">Sell With Us →</a>
+</div>
+
+<!-- Spacer for fixed nav -->
+<div style="height:72px;"></div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Home</a>
+  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+  <a href="properties.html">Properties</a>
+  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+  <span id="bcName" style="color:var(--gold-pale);">Property</span>
+</div>
+
+<!-- MOBILE SLIDER (≤640px) — built by JS -->
+<div class="gallery-slider" id="gallerySlider">
+  <div class="gallery-slider-track" id="sliderTrack"></div>
+  <div class="slider-dots" id="sliderDots"></div>
+  <button class="slider-view-all" id="slViewAll" onclick="openLb(slIdx)">
+    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    <span id="slViewAllLabel">All photos</span>
+  </button>
+</div>
+
+<!-- GALLERY — Airbnb-style mosaic -->
+<div class="gallery-wrap">
+  <div class="gallery-mosaic" id="galleryMosaic">
+    <!-- Badge -->
+    <div class="gallery-badge"><span id="mainBadge" class="prop-badge"></span></div>
+
+    <!-- Main (large left) cell -->
+    <div class="gm-main" id="gmMain" onclick="openLb(0)" role="button" aria-label="View photos">
+      <img id="gmMainImg" src="" alt="">
+    </div>
+
+    <!-- Right 2×2 grid — built by JS -->
+    <div class="gm-right" id="gmRight"></div>
+
+    <!-- Show all photos button -->
+    <button class="gallery-show-all" id="showAllBtn" onclick="openLb(0)">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span id="showAllLabel">Show all photos</span>
+    </button>
+  </div>
+</div>
+
+<!-- LIGHTBOX — full-screen immersive -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo gallery">
+  <!-- Top bar -->
+  <div class="lb-topbar">
+    <div class="lb-counter" id="lbCounter"></div>
+    <button class="lb-close" onclick="closeLb()" aria-label="Close">✕</button>
+  </div>
+
+  <!-- Image stage -->
+  <div class="lb-stage">
+    <button class="lb-arrow lb-prev" id="lbPrev" onclick="lbNav(-1)" aria-label="Previous photo">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <img class="lb-img" id="lbImg" src="" alt="">
+    <button class="lb-arrow lb-next" id="lbNext" onclick="lbNav(1)" aria-label="Next photo">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+
+  <!-- Thumbnail strip -->
+  <div class="lb-strip" id="lbStrip"></div>
+</div>
+
+<!-- DETAIL -->
+<div class="detail-wrap">
+  <div>
+    <div class="detail-price" id="detailPrice"></div>
+    <div class="detail-name" id="detailName"></div>
+    <div class="detail-loc">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span id="detailLoc"></span>
+    </div>
+    <div class="specs-bar" id="specsBar"></div>
+    <div class="detail-section-title">About This Property</div>
+    <p class="detail-desc" id="detailDesc"></p>
+    <div class="detail-section-title">Features & Amenities</div>
+    <div class="feat-grid" id="featGrid"></div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="prop-sidebar">
+    <div class="enq-card">
+      <div class="enq-head">
+        <h4>Enquire Now</h4>
+        <p>Speak directly with our property advisor</p>
+      </div>
+      <div class="enq-body">
+        <a id="btnWa" href="#" class="btn-wa" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp Us Now
+        </a>
+        <a href="tel:+94777150066" class="btn-call">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12 19.79 19.79 0 011.65 3.38 2 2 0 013.62 1.22h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          Call +94 77 715 0066
+        </a>
+        <div class="enq-form-mini">
+          <div class="form-group"><label>Your Name</label><input type="text" id="eq-name" placeholder="Full name"></div>
+          <div class="form-group"><label>WhatsApp Number</label><input type="tel" id="eq-phone" placeholder="+94 77 000 0000"></div>
+          <div class="form-group"><label>Message</label><textarea id="eq-msg" placeholder="I'm interested in this property…"></textarea></div>
+          <button class="btn-gold" style="width:100%;justify-content:center;" onclick="sendEnquiry()">Send Enquiry</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sell-nudge">
+      <div class="sell-nudge-title">Have a property to sell?</div>
+      <p>Zero upfront costs, professional photography included, and a dedicated advisor from day one.</p>
+      <a href="sell-with-us.html" class="btn-outline" style="width:100%;justify-content:center;">List Your Property →</a>
+    </div>
+  </div>
+</div>
+
+<!-- SIMILAR PROPERTIES -->
+<div class="similar-wrap">
+  <div class="section-tag">You May Also Like</div>
+  <div class="similar-section-title">Similar <em style="font-style:italic;font-weight:400;color:var(--gold-pale);">Properties</em></div>
+  <div class="similar-grid" id="similarGrid"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-text"><img src="logo.jpg" alt="logo"></div>
+        <p>Sri Lanka's most trusted luxury real estate agency. We match exceptional properties with exceptional people.</p>
+        <div class="footer-social">
+          <a href="https://wa.me/94777150066" target="_blank"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M16 31C23.732 31 30 24.732 30 17C30 9.26801 23.732 3 16 3C8.26801 3 2 9.26801 2 17C2 19.5109 2.661 21.8674 3.81847 23.905L2 31L9.31486 29.3038C11.3014 30.3854 13.5789 31 16 31ZM16 28.8462C22.5425 28.8462 27.8462 23.5425 27.8462 17C27.8462 10.4576 22.5425 5.15385 16 5.15385C9.45755 5.15385 4.15385 10.4576 4.15385 17C4.15385 19.5261 4.9445 21.8675 6.29184 23.7902L5.23077 27.7692L9.27993 26.7569C11.1894 28.0746 13.5046 28.8462 16 28.8462Z" fill="#BFC8D0"></path> <path d="M28 16C28 22.6274 22.6274 28 16 28C13.4722 28 11.1269 27.2184 9.19266 25.8837L5.09091 26.9091L6.16576 22.8784C4.80092 20.9307 4 18.5589 4 16C4 9.37258 9.37258 4 16 4C22.6274 4 28 9.37258 28 16Z" fill="url(#paint0_linear_87_7264)"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M16 30C23.732 30 30 23.732 30 16C30 8.26801 23.732 2 16 2C8.26801 2 2 8.26801 2 16C2 18.5109 2.661 20.8674 3.81847 22.905L2 30L9.31486 28.3038C11.3014 29.3854 13.5789 30 16 30ZM16 27.8462C22.5425 27.8462 27.8462 22.5425 27.8462 16C27.8462 9.45755 22.5425 4.15385 16 4.15385C9.45755 4.15385 4.15385 9.45755 4.15385 16C4.15385 18.5261 4.9445 20.8675 6.29184 22.7902L5.23077 26.7692L9.27993 25.7569C11.1894 27.0746 13.5046 27.8462 16 27.8462Z" fill="white"></path> <path d="M12.5 9.49989C12.1672 8.83131 11.6565 8.8905 11.1407 8.8905C10.2188 8.8905 8.78125 9.99478 8.78125 12.05C8.78125 13.7343 9.52345 15.578 12.0244 18.3361C14.438 20.9979 17.6094 22.3748 20.2422 22.3279C22.875 22.2811 23.4167 20.0154 23.4167 19.2503C23.4167 18.9112 23.2062 18.742 23.0613 18.696C22.1641 18.2654 20.5093 17.4631 20.1328 17.3124C19.7563 17.1617 19.5597 17.3656 19.4375 17.4765C19.0961 17.8018 18.4193 18.7608 18.1875 18.9765C17.9558 19.1922 17.6103 19.083 17.4665 19.0015C16.9374 18.7892 15.5029 18.1511 14.3595 17.0426C12.9453 15.6718 12.8623 15.2001 12.5959 14.7803C12.3828 14.4444 12.5392 14.2384 12.6172 14.1483C12.9219 13.7968 13.3426 13.254 13.5313 12.9843C13.7199 12.7145 13.5702 12.305 13.4803 12.05C13.0938 10.953 12.7663 10.0347 12.5 9.49989Z" fill="white"></path> <defs> <linearGradient id="paint0_linear_87_7264" x1="26.5" y1="7" x2="4" y2="28" gradientUnits="userSpaceOnUse"> <stop stop-color="#5BD066"></stop> <stop offset="1" stop-color="#27B43E"></stop> </linearGradient> </defs> </g></svg></a>
+              <a href="https://www.instagram.com/moshrealty/" target="_blank"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect x="2" y="2" width="28" height="28" rx="6" fill="url(#paint0_radial_87_7153)"></rect><rect x="2" y="2" width="28" height="28" rx="6" fill="url(#paint1_radial_87_7153)"></rect><rect x="2" y="2" width="28" height="28" rx="6" fill="url(#paint2_radial_87_7153)"></rect><path d="M23 10.5C23 11.3284 22.3284 12 21.5 12C20.6716 12 20 11.3284 20 10.5C20 9.67157 20.6716 9 21.5 9C22.3284 9 23 9.67157 23 10.5Z" fill="white"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M16 21C18.7614 21 21 18.7614 21 16C21 13.2386 18.7614 11 16 11C13.2386 11 11 13.2386 11 16C11 18.7614 13.2386 21 16 21ZM16 19C17.6569 19 19 17.6569 19 16C19 14.3431 17.6569 13 16 13C14.3431 13 13 14.3431 13 16C13 17.6569 14.3431 19 16 19Z" fill="white"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M6 15.6C6 12.2397 6 10.5595 6.65396 9.27606C7.2292 8.14708 8.14708 7.2292 9.27606 6.65396C10.5595 6 12.2397 6 15.6 6H16.4C19.7603 6 21.4405 6 22.7239 6.65396C23.8529 7.2292 24.7708 8.14708 25.346 9.27606C26 10.5595 26 12.2397 26 15.6V16.4C26 19.7603 26 21.4405 25.346 22.7239C24.7708 23.8529 23.8529 24.7708 22.7239 25.346C21.4405 26 19.7603 26 16.4 26H15.6C12.2397 26 10.5595 26 9.27606 25.346C8.14708 24.7708 7.2292 23.8529 6.65396 22.7239C6 21.4405 6 19.7603 6 16.4V15.6ZM15.6 8H16.4C18.1132 8 19.2777 8.00156 20.1779 8.0751C21.0548 8.14674 21.5032 8.27659 21.816 8.43597C22.5686 8.81947 23.1805 9.43139 23.564 10.184C23.7234 10.4968 23.8533 10.9452 23.9249 11.8221C23.9984 12.7223 24 13.8868 24 15.6V16.4C24 18.1132 23.9984 19.2777 23.9249 20.1779C23.8533 21.0548 23.7234 21.5032 23.564 21.816C23.1805 22.5686 22.5686 23.1805 21.816 23.564C21.5032 23.7234 21.0548 23.8533 20.1779 23.9249C19.2777 23.9984 18.1132 24 16.4 24H15.6C13.8868 24 12.7223 23.9984 11.8221 23.9249C10.9452 23.8533 10.4968 23.7234 10.184 23.564C9.43139 23.1805 8.81947 22.5686 8.43597 21.816C8.27659 21.5032 8.14674 21.0548 8.0751 20.1779C8.00156 19.2777 8 18.1132 8 16.4V15.6C8 13.8868 8.00156 12.7223 8.0751 11.8221C8.14674 10.9452 8.27659 10.4968 8.43597 10.184C8.81947 9.43139 9.43139 8.81947 10.184 8.43597C10.4968 8.27659 10.9452 8.14674 11.8221 8.0751C12.7223 8.00156 13.8868 8 15.6 8Z" fill="white"></path><defs><radialGradient id="paint0_radial_87_7153" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(12 23) rotate(-55.3758) scale(25.5196)"><stop stop-color="#B13589"></stop><stop offset="0.79309" stop-color="#C62F94"></stop><stop offset="1" stop-color="#8A3AC8"></stop></radialGradient><radialGradient id="paint1_radial_87_7153" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(11 31) rotate(-65.1363) scale(22.5942)"><stop stop-color="#E0E8B7"></stop><stop offset="0.444662" stop-color="#FB8A2E"></stop><stop offset="0.71474" stop-color="#E2425C"></stop><stop offset="1" stop-color="#E2425C" stop-opacity="0"></stop></radialGradient><radialGradient id="paint2_radial_87_7153" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0.500002 3) rotate(-8.1301) scale(38.8909 8.31836)"><stop offset="0.156701" stop-color="#406ADC"></stop><stop offset="0.467799" stop-color="#6A45BE"></stop><stop offset="1" stop-color="#6A45BE" stop-opacity="0"></stop></radialGradient></defs></g></svg></a>
+              <a href="https://www.facebook.com/moshrealty.lk/"><svg viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>Facebook-color</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Color-" transform="translate(-200.000000, -160.000000)" fill="#4460A0"> <path d="M225.638355,208 L202.649232,208 C201.185673,208 200,206.813592 200,205.350603 L200,162.649211 C200,161.18585 201.185859,160 202.649232,160 L245.350955,160 C246.813955,160 248,161.18585 248,162.649211 L248,205.350603 C248,206.813778 246.813769,208 245.350955,208 L233.119305,208 L233.119305,189.411755 L239.358521,189.411755 L240.292755,182.167586 L233.119305,182.167586 L233.119305,177.542641 C233.119305,175.445287 233.701712,174.01601 236.70929,174.01601 L240.545311,174.014333 L240.545311,167.535091 C239.881886,167.446808 237.604784,167.24957 234.955552,167.24957 C229.424834,167.24957 225.638355,170.625526 225.638355,176.825209 L225.638355,182.167586 L219.383122,182.167586 L219.383122,189.411755 L225.638355,189.411755 L225.638355,208 L225.638355,208 Z" id="Facebook"> </path> </g> </g> </g></svg></a>
+            
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Properties</div>
+        <ul class="footer-links">
+          <li><a href="properties.html?f=For+Sale">For Sale</a></li>
+          <li><a href="properties.html?f=For+Rent">For Rent</a></li>
+          <li><a href="properties.html?f=Land">Land</a></li>
+          <li><a href="properties.html?f=Commercial">Commercial</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Company</div>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="sell-with-us.html">Sell With Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contact</div>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12 19.79 19.79 0 011.65 3.38 2 2 0 013.62 1.22h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          +94 77 715 0066
+        </div>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          hello@moshrealty.lk
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Mosh Realty (Pvt) Ltd. All rights reserved.</p>
+      <p>Luxury · Integrity · Results</p>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/94777150066" class="wa-float" target="_blank" aria-label="WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script src="js/properties.js"></script>
+<script src="js/main.js"></script>
+<script>
+// Determine which property to show from filename
+const pageId = location.pathname.split('/').pop().replace('property-','').replace('.html','');
+const prop = PROPERTIES.find(p => p.id === pageId) || PROPERTIES[0];
+
+// Page title & meta
+document.getElementById('pgTitle').textContent = prop.name + ' — Mosh Realty';
+document.getElementById('bcName').textContent = prop.name;
+document.getElementById('detailPrice').textContent = prop.price;
+document.getElementById('detailName').textContent = prop.name;
+document.getElementById('detailLoc').textContent = prop.location;
+document.getElementById('detailDesc').textContent = prop.description;
+
+// Badge
+const badge = document.getElementById('mainBadge');
+badge.textContent = prop.status;
+badge.className = 'prop-badge ' + (prop.status === 'For Sale' ? 'sale' : prop.status === 'For Rent' ? 'rent' : prop.status === 'Commercial' ? 'commercial' : 'land');
+
+// ══════════════════════════════════
+// GALLERY — Airbnb-style mosaic
+// ══════════════════════════════════
+const imgs = prop.gallery || [prop.image];
+let lbIdx = 0;
+
+// Build mosaic
+const gmMainImg = document.getElementById('gmMainImg');
+const gmRight   = document.getElementById('gmRight');
+
+gmMainImg.src = imgs[0];
+
+gmMainImg.alt = prop.name + ' — photo 1';
+// Right grid: show up to 4 cells (cells 1–4 from imgs array)
+const rightCount = Math.min(4, imgs.length - 1);
+for (let i = 0; i < rightCount; i++) {
+  const cell = document.createElement('div');
+  cell.className = 'gm-right-cell';
+  const idx = i + 1;
+  const isLastVisible = (i === 3) && (imgs.length > 5);
+  if (isLastVisible) cell.classList.add('overflow-dim');
+  cell.onclick = () => openLb(idx);
+  cell.setAttribute('role', 'button');
+  cell.setAttribute('aria-label', `View photo ${idx + 1}`);
+  cell.innerHTML = `<img src="${imgs[idx]}" alt="${prop.name} — photo ${idx + 1}" loading="lazy">`;
+  if (isLastVisible) {
+    const extra = imgs.length - 5;
+    cell.innerHTML += `<div class="gm-extra-count"><div class="ec-num">+${extra + 1}</div><div class="ec-label">photos</div></div>`;
+  }
+  gmRight.appendChild(cell);
+}
+
+// Update "Show all" button label
+const showAllLabel = document.getElementById('showAllLabel');
+if (imgs.length === 1) {
+  document.getElementById('showAllBtn').style.display = 'none';
+} else {
+  showAllLabel.textContent = `Show all ${imgs.length} photos`;
+}
+
+// Hide right grid if only 1 image
+if (imgs.length === 1) gmRight.style.display = 'none';
+
+// ══════════════════════════════════
+// LIGHTBOX — full-screen immersive
+// ══════════════════════════════════
+const lbEl      = document.getElementById('lb');
+const lbImgEl   = document.getElementById('lbImg');
+const lbCountEl = document.getElementById('lbCounter');
+const lbStripEl = document.getElementById('lbStrip');
+const lbPrevBtn = document.getElementById('lbPrev');
+const lbNextBtn = document.getElementById('lbNext');
+
+// Build thumbnail strip
+const lbThumbs = [];
+imgs.forEach((src, i) => {
+  const t = document.createElement('div');
+  t.className = 'lb-strip-thumb' + (i === 0 ? ' act' : '');
+  t.innerHTML = `<img src="${src}" alt="${prop.name} ${i+1}" loading="lazy">`;
+  t.onclick = () => lbGoTo(i);
+  lbStripEl.appendChild(t);
+  lbThumbs.push(t);
+});
+
+// Hide arrows if single image
+if (imgs.length <= 1) {
+  lbPrevBtn.classList.add('hidden');
+  lbNextBtn.classList.add('hidden');
+}
+
+function lbGoTo(i) {
+  lbIdx = (i + imgs.length) % imgs.length;
+  lbImgEl.style.opacity = '0';
+  setTimeout(() => {
+    lbImgEl.src = imgs[lbIdx];
+    lbImgEl.style.opacity = '1';
+  }, 100);
+  lbCountEl.textContent = `${lbIdx + 1} / ${imgs.length}`;
+  lbThumbs.forEach((t, j) => t.classList.toggle('act', j === lbIdx));
+  lbThumbs[lbIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+
+function openLb(i) {
+  lbIdx = i !== undefined ? i : 0;
+  lbImgEl.src = imgs[lbIdx];
+  lbCountEl.textContent = `${lbIdx + 1} / ${imgs.length}`;
+  lbThumbs.forEach((t, j) => t.classList.toggle('act', j === lbIdx));
+  lbEl.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.body.classList.add('lb-active'); // Add this line
+}
+
+function closeLb() {
+  lbEl.classList.remove('open');
+  document.body.style.overflow = '';
+  document.body.classList.remove('lb-active'); // Add this line
+}
+
+function lbNav(d) { lbGoTo(lbIdx + d); }
+
+// Click backdrop to close
+lbEl.addEventListener('click', e => { if (e.target === lbEl) closeLb(); });
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (!lbEl.classList.contains('open')) return;
+  if (e.key === 'Escape')      closeLb();
+  if (e.key === 'ArrowLeft')   lbNav(-1);
+  if (e.key === 'ArrowRight')  lbNav(1);
+});
+
+// Touch/swipe on lightbox
+(function(){
+  let tx = 0;
+  lbEl.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  lbEl.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 40) lbNav(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+
+// Specs
+const specs = [];
+if (prop.beds)  specs.push(`<div class="spec-i"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><strong>${prop.beds}</strong> Bedrooms</div>`);
+if (prop.baths) specs.push(`<div class="spec-i"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12V4a1 1 0 011-1h5a1 1 0 011 1v3M2 20h20M20 20v-8a2 2 0 00-2-2h-6"/></svg><strong>${prop.baths}</strong> Bathrooms</div>`);
+if (prop.sqft)  specs.push(`<div class="spec-i"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/></svg><strong>${prop.sqft}</strong>${prop.beds ? ' sq.ft' : ''}</div>`);
+document.getElementById('specsBar').innerHTML = specs.join('');
+
+// Features
+document.getElementById('featGrid').innerHTML = (prop.features || []).map(f =>
+  `<div class="feat-item"><div class="feat-check"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>${f}</div>`
+).join('');
+
+// WA link
+const waMsg = `Hi, I'm interested in the *${prop.name}* (${prop.price}) listed on Mosh Realty. Please send me more details.`;
+document.getElementById('btnWa').href = `https://wa.me/${prop.whatsapp || '94777150066'}?text=${encodeURIComponent(waMsg)}`;
+
+// Enquiry form
+function sendEnquiry() {
+  const name  = document.getElementById('eq-name').value.trim();
+  const phone = document.getElementById('eq-phone').value.trim();
+  const msg   = document.getElementById('eq-msg').value.trim();
+  if (!name || !phone) { alert('Please enter your name and number.'); return; }
+  const waMsg = `🏠 *Property Enquiry — Mosh Realty*\n\n*Property:* ${prop.name}\n*Price:* ${prop.price}\n\n*Name:* ${name}\n*Phone:* ${phone}\n\n*Message:* ${msg || 'No message'}`;
+  window.open(`https://wa.me/${prop.whatsapp || '94777150066'}?text=${encodeURIComponent(waMsg)}`, '_blank');
+}
+
+// ══════════════════════════════════════
+// MOBILE SWIPE SLIDER
+// ══════════════════════════════════════
+(function() {
+  const sliderEl   = document.getElementById('gallerySlider');
+  const track      = document.getElementById('sliderTrack');
+  const dotsWrap   = document.getElementById('sliderDots');
+  const viewAllLbl = document.getElementById('slViewAllLabel');
+
+  // Build slides
+  imgs.forEach((src, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'gallery-slider-slide';
+    slide.innerHTML = `<img src="${src}" alt="${prop.name} photo ${i+1}" loading="${i===0?'eager':'lazy'}">`;
+    slide.addEventListener('click', () => openLb(slIdx));
+    track.appendChild(slide);
+  });
+
+  // Dots (max 7 visible dots; collapse extras)
+  const MAX_DOTS = 7;
+  const dotsCount = Math.min(imgs.length, MAX_DOTS);
+  const dots = [];
+  for (let i = 0; i < dotsCount; i++) {
+    const d = document.createElement('div');
+    d.className = 'slider-dot' + (i === 0 ? ' act' : '');
+    dotsWrap.appendChild(d);
+    dots.push(d);
+  }
+
+  viewAllLbl.textContent = `All ${imgs.length} photos`;
+
+  // State
+  window.slIdx = 0;
+
+  function slGoTo(i) {
+    window.slIdx = (i + imgs.length) % imgs.length;
+    track.style.transform = `translateX(-${window.slIdx * 100}%)`;
+    // Update dots (map to max dots range)
+    const dotIdx = Math.min(window.slIdx, MAX_DOTS - 1);
+    dots.forEach((d, j) => d.classList.toggle('act', j === dotIdx));
+  }
+
+  // Touch swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let isSwiping = false;
+
+  track.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    isSwiping = false;
+  }, { passive: true });
+
+  track.addEventListener('touchmove', e => {
+    const dx = Math.abs(e.touches[0].clientX - touchStartX);
+    const dy = Math.abs(e.touches[0].clientY - touchStartY);
+    if (dx > dy && dx > 8) isSwiping = true;
+  }, { passive: true });
+
+  track.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (isSwiping && Math.abs(dx) > 40) slGoTo(window.slIdx + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+
+  // Auto-advance (optional, gentle)
+  if (imgs.length > 1) {
+    let autoTimer = setInterval(() => slGoTo(window.slIdx + 1), 4500);
+    sliderEl.addEventListener('touchstart', () => clearInterval(autoTimer), { passive: true, once: true });
+  }
+})();
+
+// Sync lightbox open from slider: use slIdx if on mobile
+
+const similar = PROPERTIES.filter(p => p.id !== prop.id && (p.status === prop.status || p.type === prop.type)).slice(0, 3);
+const simGrid = document.getElementById('similarGrid');
+if (similar.length) {
+  simGrid.innerHTML = similar.map(p => renderPropCard(p)).join('');
+  requestAnimationFrame(() => {
+    simGrid.querySelectorAll('.prop-card').forEach((el, i) => {
+      el.style.transitionDelay = (i * 0.1) + 's';
+      requestAnimationFrame(() => el.classList.add('visible'));
+    });
+  });
+} else {
+  simGrid.closest('.similar-wrap').style.display = 'none';
+}
+</script>
+</body>
+</html>
