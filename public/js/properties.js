@@ -35,7 +35,7 @@ const PROPERTIES = [
       './Images/the-residence/15.jpeg',
       './Images/the-residence/16.jpeg',
     ],
-    description: 'Tower A',
+    description: 'This 823 sq.ft, 2-bedroom, 2-bathroom unfurnished apartment is available for sale at The Residencies Kotte by ICC (Ref- MRH01), listed at LKR 67 million. The unit comes with air conditioning, and residents have access to building amenities including a swimming pool, lift, generator, gym, and security.',
     features: ['Swimming Pool', 'Gym', 'Lift', 'Generator', 'AC', '1 Car Parking'],
     whatsapp: '+94777150066',
   },
