@@ -125,6 +125,32 @@ const PROPERTIES = [
     description: 'This 3-bedroom, 2-bathroom apartment is available for rent at The Grand Avenue, located at Sri Saranankara Place, Dehiwala. Spanning 1,399 sq ft, the unit includes a maids room with washroom and an open rooftop area, along with 24/7 security and a backup generator for uninterrupted power. It offers easy access to key locations.',
     features: ['Lift', 'Generator', '1-Vehicle Car Park', 'Full AC', 'Maids Room & Washroom'],
     whatsapp: '+94777150066',
+  },
+  {
+    id: 'trizen-01',
+    status: 'For Rent',
+    badgeClass: 'badge-rent',
+    price: 'USD 1800 / mon',
+    name: 'Trizen',
+    location: 'Colombo 02',
+    beds: 2, baths: 2, sqft: '775',
+    type: 'Apartment',
+    featured: true,
+    image: './Images/trizen-01/1.jpeg',
+    gallery: [
+      './Images/trizen-01/2.jpeg',
+      './Images/trizen-01/3.jpeg',
+      './Images/trizen-01/4.jpeg',
+      './Images/trizen-01/5.jpeg',
+      './Images/trizen-01/6.jpeg',
+      './Images/trizen-01/7.jpeg',
+      './Images/trizen-01/8.jpeg',
+      './Images/trizen-01/9.jpeg',
+      './Images/trizen-01/10.jpeg'
+    ],
+    description: 'This fully furnished 2-bedroom, 2-bathroom apartment is available for rent at TRI-ZEN by John Keells Properties, located in Colombo 02 (Ref- MRA17). Spanning 775 sq.ft, the unit comes with air conditioning, and residents have access to building amenities including a swimming pool, lift, generator, gym, and security.A Refundable security deposit of 2 months and an advance rent of 4 months required.',
+    features: ["Gym", "Lift", "Play Area", "Parking", "Clubhouse", "Backup Power", "Garden", "Pool", "Security", "Wifi", "Laundry", "Restaurant", "Sports Facilities", "Jogging Track", "Rooftop Garden", "Children Play Area", "Community Hall"],
+    whatsapp: '+94777150066',
   }
 ];
 
