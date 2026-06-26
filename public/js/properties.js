@@ -6,6 +6,31 @@
 
 const PROPERTIES = [
   {
+    id: '606-address',
+    status: 'For Sale',
+    badgeClass: 'badge-sale',
+    price: 'LKR 220 Mn',
+    name: '606 The Address',
+    location: 'Colombo 07',
+    beds: 3, baths: 3, sqft: '2,425',
+    type: 'Apartment',
+    featured: true,
+    image: './Images/606-address/1.jpeg',
+    gallery: [
+      './Images/606-address/2.jpeg',
+      './Images/606-address/3.jpeg',
+      './Images/606-address/4.jpeg',
+      './Images/606-address/5.jpeg',
+      './Images/606-address/6.jpeg',
+      './Images/606-address/7.jpeg',
+      './Images/606-address/8.jpeg',
+      
+    ],
+    description: 'A spacious 2,425 sq. ft. luxury 3-bedroom, 3-bathroom apartment at 606 The Address, Colombo 03, offering breathtaking panoramic ocean views stretching from Colpetty to Port City, complemented by a modern pantry, high-end bathroom fittings, and 2 dedicated parking spaces. Ideally situated in the heart of Colombo 03, the building features an in-house coffee shop and supermarket, with leading restaurants, essential amenities, and fuel stations just moments away — a rare opportunity to own a residence that perfectly combines stunning views, comfort, and convenience....',
+    features: ['Swimming Pool', 'Gym', 'Lift', 'Generator', 'AC', '1 Car Parking', 'Cargills'],
+    whatsapp: '+94777150066'
+  },
+  {
     id: 'kotte-apartment-residence',
     status: 'For Sale',
     badgeClass: 'badge-sale',
@@ -35,34 +60,9 @@ const PROPERTIES = [
       './Images/the-residence/15.jpeg',
       './Images/the-residence/16.jpeg',
     ],
-    description: 'This 823 sq.ft, 2-bedroom, 2-bathroom unfurnished apartment is available for sale at The Residencies Kotte by ICC (Ref- MRH01), listed at LKR 67 million. The unit comes with air conditioning, and residents have access to building amenities including a swimming pool, lift, generator, gym, and security.',
+    description: 'This 823 sq.ft, 2-bedroom, 2-bathroom unfurnished apartment is available for sale at The Residencies Kotte by ICC (Ref- MRH01), listed at LKR 67 million. The unit comes with air conditioning, and residents have access to building amenities including a swimming pool, lift, generator, gym, and security.',
     features: ['Swimming Pool', 'Gym', 'Lift', 'Generator', 'AC', '1 Car Parking'],
     whatsapp: '+94777150066',
-  },
-  {
-    id: '606-address',
-    status: 'For Sale',
-    badgeClass: 'badge-sale',
-    price: 'LKR 220 Mn',
-    name: '606 The Address',
-    location: 'Colombo 07',
-    beds: 3, baths: 3, sqft: '2,425',
-    type: 'Apartment',
-    featured: true,
-    image: './Images/606-address/1.jpeg',
-    gallery: [
-      './Images/606-address/2.jpeg',
-      './Images/606-address/3.jpeg',
-      './Images/606-address/4.jpeg',
-      './Images/606-address/5.jpeg',
-      './Images/606-address/6.jpeg',
-      './Images/606-address/7.jpeg',
-      './Images/606-address/8.jpeg',
-      
-    ],
-    description: 'A spacious 2,425 sq. ft. luxury 3-bedroom, 3-bathroom apartment at 606 The Address, Colombo 03, offering breathtaking panoramic ocean views stretching from Colpetty to Port City, complemented by a modern pantry, high-end bathroom fittings, and 2 dedicated parking spaces. Ideally situated in the heart of Colombo 03, the building features an in-house coffee shop and supermarket, with leading restaurants, essential amenities, and fuel stations just moments away — a rare opportunity to own a residence that perfectly combines stunning views, comfort, and convenience....',
-    features: ['Swimming Pool', 'Gym', 'Lift', 'Generator', 'AC', '1 Car Parking', 'Cargills'],
-    whatsapp: '+94777150066'
   }
 ];
 
