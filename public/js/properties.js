@@ -39,7 +39,7 @@ const PROPERTIES = [
     location: '27 Thalapathpitiya Rd, Nugegoda',
     beds: 2, baths: 2, sqft: '823',
     type: 'Apartment',
-    featured: true,
+    featured: false,
     image: './Images/the-residence/1.jpeg',
     gallery: [
       './Images/the-residence/2.jpeg',
@@ -109,7 +109,7 @@ const PROPERTIES = [
     location: 'Sri Saranankara Place, Dehiwala',
     beds: 3, baths: 2, sqft: '1399',
     type: 'Apartment',
-    featured: true,
+    featured: false,
     image: './Images/the-grand-avenue/1.jpeg',
     gallery: [
       './Images/the-grand-avenue/2.jpeg',
