@@ -517,7 +517,7 @@ nav { background-color: var(--navy-bar); }
 /* ── PROPERTY CARD ── */
 .prop-card {
   background: var(--page-bg);
-  border: 1px solid var(--border-soft);
+  border: 2px solid var(--navy);
   border-radius: var(--radius-lg);
   overflow: hidden;
   display: block;
