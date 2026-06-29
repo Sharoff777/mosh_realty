@@ -132,7 +132,7 @@ nav { background-color: var(--navy-bar); }
   text-decoration: none;
 }
 .nav-logo-img {
-  width: 46px; height: 46px;
+  width: 60px; height: 60px;
   object-fit: cover;
   border-radius: 50%;
   display: block;
