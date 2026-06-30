@@ -243,7 +243,7 @@ const PROPERTIES = [
     description: ' This unfurnished 1,110 sq. ft. apartment/flat (MRA03) is available for rent or lease in Cinnamon Gardens, Colombo 07, near Viharamahadevi Park, making it ideal for either residential or commercial use. It features 2 rooms and 1 bathroom, along with a separate entrance, dedicated parking for 1 vehiclee, and a ground-floor reception area.',
     features: ['1 Car Park'],
     whatsapp: '+94777150066',
-  }
+  },
   {
     id: 'col5-com',
     status: 'For Rent',
