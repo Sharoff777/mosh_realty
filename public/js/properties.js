@@ -222,8 +222,8 @@ const PROPERTIES = [
       './Images/606-address-lower/23.jpg',
       './Images/606-address-lower/24.jpg',
     ],
-    description: 'Located on the 1st floor of Prime Tower, this unit features a main hall with a balcony, a fully air-conditioned 72" living space, and a master bedroom with an attached bathroom, alongside 2 additional rooms sharing a common bathroom and a second hall with its own balcony. Practical conveniences include a kitchen with a dedicated back area for laundry, a servant room with an outside washroom, cabinet accessories throughout, heater facilities in all washrooms, and 1 dedicated parking slot',
-    features: ["1 Parking Slot", "Master Bedroom with Attached Bathroom", "Servant Room with Washroom", "Balcony", "Fully Air Conditioned", "Heater Facilities", "Cabinet Accessories"],
+    description: 'A spacious 2,425 sq. ft. luxury 3-bedroom, 3-bathroom apartment at 606 The Address, Colombo 03, offering breathtaking panoramic ocean views stretching from Colpetty to Port City, complemented by a modern pantry, high-end bathroom fittings, and 2 dedicated parking spaces. Ideally situated in the heart of Colombo 03, the building features an in-house coffee shop and supermarket, with leading restaurants, essential amenities, and fuel stations just moments away — a rare opportunity to own a residence that perfectly combines stunning views, comfort, and convenience....',
+    features: ["Pool", "Gym", "Parking", "Lift", "Play Area", "Clubhouse", "Backup Power", "Garden", "Restaurant", "Supermarket", "Pharmacy", "Community Hall", "Playground", "Balcony"],
     whatsapp: '+94777150066',
   },
   {
