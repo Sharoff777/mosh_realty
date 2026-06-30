@@ -63,7 +63,6 @@ const PROPERTIES = [
       './Images/altair/20.jpeg',
       './Images/altair/21.jpeg',
       './Images/altair/22.jpeg',
-      './Images/altair/23.jpeg',
     ],
     description: 'Spacious 3BR, 3-bath furnished apartment for rent in the prestigious Altair towers, Altair Avenue, Colombo 02. Offering 2,086 sq.ft. of elegant living space with access to a stunning pool, gym, and spa, this residence delivers refined city living in one of Colombos most coveted addresses.',
     features: ["Pool", "Gym", "Parking", "Lift"],
