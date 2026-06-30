@@ -103,7 +103,7 @@ const PROPERTIES = [
     location: '27 Thalapathpitiya Rd, Nugegoda',
     beds: 2, baths: 2, sqft: '823',
     type: 'Apartment',
-    featured: false,
+    featured: true,
     image: './Images/the-residence/1.jpeg',
     gallery: [
       './Images/the-residence/2.jpeg',
