@@ -70,33 +70,6 @@ const PROPERTIES = [
     whatsapp: '+94777150066'
   },
   {
-    id: 'trizen-02-dulith',
-    status: 'For Rent',
-    badgeClass: 'badge-rent',
-    price: 'USD 1800 / Mon',
-    name: 'The Trizen',
-    location: 'Colombo 02',
-    beds: 2, baths: 2, sqft: '750',
-    type: 'Apartment',
-    featured: true,
-    image: './Images/trizen-02-dulith/1.jpg',
-    gallery: [
-      './Images/trizen-02-dulith/2.jpg',
-      './Images/trizen-02-dulith/3.jpg',
-      './Images/trizen-02-dulith/4.jpg',
-      './Images/trizen-02-dulith/5.jpg',
-      './Images/trizen-02-dulith/6.jpg',
-      './Images/trizen-02-dulith/7.jpg',
-      './Images/trizen-02-dulith/8.jpg',
-      './Images/trizen-02-dulith/9.jpg',
-      './Images/trizen-02-dulith/10.jpg',
-      
-    ],
-    description: ' This fully furnished 750 sq. ft. apartment (MRA26) is available for rent at Trizen, located in Colombo 02. The residence offers 2 bedrooms and 2 bathrooms, complemented by 1 dedicated parking slot, along with access to a gym and swimming pool.',
-    features: ["Gym", "Lift", "Play Area", "Parking", "Clubhouse", "Backup Power", "Garden", "Pool", "Security", "Wifi", "Laundry", "Restaurant", "Sports Facilities", "Jogging Track", "Rooftop Garden", "Children Play Area", "Community Hall"],
-    whatsapp: '+94777150066'
-  },
-  {
     id: 'the-grand-ward',
     status: 'For Rent',
     badgeClass: 'badge-rent',
@@ -131,6 +104,33 @@ const PROPERTIES = [
     description: 'Description: This fully furnished 1,428 sq. ft. apartment (MRA29) is available for rent at The Grand, located on Ward Place, Colombo 07. The residence offers 3 bedrooms and 2 bathrooms, complemented by a stunning sea view and dedicated parking, with the maintenance fee borne by the owner.',
     features: ["Pool", "Gym", "Play Area", "Lift", "Parking", "Backup Power", "Garden", "Jacuzzi", "Party Hall", "Security", "Wifi", "Laundry", "Restaurant", "Children Play Area", "Balcony", "Jogging Track", "Rooftop Garden"],
     whatsapp: '+94777150066',
+  },
+  {
+    id: 'trizen-02-dulith',
+    status: 'For Rent',
+    badgeClass: 'badge-rent',
+    price: 'USD 1800 / Mon',
+    name: 'The Trizen',
+    location: 'Colombo 02',
+    beds: 2, baths: 2, sqft: '750',
+    type: 'Apartment',
+    featured: true,
+    image: './Images/trizen-02-dulith/1.jpg',
+    gallery: [
+      './Images/trizen-02-dulith/2.jpg',
+      './Images/trizen-02-dulith/3.jpg',
+      './Images/trizen-02-dulith/4.jpg',
+      './Images/trizen-02-dulith/5.jpg',
+      './Images/trizen-02-dulith/6.jpg',
+      './Images/trizen-02-dulith/7.jpg',
+      './Images/trizen-02-dulith/8.jpg',
+      './Images/trizen-02-dulith/9.jpg',
+      './Images/trizen-02-dulith/10.jpg',
+      
+    ],
+    description: ' This fully furnished 750 sq. ft. apartment (MRA26) is available for rent at Trizen, located in Colombo 02. The residence offers 2 bedrooms and 2 bathrooms, complemented by 1 dedicated parking slot, along with access to a gym and swimming pool.',
+    features: ["Gym", "Lift", "Play Area", "Parking", "Clubhouse", "Backup Power", "Garden", "Pool", "Security", "Wifi", "Laundry", "Restaurant", "Sports Facilities", "Jogging Track", "Rooftop Garden", "Children Play Area", "Community Hall"],
+    whatsapp: '+94777150066'
   },
   {
     id: 'trillium-col5',
