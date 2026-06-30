@@ -223,7 +223,7 @@ const PROPERTIES = [
     id: 'siebel-avenue',
     status: 'For Sale',
     badgeClass: 'badge-sale',
-    price: 'LKR 72 mn',
+    price: 'LKR 72 Mn',
     name: 'Siebel Avenue',
     location: 'Colombo 05',
     beds: 3, baths: 3, sqft: '1608',
