@@ -31,6 +31,33 @@ const PROPERTIES = [
     whatsapp: '+94777150066'
   },
   {
+    id: 'trizen-02-dulith',
+    status: 'For Rent',
+    badgeClass: 'badge-rent',
+    price: 'USD 1800 / mon',
+    name: 'The Trizen',
+    location: 'Colombo 02',
+    beds: 2, baths: 2, sqft: '750',
+    type: 'Apartment',
+    featured: true,
+    image: './Images/trizen-02-dulith/1.jpg',
+    gallery: [
+      './Images/trizen-02-dulith/2.jpg',
+      './Images/trizen-02-dulith/3.jpg',
+      './Images/trizen-02-dulith/4.jpg',
+      './Images/trizen-02-dulith/5.jpg',
+      './Images/trizen-02-dulith/6.jpg',
+      './Images/trizen-02-dulith/7.jpg',
+      './Images/trizen-02-dulith/8.jpg',
+      './Images/trizen-02-dulith/9.jpg',
+      './Images/trizen-02-dulith/10.jpg',
+      
+    ],
+    description: ' This fully furnished 750 sq. ft. apartment (MRA26) is available for rent at Trizen, located in Colombo 02. The residence offers 2 bedrooms and 2 bathrooms, complemented by 1 dedicated parking slot, along with access to a gym and swimming pool.',
+    features: ["Gym", "Lift", "Play Area", "Parking", "Clubhouse", "Backup Power", "Garden", "Pool", "Security", "Wifi", "Laundry", "Restaurant", "Sports Facilities", "Jogging Track", "Rooftop Garden", "Children Play Area", "Community Hall"],
+    whatsapp: '+94777150066'
+  },
+  {
     id: 'kotte-apartment-residence',
     status: 'For Sale',
     badgeClass: 'badge-sale',
