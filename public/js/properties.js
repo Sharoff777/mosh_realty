@@ -98,7 +98,7 @@ const PROPERTIES = [
     status: 'For Rent',
     badgeClass: 'badge-rent',
     price: 'LKR 360K / mon',
-    name: 'Trillium',
+    name: 'Trillium Havelock Residencies',
     location: 'Colombo 05',
     beds: 2, baths: 2, sqft: '790',
     type: 'Apartment',
